@@ -1,0 +1,58 @@
+/* Author: Tim Baumann
+   Project: karol.js */
+
+/* Reset */
+* { margin: 0; padding: 0; }
+
+html, body { height: 100%; }
+
+body {
+  font: 15px Helvetica, Arial, sans-serif;
+}
+
+#bar {
+  line-height: 40px;
+  position: relative;
+  background: #b34b00; color: #fff;
+}
+h1 {
+  font-size: 22px;
+  padding: 0 10px;
+  text-shadow: 0 1px 0 #000;
+  -moz-text-shadow: 0 1px 0 #000;
+  -webkit-text-shadow: 0 1px 0 #000;
+}
+#tools {
+  position: absolute;
+  right: 0; top: 0; bottom: 0;
+  width: 55%;
+}
+#tools input[type=button] {
+  background: #843700; color: inherit;
+  font-size: 13px;
+  padding: 3px 7px;
+  margin-left: 10px;
+  border: 1px solid #813600;
+}
+#tools input[type=number] {
+  width: 50px;
+}
+
+#wrapper {
+  position: absolute;
+  top: 40px; bottom: 0; left: 0; right: 0;
+}
+
+#editor, #environment {
+  position: absolute;
+  top: 0; bottom: 0;
+}
+#editor {
+  left: 0;
+  width: 45%;
+}
+#environment {
+  right: 0;
+  width: 55%;
+}
+

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset=utf-8>
+<title>Karol.js</title>
+<meta name=author content="Tim Baumann">
+<link rel=stylesheet href=style.css>
+<link id=bespin_base href=frameworks/bespin-embedded/>
+
+<body>
+<div id=bar>
+  <h1>Karol.js</h1>
+  <div id=tools>
+    <input id=run-button type=button value=Run>
+    <label><span>Width</span> <input id=width type=number value=10></label>
+    <label><span>Depth</span> <input id=depth type=number value=8></label>
+    <label><span>Height</span> <input id=height type=number value=5></label>
+    <input id=reset-button type=button value=Reset>
+  </div>
+</div>
+<div id=wrapper>
+  <div id=editor></div>
+  <div id=environment></div>
+</div>
+
+<script src=frameworks/bespin-embedded/BespinEmbedded.js></script>
+<script src=frameworks/javascript-stacktrace/stacktrace.js></script>
+<script src=frameworks/three.js/build/Three.js></script>
+<script src=frameworks/three.js/src/extras/primitives/Cube.js></script>
+<script src=frameworks/three.js/src/extras/primitives/Plane.js></script>
+<script src=app.js></script>
