@@ -249,7 +249,7 @@
         self.next();
         self.onchange && self.onchange();
       }
-    }, 250);
+    }, 150);
   };
   
   
@@ -268,12 +268,13 @@
     };
     
     this.el = el;
-    this.createMouseListener();
     this.renderer = new T.CanvasRenderer();
+    this.createMouseListener();
     this.scene = new T.Scene();
     this.updateSize();
     this.degrees = 45;
-    this.updateCameraPosition;
+    this.cameraZ = 120;
+    this.updateCameraPosition();
     this.createGrid();
     this.render();
     this.inject();
@@ -284,13 +285,31 @@
   
   EnvironmentView.prototype.createMouseListener = function() {
     var self = this;
-    this.el.onmousemove = function(evt) {
-      var box = self.el.getBoundingClientRect();
-      var x = evt.clientX - box.left;
-      self.degrees = 180 * (x/box.width);
-      self.updateCameraPosition();
-      self.render();
-    };
+    
+    this.renderer.domElement.addEventListener('mousedown', function(evt) {
+      var down = { x: evt.clientX, y: evt.clientY };
+      doc.body.style.cursor = 'move';
+      
+      function onMouseMove(evt) {
+        var newDown = { x: evt.clientX, y: evt.clientY };
+        var d_x = down.x - newDown.x,
+            d_y = down.y - newDown.y;
+        self.degrees += d_x / 4;
+        self.cameraZ -= d_y * 2;
+        self.updateCameraPosition();
+        self.render();
+        down = newDown;
+      }
+      
+      function onMouseUp() {
+        doc.body.style.cursor = 'default';
+        doc.body.removeEventListener('mousemove', onMouseMove, false);
+        doc.body.removeEventListener('mouseup', onMouseUp, false);
+      }
+      
+      doc.body.addEventListener('mousemove', onMouseMove, false);
+      doc.body.addEventListener('mouseup', onMouseUp, false);
+    }, false);
   };
   
   EnvironmentView.prototype.createGrid = function() {
@@ -344,10 +363,10 @@
     
     var scene = this.scene;
     
-    var GW = EnvironmentView.GW;
-    var GH = EnvironmentView.GH;
-    var x0 = -GW*(model.width/2);
-    var y0 = GW*(model.depth/2);
+    var GW = EnvironmentView.GW,
+        GH = EnvironmentView.GH;
+    var x0 = -GW*(model.width/2),
+        y0 = GW*(model.depth/2);
     
     var MATERIALS = [];
     for (var i = 0; i < 6; i++) {
@@ -363,8 +382,6 @@
       for (var y = 0; y < d; y++) {
         var fieldObj = row[y];
         var field = model.fields[x][y];
-        
-        // TODO: Adjust position of marke
         
         while (field.ziegel < fieldObj.ziegel.length) {
           scene.removeObject(fieldObj.ziegel.pop());
@@ -416,7 +433,6 @@
     
     var camera = this.camera = new T.Camera(75, width/height, 1, 1e5);
     camera.up = new T.Vector3(0, 0, 1);
-    camera.position.z = 120;
     
     this.renderer.setSize(width, height);
   };
@@ -426,9 +442,10 @@
     var radian = degrees * (Math.PI/180);
     var position = this.camera.position;
     
-    var RADIUS = 600;
+    var RADIUS = 400;
     position.x =  Math.sin(radian) * RADIUS;
     position.y = -Math.cos(radian) * RADIUS;
+    position.z = this.cameraZ;
   };
   
   EnvironmentView.prototype.dimensionsChanged = function() {
