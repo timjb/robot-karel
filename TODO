@@ -1,0 +1,15 @@
+* Commands:
+  * "schnell" and "langsam"
+  * "ton"
+  * Directions (North, South, West, East)
+  * "warten"
+  * "beenden"
+* Quader
+* Show a little, cute robot
+* Buttons for running step by step or fast
+* Buttons for sending single commands to the robot
+* Highlight current line
+* Fix style of the ziegel and the grid
+* Manually edit world
+* README
+* Docs
