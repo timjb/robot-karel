@@ -453,6 +453,7 @@
     
     // Ground
     var plane = new T.Mesh(new Plane(w*GW, d*GW, w, d), material);
+    plane.doubleSided = true;
     this.scene.addObject(plane);
     
     // Back
@@ -460,6 +461,7 @@
     plane.position.y = (d/2)*GW;
     plane.position.z = (h/2)*GH;
     plane.rotation.x = Math.PI/2;
+    plane.doubleSided = true;
     this.scene.addObject(plane);
     
     // Left Side
@@ -467,6 +469,7 @@
     plane.position.x = -(w/2)*GW;
     plane.position.z = (h/2)*GH;
     plane.rotation.y = Math.PI/2;
+    plane.doubleSided = true;
     this.scene.addObject(plane);
   };
   
