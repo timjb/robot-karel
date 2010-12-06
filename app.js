@@ -1,4 +1,10 @@
 (function(win, doc, T, undefined) {
+  var setInterval = win.setInterval;
+  var clearInterval = win.clearInterval;
+  var setTimeout = win.setTimeout;
+  var clearTimeout = win.clearTimeout;
+  var XMLHttpRequest = win.XMLHttpRequest;
+  
   /*
    * Helpers
    */
@@ -17,11 +23,26 @@
     var xhr = new XMLHttpRequest();
     xhr.onreadystatechange = function() {
       if (xhr.readyState == 4) {
-        callback(xhr.responseText);
+        callback(xhr.responseText, xhr.responseXML);
       }
     };
     xhr.open('GET', url);
     xhr.send(null);
+    return xhr;
+  }
+  
+  function each(obj, fn) {
+    if (obj instanceof Array) {
+      for (var i = 0, l = obj.length; i < l; i++) {
+        fn(obj[i], i);
+      }
+    } else {
+      for (prop in obj) {
+        if (obj.hasOwnProperty(prop)) {
+          fn(obj[prop], prop);
+        }
+      }
+    }
   }
   
   function clone(obj) {
@@ -37,6 +58,30 @@
       }
       return obj;
     }
+  }
+  
+  function toArray(obj) {
+    if (obj instanceof Array) return obj;
+    if (obj != undefined && obj != null) return [obj];
+    return [];
+  }
+  
+  function errorFunction(msg) {
+    var error = new Error(msg);
+    return function() {
+      throw error;
+    };
+  }
+  
+  function removeFromArray(arr, obj) {
+    var index = arr.indexOf(obj);
+    if (index != -1) arr.splice(index, 1);
+  }
+  
+  function stop(obj) {
+    clearTimeout(obj);
+    clearInterval(obj);
+    if (typeof obj.abort == 'function') obj.abort();
   }
   
   
@@ -180,8 +225,11 @@
   };
   
   Environment.prototype.run = function(code) {
-    this.stack = this.clone().execute(code);
-    this.slowly();
+    var self = this;
+    this.clone().execute(code, function(stack) {
+      self.stack = stack;
+      self.slowly();
+    });
     //this.onchange && this.onchange();
   };
   
@@ -193,42 +241,123 @@
     return env;
   };
   
-  Environment.prototype.execute = function(code) {
-    var karol = {};
+  Environment.prototype.execute = function(code, callback) {
+    var karol = win.karol = {};
     var stack = [];
-    var environment = this;
-    var methods = ['istWand', 'schritt', 'linksDrehen', 'rechtsDrehen',
-                   'hinlegen', 'aufheben', 'istZiegel',
-                   'markeSetzen', 'markeLoeschen', 'istMarke'];
+    var self = this;
+    var timed = [];
+    var cached = {};
+    var END_EXC = new Error('end');
     
-    for (var i = 0, l = methods.length; i < l; i++) {
-      (function(name) {
-        karol[name] = function(n) {
-          n = n || 1;
-          
-          //var p = new printStackTrace.implementation();
-          //var stacktrace = p.run();
-          //console.log(stacktrace[2]);
-          
-          for (var i = 0; i < n; i++) {
-            var result = environment[name]();
-            stack.push(name);
-          }
-          return result;
-        };
-      })(methods[i]);
+    function stopAll() {
+      each(timed, stop);
+      timed = [];
     }
     
-    win.karol = karol;
-    try {
+    function exec(fn) {
+      try {
+        fn();
+      } catch (exc) {
+        if (exc != END_EXC) {
+          stack.push(exc);
+        }
+        stopAll();
+      }
+      end();
+    }
+    
+    function cleanup() {
+      delete win.karol;
+      
+      // delete the new global functions
+      each(newGlobalFunctions, function(newFn, oldFn) {
+        delete win[newFn];
+      });
+      
+      // restore the old global functions
+      each(cached, function(fn, name) {
+        win[name] = fn;
+      });
+    }
+    
+    function end() {
+      if (!timed.length) {
+        cleanup();
+        callback(stack);
+      }
+    }
+    
+    each(['istWand', 'schritt', 'linksDrehen', 'rechtsDrehen', 'hinlegen', 'aufheben', 'istZiegel', 'markeSetzen', 'markeLoeschen', 'istMarke'], function(name) {
+      karol[name] = function(n) {
+        n = n || 1;
+        
+        //var p = new printStackTrace.implementation();
+        //var stacktrace = p.run();
+        //console.log(stacktrace[2]);
+        
+        for (var i = 0; i < n; i++) {
+          var result = self[name]();
+          stack.push(name);
+        }
+        return result;
+      };
+    });
+    
+    win.warten = function(fn, ms) {
+      var timeout = setTimeout(function() {
+        removeFromArray(timed, timeout);
+        exec(fn);
+      }, ms);
+      timed.push(timeout);
+      return timeout;
+    };
+    
+    win.periode = function(fn, ms) {
+      var interval = setInterval(function() {
+        exec(fn)
+      }, ms);
+      timed.push(interval);
+      return interval;
+    };
+    
+    win.laden = function(url, fn) {
+      var xhr = get(url, function(responseText, responseXML) {
+        removeFromArray(timed, xhr);
+        exec(fn);
+      });
+      timed.push(xhr);
+      return xhr;
+    };
+    
+    win.stoppen = function(obj) {
+      stop(obj);
+      removeFromArray(timed, obj);
+      end();
+    };
+    
+    win.beenden = function() {
+      throw END_EXC;
+    };
+    
+    newGlobalFunctions = {
+      'laden': 'XMLHttpRequest',
+      'warten': 'setTimeout',
+      'periode': 'setInterval',
+      'stop': ['clearInterval', 'clearTimeout'],
+      'beenden': null,
+    };
+    
+    each(newGlobalFunctions, function(oldFn, newFn) {
+      each(toArray(oldFn), function(oldFn) {
+        cached[oldFn] = win[oldFn];
+        win[oldFn] = errorFunction("Verwenden Sie anstatt '"+oldFn+"' die Funktion '"+newFn+"' wie in der Dokumentation beschrieben.");
+      });
+      karol[newFn] = errorFunction("Die Funktion '"+newFn+"'ist kein Methode von Karol, sondern eine globale Funktion. Sie muss ohne 'karol.' aufgerufen werden.");
+    });
+    
+    exec(function() {
       win.eval(code); // evil, I know
-    } catch (exc) {
-      //var stacktrace = (new printStackTrace.implementation).run(exc);
-      stack.push(exc);
-    }
-    delete win.karol;
-    
-    return stack;
+    });
   };
   
   Environment.prototype.next = function() {
@@ -244,7 +373,7 @@
     var self = this;
     var interval = win.setInterval(function() {
       if (self.stack.length == 0) {
-        win.clearInterval(interval);
+        clearInterval(interval);
       } else {
         self.next();
         self.onchange && self.onchange();
@@ -370,7 +499,7 @@
     
     var MATERIALS = [];
     for (var i = 0; i < 6; i++) {
-      MATERIALS.push([new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: true })]);
+      MATERIALS.push([new T.MeshBasicMaterial({ color: 0xff0000, wireframe: true })]);
     }
     
     //var M = T.MeshBasicMaterial({ color: 0xff0000 });
