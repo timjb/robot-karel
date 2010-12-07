@@ -9,7 +9,7 @@
 <link id=bespin_base href=frameworks/bespin-embedded/>
 
 <body>
-<div id=bar>
+<div class=bar id=top-bar>
   <h1>Karol.js</h1>
   <div id=tools>
     <input id=run-button type=button value=Run>
@@ -19,9 +19,17 @@
     <input id=reset-button type=button value=Reset>
   </div>
 </div>
-<div id=wrapper>
-  <div id=editor></div>
-  <div id=environment></div>
+<div id=editor></div>
+<div id=environment></div>
+<div class=bar id=bottom-bar>
+  <input type=button id=links-drehen value="&larr;" title="Links drehen">
+  <input type=button id=schritt value="&uarr;" title=Schritt>
+  <input type=button id=rechts-drehen value="&rarr;" title="Rechts drehen">
+  <input type=button id=hinlegen value=H title=Hinlegen>
+  <input type=button id=aufheben value=A title=Aufheben>
+  <input type=button id=marke value=M title="Marke setzen bzw. löschen">
+  <input type=button id=quader value=Q title="Quader hinstellen">
+  <input type=button id=entfernen value=E title="Quader entfernen">
 </div>
 
 <script src=frameworks/bespin-embedded/BespinEmbedded.js></script>

@@ -10,10 +10,16 @@ body {
   font: 15px Helvetica, Arial, sans-serif;
 }
 
-#bar {
+.bar, #editor, #environment {
+  position: absolute;
+}
+
+.bar {
   line-height: 40px;
-  position: relative;
   background: #b34b00; color: #fff;
+}
+#top-bar {
+  left: 0; top: 0; right: 0;
 }
 h1 {
   font-size: 22px;
@@ -27,32 +33,31 @@ h1 {
   right: 0; top: 0; bottom: 0;
   width: 55%;
 }
-#tools input[type=button] {
+input[type=button] {
   background: #843700; color: inherit;
   font-size: 13px;
   padding: 3px 7px;
   margin-left: 10px;
   border: 1px solid #813600;
 }
-#tools input[type=number] {
+input[type=number] {
   width: 50px;
 }
-
-#wrapper {
-  position: absolute;
-  top: 40px; bottom: 0; left: 0; right: 0;
+#bottom-bar {
+  left: 45%; bottom: 0; right: 0;
+  height: 40px;
+  text-align: center;
 }
 
-#editor, #environment {
-  position: absolute;
-  top: 0; bottom: 0;
-}
 #editor {
   left: 0;
   width: 45%;
+  top: 40px;
+  bottom: 0;
 }
 #environment {
   right: 0;
   width: 55%;
+  top: 40px;
+  bottom: 40px;
 }
-

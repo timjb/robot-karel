@@ -84,6 +84,12 @@
     if (typeof obj.abort == 'function') obj.abort();
   }
   
+  function capitalize(str) {
+    return str.replace(/(?:\s|-|_)([a-z])/g, function(x, letter) {
+      return letter.toUpperCase();
+    });
+  }
+  
   
   /*
    * Model
@@ -92,12 +98,14 @@
   function Field() {
     this.ziegel = 0;
     this.marke = false;
+    this.quader = false;
   }
   
   Field.prototype.clone = function() {
     var f = new Field();
     f.ziegel = this.ziegel;
     f.marke = this.marke;
+    f.quader = this.quader;
     return f;
   };
   
@@ -154,9 +162,8 @@
   };
   
   Environment.prototype.hinlegen = function() {
-    var position = this.forward();
-    if (this.isValid(position)) {
-      var field = this.getField(position);
+    if (!this.istWand()) {
+      var field = this.getField(this.forward());
       if (field.ziegel < this.height) {
         field.ziegel += 1;
       } else {
@@ -167,17 +174,16 @@
     }
   };
   
-  Environment.prototype.aufnehmen = function() {
-    var position = this.forward();
-    if (this.isValid(position)) {
-      var field = this.getField(position);
+  Environment.prototype.aufheben = function() {
+    if (!this.istWand()) {
+      var field = this.getField(this.forward());
       if (field.ziegel > 0) {
         field.ziegel--;
       } else {
-        throw new Error("Karol kann keinen Ziegel aufnehmen, da kein Ziegel vor ihm liegt.");
+        throw new Error("Karol kann keinen Ziegel aufheben, da kein Ziegel vor ihm liegt.");
       }
     } else {
-      throw new Error("Karol kann keinen Ziegel aufnehmen. Er steht vor einer Wand.");
+      throw new Error("Karol kann keinen Ziegel aufheben. Er steht vor einer Wand.");
     }
   };
   
@@ -187,6 +193,11 @@
   
   Environment.prototype.markeLoeschen = function() {
     this.getField(this.position).marke = false;
+  };
+  
+  Environment.prototype.marke = function() {
+    var field = this.getField(this.position);
+    field.marke = !field.marke;
   };
   
   Environment.prototype.istMarke = function() {
@@ -200,7 +211,8 @@
   };
   
   Environment.prototype.istWand = function() {
-    return !this.isValid(this.forward());
+    var next = this.forward();
+    return !this.isValid(next) || this.getField(next).quader;
   };
   
   Environment.prototype.linksDrehen = function() {
@@ -212,8 +224,8 @@
   };
   
   Environment.prototype.schritt = function() {
-    var newPosition = this.forward();
-    if (this.isValid(newPosition)) {
+    if (!this.istWand()) {
+      var newPosition = this.forward();
       if (Math.abs(this.getField(this.position).ziegel - this.getField(newPosition).ziegel) <= 1) {
         this.position = newPosition;
       } else {
@@ -221,6 +233,38 @@
       }
     } else {
       throw new Error("Karol kann keinen Schritt machen, er steht vor einer Wand.");
+    }
+  };
+  
+  Environment.prototype.quader = function() {
+    var position = this.forward();
+    if (this.isValid(position)) {
+      var field = this.getField(position);
+      if (!field.quader) {
+        if (!field.ziegel) {
+          field.quader = true;
+        } else {
+          throw new Error("Karol kann keinen Quader hinlegen, da auf dem Feld schon Ziegel liegen.");
+        }
+      } else {
+        throw new Error("Karol kann keinen Quader hinlegen, da schon einer liegt.");
+      }
+    } else {
+      throw new Error("Karol kann keinen Quader hinlegen. Er steht vor einer Wand.");
+    }
+  };
+  
+  Environment.prototype.entfernen = function() {
+    var position = this.forward();
+    if (this.isValid(position)) {
+      var field = this.getField(position);
+      if (field.quader) {
+        field.quader = false;
+      } else {
+        throw new Error("Karol kann keinen Quader entfernen, da auf dem Feld kein Quader liegt.");
+      }
+    } else {
+      throw new Error("Karol kann keinen Quader entfernen. Er steht vor einer Wand.");
     }
   };
   
@@ -314,7 +358,7 @@
     
     win.periode = function(fn, ms) {
       var interval = setInterval(function() {
-        exec(fn)
+        exec(fn);
       }, ms);
       timed.push(interval);
       return interval;
@@ -500,10 +544,16 @@
     var x0 = -GW*(model.width/2),
         y0 = GW*(model.depth/2);
     
-    var MATERIALS = [];
-    for (var i = 0; i < 6; i++) {
-      MATERIALS.push([new T.MeshBasicMaterial({ color: 0xff0000, wireframe: true })]);
+    function createCubeMaterial(props) {
+      var materials = [];
+      for (var i = 0; i < 6; i++) {
+        materials.push([new T.MeshBasicMaterial(props)]);
+      }
+      return materials;
     }
+    
+    var ZIEGEL_MATERIAL = createCubeMaterial({ color: 0xff0000, wireframe: true });
+    var QUADER_MATERIAL = createCubeMaterial({ color: 0x666666 });
     
     //var M = T.MeshBasicMaterial({ color: 0xff0000 });
     //var MATERIALS = [[M], [M], [M], [M], [M], [M]];
@@ -524,7 +574,7 @@
         
         while (field.ziegel > fieldObj.ziegel.length) {
           var z = fieldObj.ziegel.length;
-          var cube = new T.Mesh(new Cube(GW, GW, GH, 1, 1, MATERIALS), new T.MeshFaceMaterial());
+          var cube = new T.Mesh(new Cube(GW, GW, GH, 1, 1, ZIEGEL_MATERIAL), new T.MeshFaceMaterial());
           cube.position.x = GW/2 + x0 + x*GW;
           cube.position.y = -GW/2 + y0 - y*GW;
           cube.position.z = GH/2 + z*GH;
@@ -537,6 +587,7 @@
         
         if (!field.marke && fieldObj.marke) {
           scene.removeObject(fieldObj.marke);
+          delete fieldObj.marke;
         }
         
         if (field.marke && !fieldObj.marke) {
@@ -549,6 +600,20 @@
           marke.position.z = fieldObj.ziegel.length*GH;
           scene.addObject(marke);
           fieldObj.marke = marke;
+        }
+        
+        if (field.quader && !fieldObj.quader) {
+          var cube = new T.Mesh(new Cube(GW, GW, 2*GH, 1, 1, QUADER_MATERIAL), new T.MeshFaceMaterial());
+          cube.position.x = GW/2 + x0 + x*GW;
+          cube.position.y = -GW/2 + y0 - y*GW;
+          cube.position.z = GH;
+          scene.addObject(cube);
+          fieldObj.quader = cube;
+        }
+        
+        if (!field.quader && fieldObj.quader) {
+          scene.removeObject(fieldObj.quader);
+          delete fieldObj.quader;
         }
       }
     }
@@ -642,6 +707,21 @@
   AppController.prototype.initButtons = function() {
     $('run-button').onclick = bind(this.run, this);
     $('reset-button').onclick = bind(this.reset, this);
+    
+    var self = this;
+    each(['links-drehen', 'schritt', 'rechts-drehen', 'hinlegen', 'aufheben', 'marke', 'quader', 'entfernen'], function(name) {
+      var button = $(name);
+      var method = capitalize(name);
+      button.addEventListener('click', function() {
+        try {
+          self.environment[method]();
+        } catch (exc) {
+          alert(exc);
+        }
+        self.environmentView.updateFields();
+        self.environmentView.render();
+      }, false);
+    });
   };
   
   AppController.prototype.addEvents = function() {
