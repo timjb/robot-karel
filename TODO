@@ -3,8 +3,14 @@
   * "ton"
   * Directions (North, South, West, East)
 * Show a little, cute robot
+* Keyboard navigation
 * Buttons for running step by step or fast
 * Highlight current line
 * Fix style of the ziegel and the grid
 * README
 * Docs
+* Examples
+  * Time (digital clock using marks)
+  * Live stock quotes
+  * Pyramid
+  * Maze
