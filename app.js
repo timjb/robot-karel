@@ -133,6 +133,7 @@
     this.direction = new Position(1, 0);
     
     this.createFields();
+    this.initBeepSound();
   }
   
   Environment.prototype.createFields = function() {
@@ -228,6 +229,25 @@
     field.quader = true;
   };
   
+  Environment.prototype.initBeepSound = function() {
+    if (win.Audio) {
+      var sound = this.beepSound = new win.Audio();
+      if (sound.canPlayType('audio/ogg; codecs="vorbis"')) {
+        sound.src = 'beep.ogg';
+      } else if (sound.canPlayType('audio/mpeg;')) {
+        sound.src = 'beep.mp3';
+      }
+    }
+  };
+  
+  Environment.prototype.ton = function() {
+    var sound = this.beepSound;
+    if (sound) {
+      sound.play();
+      this.initBeepSound(); // Because Chrome can't replay
+    }
+  };
+  
   Environment.prototype.entfernen = function() {
     var position = this.forward();
     if (!this.isValid(position)) throw new Error("Karol kann keinen Quader entfernen. Er steht vor einer Wand.");
@@ -314,6 +334,10 @@
         return result;
       };
     });
+    
+    karol.ton = function() {
+      stack.push('ton');
+    };
     
     win.warten = function(fn, ms) {
       var timeout = setTimeout(function() {
