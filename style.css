@@ -16,7 +16,7 @@ body {
 
 .bar {
   line-height: 40px;
-  background: #b34b00; color: #fff;
+  background: #d55b00; color: #fff;
 }
 #top-bar {
   left: 0; top: 0; right: 0;
@@ -24,9 +24,7 @@ body {
 h1 {
   font-size: 22px;
   padding: 0 10px;
-  text-shadow: 0 1px 0 #000;
-  -moz-text-shadow: 0 1px 0 #000;
-  -webkit-text-shadow: 0 1px 0 #000;
+  text-shadow: 0 1px 0 #000; -moz-text-shadow: 0 1px 0 #000; -webkit-text-shadow: 0 1px 0 #000;
 }
 #tools {
   position: absolute;
@@ -34,11 +32,19 @@ h1 {
   width: 55%;
 }
 input[type=button] {
-  background: #843700; color: inherit;
-  font-size: 13px;
-  padding: 3px 7px;
+  background: transparent; color: inherit; border: none;
+  text-shadow: 0 1px 0 #000; -moz-text-shadow: 0 1px 0 #000; -webkit-text-shadow: 0 1px 0 #000;
+  -webkit-box-shadow: 0 0 5px #a24500; -moz-box-shadow: 0 0 5px #a24500; box-shadow: 0 0 5px #a24500;
+  font-size: 12px; line-height: 24px; font-weight: bold;
+  padding: 0 10px;
   margin-left: 10px;
-  border: 1px solid #813600;
+}
+input[type=button]:hover {
+  -webkit-box-shadow: 0 0 5px #8d3c00; -moz-box-shadow: 0 0 5px #8d3c00; box-shadow: 0 0 5px #8d3c00;
+  cursor: pointer;
+}
+input[type=button]:active {
+  background: #a24500;
 }
 input[type=number] {
   width: 50px;
