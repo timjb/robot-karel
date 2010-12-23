@@ -130,7 +130,7 @@
     this.height = height;
     
     this.position = new Position(0, 0);
-    this.direction = new Position(1, 0);
+    this.direction = new Position(0, 1);
     
     this.createFields();
     this.initBeepSound();
