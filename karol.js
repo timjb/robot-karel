@@ -333,7 +333,7 @@
     win.laden = function(url, fn) {
       var xhr = get(url, function(responseText, responseXML) {
         removeFromArray(timed, xhr);
-        exec(fn);
+        exec(bind(fn, null, responseText, responseXML));
       });
       timed.push(xhr);
       return xhr;
