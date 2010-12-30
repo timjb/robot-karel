@@ -7963,6 +7963,12 @@ function removeEvent(element, type, fn) {
     return doc.getElementById(id);
   }
 
+  function log() {
+    if (win.console && typeof win.console.log == 'function') {
+      win.console.log.apply(console, arguments);
+    }
+  }
+
   function clone(obj) {
     if (obj instanceof Array) {
       var n = [];
@@ -8261,8 +8267,11 @@ function removeEvent(element, type, fn) {
 
     win.laden = function(url, fn) {
       var xhr = get(url, function(responseText, responseXML) {
+        log(url, responseText, responseXML);
         removeFromArray(timed, xhr);
         exec(bind(fn, null, responseText, responseXML));
+      }, function() {
+        log('Loading failed: ' + url);
       });
       timed.push(xhr);
       return xhr;
@@ -8568,7 +8577,7 @@ function removeEvent(element, type, fn) {
       self.editor.syntax = 'js';
       self.initExampleCode();
     }, function() {
-      win.console && win.console.log && console.log('Bespin launch failed');
+      log('Bespin launch failed');
     });
   };
 

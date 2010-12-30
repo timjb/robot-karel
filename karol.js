@@ -22,6 +22,12 @@
     return doc.getElementById(id);
   }
   
+  function log() {
+    if (win.console && typeof win.console.log == 'function') {
+      win.console.log.apply(console, arguments);
+    }
+  }
+  
   function clone(obj) {
     if (obj instanceof Array) {
       var n = [];
@@ -291,7 +297,7 @@
         
         //var p = new printStackTrace.implementation();
         //var stacktrace = p.run();
-        //console.log(stacktrace[2]);
+        //log(stacktrace[2]);
         
         for (var i = 0; i < n; i++) {
           var result = self[name]();
@@ -324,8 +330,11 @@
     
     win.laden = function(url, fn) {
       var xhr = get(url, function(responseText, responseXML) {
+        log(url, responseText, responseXML);
         removeFromArray(timed, xhr);
         exec(bind(fn, null, responseText, responseXML));
+      }, function() {
+        log('Loading failed: ' + url);
       });
       timed.push(xhr);
       return xhr;
@@ -636,7 +645,7 @@
       self.editor.syntax = 'js';
       self.initExampleCode();
     }, function() {
-      win.console && win.console.log && console.log('Bespin launch failed');
+      log('Bespin launch failed');
     });
   };
   
