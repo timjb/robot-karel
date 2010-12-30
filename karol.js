@@ -1,9 +1,12 @@
-(function(win, doc, T, undefined) {
-  var setInterval = win.setInterval;
-  var clearInterval = win.clearInterval;
-  var setTimeout = win.setTimeout;
-  var clearTimeout = win.clearTimeout;
-  var XMLHttpRequest = win.XMLHttpRequest;
+//= require <BespinEmbedded.uncompressed>
+
+(function(win, doc, undefined) {
+  //= require <stacktrace>
+  //= require <Three>
+  var T = THREE;
+  //= require <Cube>
+  //= require <Plane>
+  
   
   /*
    * Helpers
@@ -248,11 +251,15 @@
   };
   
   Environment.prototype.execute = function(code, callback) {
+    var iframe = doc.createElement('iframe');
+    iframe.style.display = 'none';
+    doc.body.appendChild(iframe);
+    var win = iframe.contentWindow;
+    win.parent = null;
     var karol = win.karol = {};
     var stack = [];
     var self = this;
     var timed = [];
-    var cached = {};
     var END_EXC = new Error('end');
     
     function stopAll() {
@@ -272,23 +279,8 @@
       end();
     }
     
-    function cleanup() {
-      delete win.karol;
-      
-      // delete the new global functions
-      each(newGlobalFunctions, function(newFn, oldFn) {
-        delete win[newFn];
-      });
-      
-      // restore the old global functions
-      each(cached, function(fn, name) {
-        win[name] = fn;
-      });
-    }
-    
     function end() {
       if (!timed.length) {
-        cleanup();
         callback(stack);
       }
     }
@@ -348,22 +340,6 @@
     win.beenden = function() {
       throw END_EXC;
     };
-    
-    newGlobalFunctions = {
-      'laden': 'XMLHttpRequest',
-      'warten': 'setTimeout',
-      'periode': 'setInterval',
-      'stop': ['clearInterval', 'clearTimeout'],
-      'beenden': null,
-    };
-    
-    each(newGlobalFunctions, function(oldFn, newFn) {
-      each(toArray(oldFn), function(oldFn) {
-        cached[oldFn] = win[oldFn];
-        win[oldFn] = errorFunction("Verwenden Sie anstatt '"+oldFn+"' die Funktion '"+newFn+"' wie in der Dokumentation beschrieben.");
-      });
-      karol[newFn] = errorFunction("Die Funktion '"+newFn+"'ist kein Methode von Karol, sondern eine globale Funktion. Sie muss ohne 'karol.' aufgerufen werden.");
-    });
     
     exec(function() {
       win.eval(code); // evil, I know
@@ -714,4 +690,4 @@
   };
   
   new AppController();
-})(window, document, THREE);
+})(window, document);
