@@ -636,12 +636,14 @@
   }
   
   AppController.prototype.initModelAndView = function() {
+    var environmentElement = $('environment');
+    environmentElement.innerHTML = '';
     this.environment = new Environment(
       Number($('width').value),
       Number($('depth').value),
       Number($('height').value)
     );
-    this.environmentView = new EnvironmentView($('environment'), this.environment);
+    this.environmentView = new EnvironmentView(environmentElement, this.environment);
   };
   
   AppController.prototype.initBespin = function() {
@@ -663,10 +665,17 @@
   };
   
   AppController.prototype.initButtons = function() {
-    addEvent($('run-button'),   'click', bind(this.run, this));
-    addEvent($('reset-button'), 'click', bind(this.reset, this));
-    
     var self = this;
+    
+    addEvent($('run-button'),        'click', bind(this.run, this));
+    addEvent($('reset-button'),      'click', bind(this.reset, this));
+    addEvent($('new-button'),        'click', bind(this.toggleNewPane, this));
+    addEvent($('new-cancel-button'), 'click', bind(this.toggleNewPane, this));
+    addEvent($('new-apply-button'),  'click', function() {
+      self.initModelAndView();
+      self.toggleNewPane();
+    });
+    
     each(['links-drehen', 'schritt', 'rechts-drehen', 'hinlegen', 'aufheben', 'marke', 'quader', 'entfernen'], function(name) {
       var button = $(name);
       var method = capitalize(name);
@@ -702,6 +711,16 @@
   AppController.prototype.reset = function() {
     this.environmentView.dispose();
     this.initModelAndView();
+  };
+  
+  AppController.prototype.toggleNewPane = function() {
+    var el = $('new-pane');
+    var classRegex = /(^|\s)visible(\s|$)/
+    if (el.className.match(classRegex)) {
+      el.className = el.className.replace(classRegex, ' ');
+    } else {
+      el.className += ' visible';
+    }
   };
   
   new AppController();

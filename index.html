@@ -12,11 +12,16 @@
 <div class=bar id=top-bar>
   <h1>Karol.js</h1>
   <div id=tools>
-    <input id=run-button type=button value=Run>
-    <label><span>Width</span> <input id=width type=number value=10></label>
-    <label><span>Depth</span> <input id=depth type=number value=8></label>
-    <label><span>Height</span> <input id=height type=number value=5></label>
-    <input id=reset-button type=button value=Reset>
+    <input type=button class=left id=run-button value=Run>
+    <input type=button class=left id=reset-button value=Reset>
+    <input type=button class=right id=new-button value="New World">
+    <div id=new-pane>
+      <label><span>Width</span> <input id=width type=number value=10></label>
+      <label><span>Depth</span> <input id=depth type=number value=8></label>
+      <label><span>Height</span> <input id=height type=number value=5></label>
+      <input type=button id=new-cancel-button value=Cancel>
+      <input type=button id=new-apply-button value=Apply>
+    </div>
   </div>
 </div>
 <div id=editor></div>
