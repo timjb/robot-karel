@@ -7959,6 +7959,48 @@ function removeEvent(element, type, fn) {
 	}
 }
 
+function mixin(obj, mixin) {
+	for(var key in mixin) {
+		if(mixin.hasOwnProperty(key)) {
+			obj[key] = mixin[key];
+		}
+	}
+}
+
+var Events = {
+	addEvent: function(type, fn) {
+		if(!this.events) {
+			this.events = {};
+		}
+		if(!this.events[type]) {
+			this.events[type] = [];
+		}
+		this.events[type].push(fn);
+	},
+	removeEvent: function(type, fn) {
+		if(this.events) {
+			var fns = this.events[type];
+			for(var i = 0, l = fns.length; i < l; i += 1) {
+				if(fns[i] == fn) {
+					fns.splice(i, 1);
+					break;
+				}
+			}
+		}
+	},
+	_fireEvent: function(type) {
+		if(this.events) {
+			var fns = this.events[type];
+			if(fns.length) {
+				var args = Array.prototype.slice.call(arguments, 1);
+				for(var i = 0, l = fns.length; i < l; i++) {
+					fns[i].apply(null, args);
+				}
+			}
+		}
+	}
+};
+
   function $(id) {
     return doc.getElementById(id);
   }
@@ -8060,6 +8102,8 @@ function removeEvent(element, type, fn) {
     this.initBeepSound();
   }
 
+  mixin(Environment.prototype, Events);
+
   Environment.prototype.createFields = function() {
     var w = this.width,
         d = this.depth;
@@ -8088,29 +8132,36 @@ function removeEvent(element, type, fn) {
 
   Environment.prototype.hinlegen = function() {
     if (this.istWand()) throw new Error("Karol kann keinen Ziegel hinlegen. Er steht vor einer Wand.");
-    var field = this.getField(this.forward());
+    var nextPosition = this.forward();
+    var field = this.getField(nextPosition);
     if (field.ziegel >= this.height) throw new Error("Karol kann keinen Ziegel hinlegen, da die Maximalhoehe erreicht wurde.");
     field.ziegel += 1;
+    this._fireEvent('change', nextPosition);
   };
 
   Environment.prototype.aufheben = function() {
     if (this.istWand()) throw new Error("Karol kann keinen Ziegel aufheben. Er steht vor einer Wand.");
-    var field = this.getField(this.forward());
+    var nextPosition = this.forward();
+    var field = this.getField(nextPosition);
     if (!field.ziegel) throw new Error("Karol kann keinen Ziegel aufheben, da kein Ziegel vor ihm liegt.");
     field.ziegel--;
+    this._fireEvent('change', nextPosition);
   };
 
   Environment.prototype.markeSetzen = function() {
     this.getField(this.position).marke = true;
+    this._fireEvent('change', this.position);
   };
 
   Environment.prototype.markeLoeschen = function() {
     this.getField(this.position).marke = false;
+    this._fireEvent('change', this.position);
   };
 
   Environment.prototype.marke = function() {
     var field = this.getField(this.position);
     field.marke = !field.marke;
+    this._fireEvent('change', this.position);
   };
 
   Environment.prototype.istMarke = function() {
@@ -8151,6 +8202,7 @@ function removeEvent(element, type, fn) {
     if (field.quader) throw new Error("Karol kann keinen Quader hinlegen, da schon einer liegt.");
     if (field.ziegel) throw new Error("Karol kann keinen Quader hinlegen, da auf dem Feld schon Ziegel liegen.");
     field.quader = true;
+    this._fireEvent('change', position);
   };
 
   Environment.prototype.initBeepSound = function() {
@@ -8178,6 +8230,7 @@ function removeEvent(element, type, fn) {
     var field = this.getField(position);
     if (!field.quader) throw new Error("Karol kann keinen Quader entfernen, da auf dem Feld kein Quader liegt.");
     field.quader = false;
+    this._fireEvent('change', position);
   };
 
   Environment.prototype.run = function(code) {
@@ -8323,10 +8376,10 @@ function removeEvent(element, type, fn) {
     this.createFields();
 
     var self = this;
-    model.onchange = function() {
-      self.updateFields();
+    model.addEvent('change', function(position) {
+      self.updateField(position.x, position.y);
       self.render();
-    };
+    });
 
     this.el = el;
     this.renderer = new T.CanvasRenderer();
@@ -8417,7 +8470,7 @@ function removeEvent(element, type, fn) {
     }
   };
 
-  EnvironmentView.prototype.updateFields = function() {
+  EnvironmentView.prototype.updateField = function(x, y) {
     var model = this.model;
     var w = model.width,
         d = model.depth;
@@ -8441,64 +8494,58 @@ function removeEvent(element, type, fn) {
     var QUADER_MATERIAL = createCubeMaterial({ color: 0x666666 });
 
 
-    var fields = this.fields;
-    for (var x = 0; x < w; x++) {
-      var row = fields[x];
-      for (var y = 0; y < d; y++) {
-        var fieldObj = row[y];
-        var field = model.fields[x][y];
+    var fieldObj = this.fields[x][y];
+    var field = model.fields[x][y];
 
-        while (field.ziegel < fieldObj.ziegel.length) {
-          scene.removeObject(fieldObj.ziegel.pop());
-          if (fieldObj.marke) {
-            fieldObj.marke.position.z = fieldObj.ziegel.length*GH;
-          }
-        }
-
-        while (field.ziegel > fieldObj.ziegel.length) {
-          var z = fieldObj.ziegel.length;
-          var cube = new T.Mesh(new Cube(GW, GW, GH, 1, 1, ZIEGEL_MATERIAL), new T.MeshFaceMaterial());
-          cube.position.x = GW/2 + x0 + x*GW;
-          cube.position.y = -GW/2 + y0 - y*GW;
-          cube.position.z = GH/2 + z*GH;
-          scene.addObject(cube);
-          fieldObj.ziegel.push(cube);
-          if (fieldObj.marke) {
-            fieldObj.marke.position.z = fieldObj.ziegel.length*GH;
-          }
-        }
-
-        if (!field.marke && fieldObj.marke) {
-          scene.removeObject(fieldObj.marke);
-          delete fieldObj.marke;
-        }
-
-        if (field.marke && !fieldObj.marke) {
-          var marke = new T.Mesh(
-            new Plane(GW, GW, 1, 1),
-            new T.MeshBasicMaterial({ color: 0xcccc55 })
-          );
-          marke.position.x = GW/2 + x0 + x*GW;
-          marke.position.y = -GW/2 + y0 - y*GW;
-          marke.position.z = fieldObj.ziegel.length*GH;
-          scene.addObject(marke);
-          fieldObj.marke = marke;
-        }
-
-        if (field.quader && !fieldObj.quader) {
-          var cube = new T.Mesh(new Cube(GW, GW, 2*GH, 1, 1, QUADER_MATERIAL), new T.MeshFaceMaterial());
-          cube.position.x = GW/2 + x0 + x*GW;
-          cube.position.y = -GW/2 + y0 - y*GW;
-          cube.position.z = GH;
-          scene.addObject(cube);
-          fieldObj.quader = cube;
-        }
-
-        if (!field.quader && fieldObj.quader) {
-          scene.removeObject(fieldObj.quader);
-          delete fieldObj.quader;
-        }
+    while (field.ziegel < fieldObj.ziegel.length) {
+      scene.removeObject(fieldObj.ziegel.pop());
+      if (fieldObj.marke) {
+        fieldObj.marke.position.z = fieldObj.ziegel.length*GH;
       }
+    }
+
+    while (field.ziegel > fieldObj.ziegel.length) {
+      var z = fieldObj.ziegel.length;
+      var cube = new T.Mesh(new Cube(GW, GW, GH, 1, 1, ZIEGEL_MATERIAL), new T.MeshFaceMaterial());
+      cube.position.x = GW/2 + x0 + x*GW;
+      cube.position.y = -GW/2 + y0 - y*GW;
+      cube.position.z = GH/2 + z*GH;
+      scene.addObject(cube);
+      fieldObj.ziegel.push(cube);
+      if (fieldObj.marke) {
+        fieldObj.marke.position.z = fieldObj.ziegel.length*GH;
+      }
+    }
+
+    if (!field.marke && fieldObj.marke) {
+      scene.removeObject(fieldObj.marke);
+      delete fieldObj.marke;
+    }
+
+    if (field.marke && !fieldObj.marke) {
+      var marke = new T.Mesh(
+        new Plane(GW, GW, 1, 1),
+        new T.MeshBasicMaterial({ color: 0xcccc55 })
+      );
+      marke.position.x = GW/2 + x0 + x*GW;
+      marke.position.y = -GW/2 + y0 - y*GW;
+      marke.position.z = fieldObj.ziegel.length*GH;
+      scene.addObject(marke);
+      fieldObj.marke = marke;
+    }
+
+    if (field.quader && !fieldObj.quader) {
+      var cube = new T.Mesh(new Cube(GW, GW, 2*GH, 1, 1, QUADER_MATERIAL), new T.MeshFaceMaterial());
+      cube.position.x = GW/2 + x0 + x*GW;
+      cube.position.y = -GW/2 + y0 - y*GW;
+      cube.position.z = GH;
+      scene.addObject(cube);
+      fieldObj.quader = cube;
+    }
+
+    if (!field.quader && fieldObj.quader) {
+      scene.removeObject(fieldObj.quader);
+      delete fieldObj.quader;
     }
   };
 
@@ -8601,7 +8648,6 @@ function removeEvent(element, type, fn) {
         } catch (exc) {
           alert(exc);
         }
-        self.environmentView.updateFields();
         self.environmentView.render();
       });
     });
