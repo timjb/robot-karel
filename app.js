@@ -8056,6 +8056,31 @@ var Events = {
     });
   }
 
+  var keys = {
+    13: 'enter',
+    38: 'up',
+    40: 'down',
+    37: 'left',
+    39: 'right',
+    27: 'esc',
+    32: 'space',
+    8:  'backspace',
+    9:  'tab',
+    46: 'delete',
+    16: 'shift'
+  };
+
+  function getKey(evt) {
+    var key = keys[evt.keyCode];
+    if (!key) {
+      key = String.fromCharCode(evt.keyCode);
+      if (!evt.shiftKey) {
+        key = key.toLowerCase();
+      }
+    }
+    return key;
+  }
+
 
   /*
    * Model
@@ -8386,7 +8411,7 @@ var Events = {
     this.reset();
 
     var self = this;
-    var interval = win.setInterval(function() {
+    var interval = setInterval(function() {
       if (self.stack.length == 0) {
         clearInterval(interval);
       } else {
@@ -8658,6 +8683,7 @@ var Events = {
     });
 
     this.initButtons();
+    this.initKeyboard();
     this.addEvents();
   }
 
@@ -8690,6 +8716,15 @@ var Events = {
     }
   };
 
+  AppController.prototype.sendCommand = function(cmd) {
+    try {
+      this.environment[cmd]();
+    } catch (exc) {
+      alert(exc);
+    }
+    this.environmentView.render();
+  };
+
   AppController.prototype.initButtons = function() {
     var self = this;
 
@@ -8705,15 +8740,36 @@ var Events = {
 
     each(['links-drehen', 'schritt', 'rechts-drehen', 'hinlegen', 'aufheben', 'marke', 'quader', 'entfernen'], function(name) {
       var button = $(name);
-      var method = capitalize(name);
+      var command = capitalize(name);
       addEvent(button, 'click', function() {
-        try {
-          self.environment[method]();
-        } catch (exc) {
-          alert(exc);
-        }
-        self.environmentView.render();
+        self.sendCommand(command);
       });
+    });
+  };
+
+  AppController.prototype.initKeyboard = function() {
+    var self = this;
+    var actions = {
+      'left': 'linksDrehen',
+      'right': 'rechtsDrehen',
+      'up': 'schritt',
+      'space': 'marke',
+      'h': 'hinlegen',
+      'enter': 'hinlegen',
+      'a': 'aufheben',
+      'backspace': 'aufheben',
+      'm': 'marke',
+      'q': 'quader',
+      'e': 'entfernen',
+      'delete': 'entfernen'
+    };
+    addEvent(doc, 'keydown', function(evt) {
+      if (!self.editor.focus) {
+        var key = getKey(evt);
+        if (actions.hasOwnProperty(key)) {
+          self.sendCommand(actions[key]);
+        }
+      }
     });
   };
 
