@@ -276,11 +276,10 @@
   
   Environment.prototype.run = function(code) {
     var self = this;
-    this.clone().execute(code, function(stack) {
+    this.execute(code, function(stack) {
+      log('Commands: ' + stack.join(', '));
       self.stack = stack;
-      self.slowly();
     });
-    //this.onchange && this.onchange();
   };
   
   Environment.prototype.clone = function() {
@@ -420,10 +419,13 @@
     this.model = model;
     this.createFields();
     
+    var renderTimeout = null;
+    var boundRender = bind(this.render, this);
     var self = this;
     model.addEvent('change', function(position) {
       self.updateField(position.x, position.y);
-      self.render();
+      clearTimeout(renderTimeout);
+      renderTimeout = setTimeout(boundRender, 50);
     });
     
     this.el = el;
@@ -600,6 +602,7 @@
   };
   
   EnvironmentView.prototype.render = function() {
+    log('render');
     this.renderer.render(this.scene, this.camera);
   };
   
