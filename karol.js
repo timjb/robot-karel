@@ -275,6 +275,8 @@
   };
   
   Environment.prototype.run = function(code) {
+    this.backup = this.clone();
+    
     var self = this;
     this.execute(code, function(stack) {
       log('Commands: ' + stack.join(', '));
@@ -284,10 +286,14 @@
   
   Environment.prototype.clone = function() {
     var env = new Environment(this.width, this.depth, this.height);
-    env.position  = this.position.clone();
-    env.direction = this.direction.clone();
-    env.fields = clone(this.fields);
+    env.copy(this);
     return env;
+  };
+  
+  Environment.prototype.copy = function(other) {
+    this.position  = other.position.clone();
+    this.direction = other.direction.clone();
+    this.fields = clone(other.fields);
   };
   
   Environment.prototype.execute = function(code, callback) {
@@ -398,7 +404,9 @@
     }
   };
   
-  Environment.prototype.slowly = function() {
+  Environment.prototype.replay = function() {
+    this.reset();
+    
     var self = this;
     var interval = win.setInterval(function() {
       if (self.stack.length == 0) {
@@ -408,6 +416,11 @@
         self.onchange && self.onchange();
       }
     }, 150);
+  };
+  
+  Environment.prototype.reset = function() {
+    this.copy(this.backup);
+    this._fireEvent('complete-change');
   };
   
   
@@ -426,6 +439,10 @@
       self.updateField(position.x, position.y);
       clearTimeout(renderTimeout);
       renderTimeout = setTimeout(boundRender, 50);
+    });
+    model.addEvent('complete-change', function() {
+      self.updateAllFields();
+      self.render();
     });
     
     this.el = el;
@@ -517,6 +534,17 @@
         row.push({ ziegel: [], marke: null });
       }
       fields.push(row);
+    }
+  };
+  
+  EnvironmentView.prototype.updateAllFields = function() {
+    var model = this.model;
+    var w = model.width
+    ,   d = model.depth;
+    for (var x = 0; x < w; x++) {
+      for (var y = 0; y < d; y++) {
+        this.updateField(x, y);
+      }
     }
   };
   
@@ -693,6 +721,7 @@
     var self = this;
     
     addEvent($('run-button'),        'click', bind(this.run, this));
+    addEvent($('replay-button'),     'click', bind(this.replay, this));
     addEvent($('reset-button'),      'click', bind(this.reset, this));
     addEvent($('new-button'),        'click', bind(this.toggleNewPane, this));
     addEvent($('new-cancel-button'), 'click', bind(this.toggleNewPane, this));
@@ -733,9 +762,12 @@
     this.environment.run(this.editor.value);
   };
   
+  AppController.prototype.replay = function() {
+    this.environment.replay();
+  };
+  
   AppController.prototype.reset = function() {
-    this.environmentView.dispose();
-    this.initModelAndView();
+    this.environment.reset();
   };
   
   AppController.prototype.toggleNewPane = function() {
