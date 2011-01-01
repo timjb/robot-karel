@@ -326,6 +326,11 @@
     iframe.style.display = 'none';
     doc.body.appendChild(iframe);
     var win = iframe.contentWindow;
+    win.document.write('<script>'
+    + 'function sandbox(code) {'
+    + '  eval(code);'
+    + '}'
+    + '</script>');
     win.parent = null;
     var karol = win.karol = {};
     var stack = [];
@@ -412,7 +417,7 @@
     };
     
     exec(function() {
-      win.eval(code); // evil, I know
+      win.sandbox(code); // evil, I know
     });
   };
   
