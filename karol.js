@@ -176,8 +176,9 @@
     return this.position.plus(this.direction);
   };
   
-  Environment.prototype.istZiegel = function() {
-    return this.getField(this.forward()).ziegel > 0;
+  Environment.prototype.istZiegel = function(n) {
+    n = n || 1;
+    return this.getField(this.forward()).ziegel >= n;
   };
   
   Environment.prototype.hinlegen = function() {
@@ -369,8 +370,13 @@
         //var stacktrace = p.run();
         //log(stacktrace[2]);
         
-        for (var i = 0; i < n; i++) {
-          var result = self[name]();
+        if (self[name].length == 0) {
+          for (var i = 0; i < n; i++) {
+            var result = self[name]();
+            stack.push(name);
+          }
+        } else {
+          var result = self[name].apply(self, arguments);
           stack.push(name);
         }
         return result;
