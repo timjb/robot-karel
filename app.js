@@ -8308,11 +8308,6 @@ var Events = {
     iframe.style.display = 'none';
     doc.body.appendChild(iframe);
     var win = iframe.contentWindow;
-    win.document.write('<script>'
-    + 'function sandbox(code) {'
-    + '  eval(code);'
-    + '}'
-    + '</script>');
     win.parent = null;
     var karol = win.karol = {};
     var stack = [];
@@ -8339,6 +8334,7 @@ var Events = {
 
     function end() {
       if (!timed.length) {
+        doc.body.removeChild(iframe);
         callback(stack);
       }
     }
@@ -8347,6 +8343,17 @@ var Events = {
       karol[name] = function(n) {
         n = n || 1;
 
+        /*
+        var p = new printStackTrace.implementation();
+        var stacktrace = p.run();
+        log(stacktrace.join('\n'));
+        */
+
+        try {
+          throw new Error();
+        } catch (exc) {
+          log(exc.stack);
+        }
 
         if (self[name].length == 0) {
           for (var i = 0; i < n; i++) {
@@ -8401,7 +8408,7 @@ var Events = {
     };
 
     exec(function() {
-      win.sandbox(code); // evil, I know
+      win.document.write('<script>'+code+'</script>'); // evil, I know
     });
   };
 
