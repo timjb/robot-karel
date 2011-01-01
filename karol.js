@@ -356,7 +356,7 @@
       }
     }
     
-    each(['istWand', 'schritt', 'linksDrehen', 'rechtsDrehen', 'hinlegen', 'aufheben', 'istZiegel', 'markeSetzen', 'markeLoeschen', 'istMarke', 'istNorden', 'istSueden', 'istWesten', 'istOsten'], function(name) {
+    each(['istWand', 'schritt', 'linksDrehen', 'rechtsDrehen', 'hinlegen', 'aufheben', 'istZiegel', 'markeSetzen', 'markeLoeschen', 'istMarke', 'istNorden', 'istSueden', 'istWesten', 'istOsten', 'ton'], function(name) {
       karol[name] = function(n) {
         n = n || 1;
         
@@ -371,10 +371,6 @@
         return result;
       };
     });
-    
-    karol.ton = function() {
-      stack.push('ton');
-    };
     
     win.warten = function(fn, ms) {
       var timeout = setTimeout(function() {
