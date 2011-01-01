@@ -8089,6 +8089,12 @@ var Events = {
     return new Position(this.x + another.x, this.y + another.y);
   };
 
+  Position.prototype.equals = function(another) {
+    return another instanceof Position
+           && another.x == this.x
+           && another.y == this.y;
+  };
+
 
   function Environment(width, depth, height) {
     this.width = width;
@@ -8233,6 +8239,22 @@ var Events = {
     this._fireEvent('change', position);
   };
 
+  Environment.prototype.istNorden = function() {
+    return this.direction.equals(new Position(0, -1));
+  };
+
+  Environment.prototype.istSueden = function() {
+    return this.direction.equals(new Position(0, 1));
+  };
+
+  Environment.prototype.istWesten = function() {
+    return this.direction.equals(new Position(-1, 0));
+  };
+
+  Environment.prototype.istOsten = function() {
+    return this.direction.equals(new Position(1, 0));
+  };
+
   Environment.prototype.run = function(code) {
     var self = this;
     this.clone().execute(code, function(stack) {
@@ -8284,7 +8306,7 @@ var Events = {
       }
     }
 
-    each(['istWand', 'schritt', 'linksDrehen', 'rechtsDrehen', 'hinlegen', 'aufheben', 'istZiegel', 'markeSetzen', 'markeLoeschen', 'istMarke'], function(name) {
+    each(['istWand', 'schritt', 'linksDrehen', 'rechtsDrehen', 'hinlegen', 'aufheben', 'istZiegel', 'markeSetzen', 'markeLoeschen', 'istMarke', 'istNorden', 'istSueden', 'istWesten', 'istOsten'], function(name) {
       karol[name] = function(n) {
         n = n || 1;
 
