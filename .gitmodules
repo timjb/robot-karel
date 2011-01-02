@@ -1,9 +1,6 @@
 [submodule "frameworks/three.js"]
 	path = frameworks/three.js
 	url = https://github.com/mrdoob/three.js.git
-[submodule "frameworks/javascript-stacktrace"]
-	path = frameworks/javascript-stacktrace
-	url = https://github.com/emwendelin/javascript-stacktrace.git
 [submodule "frameworks/regal.js"]
 	path = frameworks/regal.js
 	url = git://github.com/timjb/regal.js.git
