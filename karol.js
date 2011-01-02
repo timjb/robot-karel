@@ -1,6 +1,9 @@
 //= require <BespinEmbedded.uncompressed>
 
 (function(win, doc, undefined) {
+  // Settings
+  var HIGHLIGHT_LINE = false;
+  
   //= require <stacktrace>
   //= require <Three>
   var T = THREE;
@@ -99,6 +102,51 @@
     }
     return key;
   }
+  
+  // Browser detection
+  // https://github.com/mootools/mootools-core/blob/601c6dd6a6a98d8635c1a8e6ee840b8b3f7022d1/Source/Browser/Browser.js
+  var browser = (function() {
+    var ua = navigator.userAgent.toLowerCase();
+    var UA = ua.match(/(opera|ie|firefox|chrome|version)[\s\/:]([\w\d\.]+)?.*?(safari|version[\s\/:]([\w\d\.]+)|$)/) || [null, 'unknown', 0];
+    return (UA[1] == 'version') ? UA[3] : UA[1];
+  })();
+  
+  log('browser detected: ' + browser);
+  
+  function getLineNumber(stack, n) {
+    var self = getLineNumber;
+    if (self.hasOwnProperty(browser)) {
+      return self[browser](stack, n);
+    } else {
+      return null;
+    }
+  }
+  
+  getLineNumber.chrome = function(stack, n) {
+    var lines = stack.split("\n");
+    var line = lines[1+n];
+    var match = line.match(/:(\d+):\d+\)?$/);
+    if (match) {
+      return Number(match[1]);
+    } else {
+      return null;
+    }
+  };
+  
+  getLineNumber.firefox = function(stack, n) {
+    var lines = stack.split("\n");
+    var line = lines[1+n];
+    var match = line.match(/:(\d+)$/);
+    if (match) {
+      return Number(match[1]);
+    } else {
+      return null;
+    }
+  };
+  
+  getLineNumber.possible = function() {
+    return this.hasOwnProperty(browser);
+  };
   
   
   /*
@@ -362,26 +410,24 @@
       karol[name] = function(n) {
         n = n || 1;
         
-        /*
-        var p = new printStackTrace.implementation();
-        var stacktrace = p.run();
-        log(stacktrace.join('\n'));
-        */
-        
-        try {
-          throw new Error();
-        } catch (exc) {
-          log(exc.stack);
+        if (HIGHLIGHT_LINE) {
+          try {
+            throw new Error();
+          } catch (exc) {
+            var lineNumber = getLineNumber(exc.stack, 1);
+          }
+        } else {
+          var lineNumber = null;
         }
         
         if (self[name].length == 0) {
           for (var i = 0; i < n; i++) {
             var result = self[name]();
-            stack.push(name);
+            stack.push([name, lineNumber]);
           }
         } else {
           var result = self[name].apply(self, arguments);
-          stack.push(name);
+          stack.push([name, lineNumber]);
         }
         return result;
       };
@@ -432,11 +478,18 @@
   };
   
   Environment.prototype.next = function() {
-    var command = this.stack.shift();
+    var pair = this.stack.shift()
+    ,   command = pair[0]
+    ,   lineNumber = pair[1];
+    
     if (typeof command == 'string') {
       this[command]();
     } else if (command instanceof Error) {
       win.alert(command);
+    }
+    
+    if (lineNumber) {
+      this._fireEvent('line', lineNumber);
     }
   };
   
@@ -733,6 +786,11 @@
       Number($('depth').value),
       Number($('height').value)
     );
+    var self = this;
+    this.environment.addEvent('line', function(lineNumber) {
+      self.editor.setLineNumber(lineNumber);
+    });
+    
     this.environmentView = new EnvironmentView(environmentElement, this.environment);
   };
   

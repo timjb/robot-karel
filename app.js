@@ -7136,6 +7136,8 @@ if (typeof(window) === "undefined") {
 }
 
 (function(win, doc, undefined) {
+  var HIGHLIGHT_LINE = false;
+
 
 /**
  * Main function giving a function stack trace with a forced or passed in Error
@@ -8081,6 +8083,49 @@ var Events = {
     return key;
   }
 
+  var browser = (function() {
+    var ua = navigator.userAgent.toLowerCase();
+    var UA = ua.match(/(opera|ie|firefox|chrome|version)[\s\/:]([\w\d\.]+)?.*?(safari|version[\s\/:]([\w\d\.]+)|$)/) || [null, 'unknown', 0];
+    return (UA[1] == 'version') ? UA[3] : UA[1];
+  })();
+
+  log('browser detected: ' + browser);
+
+  function getLineNumber(stack, n) {
+    var self = getLineNumber;
+    if (self.hasOwnProperty(browser)) {
+      return self[browser](stack, n);
+    } else {
+      return null;
+    }
+  }
+
+  getLineNumber.chrome = function(stack, n) {
+    var lines = stack.split("\n");
+    var line = lines[1+n];
+    var match = line.match(/:(\d+):\d+\)?$/);
+    if (match) {
+      return Number(match[1]);
+    } else {
+      return null;
+    }
+  };
+
+  getLineNumber.firefox = function(stack, n) {
+    var lines = stack.split("\n");
+    var line = lines[1+n];
+    var match = line.match(/:(\d+)$/);
+    if (match) {
+      return Number(match[1]);
+    } else {
+      return null;
+    }
+  };
+
+  getLineNumber.possible = function() {
+    return this.hasOwnProperty(browser);
+  };
+
 
   /*
    * Model
@@ -8343,26 +8388,24 @@ var Events = {
       karol[name] = function(n) {
         n = n || 1;
 
-        /*
-        var p = new printStackTrace.implementation();
-        var stacktrace = p.run();
-        log(stacktrace.join('\n'));
-        */
-
-        try {
-          throw new Error();
-        } catch (exc) {
-          log(exc.stack);
+        if (HIGHLIGHT_LINE) {
+          try {
+            throw new Error();
+          } catch (exc) {
+            var lineNumber = getLineNumber(exc.stack, 1);
+          }
+        } else {
+          var lineNumber = null;
         }
 
         if (self[name].length == 0) {
           for (var i = 0; i < n; i++) {
             var result = self[name]();
-            stack.push(name);
+            stack.push([name, lineNumber]);
           }
         } else {
           var result = self[name].apply(self, arguments);
-          stack.push(name);
+          stack.push([name, lineNumber]);
         }
         return result;
       };
@@ -8413,11 +8456,18 @@ var Events = {
   };
 
   Environment.prototype.next = function() {
-    var command = this.stack.shift();
+    var pair = this.stack.shift()
+    ,   command = pair[0]
+    ,   lineNumber = pair[1];
+
     if (typeof command == 'string') {
       this[command]();
     } else if (command instanceof Error) {
       win.alert(command);
+    }
+
+    if (lineNumber) {
+      this._fireEvent('line', lineNumber);
     }
   };
 
@@ -8709,6 +8759,11 @@ var Events = {
       Number($('depth').value),
       Number($('height').value)
     );
+    var self = this;
+    this.environment.addEvent('line', function(lineNumber) {
+      self.editor.setLineNumber(lineNumber);
+    });
+
     this.environmentView = new EnvironmentView(environmentElement, this.environment);
   };
 
