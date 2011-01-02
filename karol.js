@@ -4,7 +4,6 @@
   // Settings
   var HIGHLIGHT_LINE = false;
   
-  //= require <stacktrace>
   //= require <Three>
   var T = THREE;
   //= require <Cube>
