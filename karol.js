@@ -225,7 +225,7 @@
   
   Environment.prototype.istZiegel = function(n) {
     n = n || 1;
-    return this.getField(this.forward()).ziegel >= n;
+    return this.getField(this.forward()).ziegel == n;
   };
   
   Environment.prototype.hinlegen = function() {
