@@ -8436,7 +8436,7 @@ var Events = {
 
     win.onBespinLoad = bind(this.initBespin, this);
     var self = this;
-    get('example.js', function(text) {
+    get('examples/pyramid.js', function(text) {
       self.exampleCode = text;
       self.initExampleCode();
     });
