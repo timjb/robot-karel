@@ -182,9 +182,9 @@ function create_connections() {
  */
 
 function main() {
-  console.log('test');
   create_grid();
   create_connections();
+  build_3m_walls();
 }
 
 main();
