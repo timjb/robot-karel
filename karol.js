@@ -224,8 +224,8 @@
   };
   
   Environment.prototype.istZiegel = function(n) {
-    n = n || 1;
-    return this.getField(this.forward()).ziegel == n;
+    var ziegel = this.getField(this.forward()).ziegel;
+    return n ? (ziegel == n) : !!ziegel;
   };
   
   Environment.prototype.hinlegen = function() {
@@ -767,7 +767,7 @@
     
     win.onBespinLoad = bind(this.initBespin, this);
     var self = this;
-    get('examples/pyramid.js', function(text) {
+    get('examples/maze.js', function(text) {
       self.exampleCode = text;
       self.initExampleCode();
     });
