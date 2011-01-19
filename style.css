@@ -4,6 +4,9 @@
 /* Reset */
 * { margin: 0; padding: 0; }
 
+.left { float: left; }
+.right { float: right; }
+
 html, body { height: 100%; }
 
 body {
@@ -33,7 +36,11 @@ h1 {
   padding: 0 5px;
   width: 55%;
 }
-input[type=button] {
+label input[type=radio] + span {
+  display: inline-block;
+  cursor: pointer;
+}
+input[type=button], label input[type=radio] + span {
   background: #d55b00; color: #fff; border: none;
   text-shadow: 0 1px 0 #000; -moz-text-shadow: 0 1px 0 #000; -webkit-text-shadow: 0 1px 0 #000;
   -webkit-box-shadow: 0 0 5px #a24500; -moz-box-shadow: 0 0 5px #a24500; box-shadow: 0 0 5px #a24500;
@@ -41,22 +48,17 @@ input[type=button] {
   padding: 0 10px;
   margin: 8px 5px;
 }
-input[type=button].left {
-  float: left;
-}
-input[type=button].right {
-  float: right;
-}
 input[type=button]:hover {
   -webkit-box-shadow: 0 0 5px #8d3c00; -moz-box-shadow: 0 0 5px #8d3c00; box-shadow: 0 0 5px #8d3c00;
   cursor: pointer;
 }
-input[type=button]:active {
+input[type=button]:active, label input[type=radio]:checked + span {
   background: #a24500;
 }
 input[type=number] {
   width: 50px;
 }
+label input[type=radio] { display: none; }
 #new-pane {
   display: none;
   position: absolute; top: 40px; right: 0;

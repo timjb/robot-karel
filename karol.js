@@ -186,6 +186,26 @@
            && another.y == this.y;
   };
   
+  Position.NORTH = new Position(0, -1);
+  Position.prototype.isNorth = function() {
+    return this.equals(Position.NORTH);
+  };
+  
+  Position.SOUTH = new Position(0, 1);
+  Position.prototype.isSouth = function() {
+    return this.equals(Position.SOUTH);
+  };
+  
+  Position.WEST = new Position(-1, 0);
+  Position.prototype.isWest = function() {
+    return this.equals(Position.WEST);
+  };
+  
+  Position.EAST = new Position(1, 0);
+  Position.prototype.isEast = function() {
+    return this.equals(Position.EAST);
+  };
+  
   
   function Environment(width, depth, height) {
     this.width = width;
@@ -193,7 +213,7 @@
     this.height = height;
     
     this.position = new Position(0, 0);
-    this.direction = new Position(0, 1);
+    this.direction = Position.SOUTH.clone();
     
     this.createFields();
     this.initBeepSound();
@@ -234,7 +254,7 @@
     var field = this.getField(nextPosition);
     if (field.ziegel >= this.height) throw new Error("Karol kann keinen Ziegel hinlegen, da die Maximalhoehe erreicht wurde.");
     field.ziegel += 1;
-    this._fireEvent('change', nextPosition);
+    this._fireEvent('change-field', nextPosition);
   };
   
   Environment.prototype.aufheben = function() {
@@ -243,23 +263,23 @@
     var field = this.getField(nextPosition);
     if (!field.ziegel) throw new Error("Karol kann keinen Ziegel aufheben, da kein Ziegel vor ihm liegt.");
     field.ziegel--;
-    this._fireEvent('change', nextPosition);
+    this._fireEvent('change-field', nextPosition);
   };
   
   Environment.prototype.markeSetzen = function() {
     this.getField(this.position).marke = true;
-    this._fireEvent('change', this.position);
+    this._fireEvent('change-field', this.position);
   };
   
   Environment.prototype.markeLoeschen = function() {
     this.getField(this.position).marke = false;
-    this._fireEvent('change', this.position);
+    this._fireEvent('change-field', this.position);
   };
   
   Environment.prototype.marke = function() {
     var field = this.getField(this.position);
     field.marke = !field.marke;
-    this._fireEvent('change', this.position);
+    this._fireEvent('change-field', this.position);
   };
   
   Environment.prototype.istMarke = function() {
@@ -279,10 +299,12 @@
   
   Environment.prototype.linksDrehen = function() {
     this.direction = new Position(this.direction.y, -this.direction.x);
+    this._fireEvent('change-robot');
   };
   
   Environment.prototype.rechtsDrehen = function() {
     this.direction = new Position(-this.direction.y, this.direction.x);
+    this._fireEvent('change-robot');
   };
   
   Environment.prototype.schritt = function() {
@@ -291,6 +313,7 @@
     if (Math.abs(this.getField(this.position).ziegel - this.getField(newPosition).ziegel) > 1)
       throw new Error("Karol kann nur einen Ziegel pro Schritt nach oben oder unten springen.");
     this.position = newPosition;
+    this._fireEvent('change-robot');
   };
   
   Environment.prototype.quader = function() {
@@ -300,7 +323,16 @@
     if (field.quader) throw new Error("Karol kann keinen Quader hinlegen, da schon einer liegt.");
     if (field.ziegel) throw new Error("Karol kann keinen Quader hinlegen, da auf dem Feld schon Ziegel liegen.");
     field.quader = true;
-    this._fireEvent('change', position);
+    this._fireEvent('change-field', position);
+  };
+  
+  Environment.prototype.entfernen = function() {
+    var position = this.forward();
+    if (!this.isValid(position)) throw new Error("Karol kann keinen Quader entfernen. Er steht vor einer Wand.");
+    var field = this.getField(position);
+    if (!field.quader) throw new Error("Karol kann keinen Quader entfernen, da auf dem Feld kein Quader liegt.");
+    field.quader = false;
+    this._fireEvent('change-field', position);
   };
   
   Environment.prototype.initBeepSound = function() {
@@ -320,15 +352,6 @@
       sound.play();
       this.initBeepSound(); // Because Chrome can't replay
     }
-  };
-  
-  Environment.prototype.entfernen = function() {
-    var position = this.forward();
-    if (!this.isValid(position)) throw new Error("Karol kann keinen Quader entfernen. Er steht vor einer Wand.");
-    var field = this.getField(position);
-    if (!field.quader) throw new Error("Karol kann keinen Quader entfernen, da auf dem Feld kein Quader liegt.");
-    field.quader = false;
-    this._fireEvent('change', position);
   };
   
   Environment.prototype.istNorden = function() {
@@ -511,45 +534,102 @@
     this._fireEvent('complete-change');
   };
   
+  Environment.prototype.eachField = function(fn) {
+    var w = this.width
+    ,   d = this.depth;
+    for (var x = 0; x < w; x++) {
+      for (var y = 0; y < d; y++) {
+        fn(x, y, this.fields[x][y]);
+      }
+    }
+  };
+  
   
   /*
    * View
    */
   
-  function EnvironmentView(el, model) {
+  var ENVIRONMENT_COLORS = (function() {
+    var C = {};
+    function def(name, hex) {
+      C[name] = {
+        css: '#'+hex,
+        hex: parseInt(hex, 16)
+      };
+    }
+    
+    def('ziegel', 'ff0000');
+    def('quader', '666666');
+    def('marke',  'cccc55');
+    
+    return C;
+  })();
+  
+  
+  function View() {}
+  
+  View.prototype.inject = function(p) {
+    p.appendChild(this.getElement());
+    this.dimensionsChanged();
+  };
+  
+  View.prototype.dispose = function() {
+    var el = this.getElement(),
+        p  = el.parentElement;
+    if (p) p.removeChild(el);
+  };
+  
+  View.prototype.isVisible = function() {
+    return !!this.getElement().parentElement;
+  };
+  
+  View.prototype.dimensionsChanged = function() {
+    var p = this.getElement().parentElement;
+    if (p) this.updateSize(p.getBoundingClientRect());
+    if (this.render) this.render();
+  };
+  
+  View.prototype.delayRender = function() {
+    if (this.isVisible()) {
+      clearTimeout(this.renderTimeout);
+      this.renderTimeout = setTimeout(bind(this.render, this), 50);
+    }
+  };
+  
+  
+  function EnvironmentView3D(model) {
     this.model = model;
     this.createFields();
     
-    var renderTimeout = null;
-    var boundRender = bind(this.render, this);
     var self = this;
-    model.addEvent('change', function(position) {
-      self.updateField(position.x, position.y);
-      clearTimeout(renderTimeout);
-      renderTimeout = setTimeout(boundRender, 50);
+    model.addEvent('change-field', function (position) {
+      var x = position.x, y = position.y;
+      self.updateField(x, y, model.fields[x][y]);
+      self.delayRender();
+    });
+    model.addEvent('change-robot', function() {
+      // TODO: Update the position of the robot
+      self.delayRender();
     });
     model.addEvent('complete-change', function() {
       self.updateAllFields();
       self.render();
     });
     
-    this.el = el;
     this.renderer = new T.CanvasRenderer();
     this.createMouseListener();
     this.scene = new T.Scene();
-    this.updateSize();
     this.degrees = 45;
     this.cameraZ = 120;
-    this.updateCameraPosition();
     this.createGrid();
-    this.render();
-    this.inject();
   }
   
-  EnvironmentView.GW = 40; // Grid Width
-  EnvironmentView.GH = 25; // Grid Height
+  EnvironmentView3D.GW = 40; // Grid Width
+  EnvironmentView3D.GH = 25; // Grid Height
   
-  EnvironmentView.prototype.createMouseListener = function() {
+  EnvironmentView3D.prototype = new View();
+  
+  EnvironmentView3D.prototype.createMouseListener = function() {
     var self = this;
     
     addEvent(this.renderer.domElement, 'mousedown', function(evt) {
@@ -578,15 +658,15 @@
     });
   };
   
-  EnvironmentView.prototype.createGrid = function() {
+  EnvironmentView3D.prototype.createGrid = function() {
     var model = this.model;
     var w = model.width,
         d = model.depth,
         h = model.height;
     
     var material = new T.MeshBasicMaterial({ color: 0x5555cc, wireframe: true });
-    var GW = EnvironmentView.GW;
-    var GH = EnvironmentView.GH;
+    var GW = EnvironmentView3D.GW;
+    var GH = EnvironmentView3D.GH;
     
     // Ground
     var plane = new T.Mesh(new Plane(w*GW, d*GW, w, d), material);
@@ -610,7 +690,7 @@
     this.scene.addObject(plane);
   };
   
-  EnvironmentView.prototype.createFields = function() {
+  EnvironmentView3D.prototype.createFields = function() {
     var model = this.model;
     var w = model.width,
         d = model.depth;
@@ -625,26 +705,17 @@
     }
   };
   
-  EnvironmentView.prototype.updateAllFields = function() {
-    var model = this.model;
-    var w = model.width
-    ,   d = model.depth;
-    for (var x = 0; x < w; x++) {
-      for (var y = 0; y < d; y++) {
-        this.updateField(x, y);
-      }
-    }
+  EnvironmentView3D.prototype.updateAllFields = function() {
+    this.model.eachField(bind(this.updateField, this));
   };
   
-  EnvironmentView.prototype.updateField = function(x, y) {
+  EnvironmentView3D.prototype.updateField = function(x, y, field) {
     var model = this.model;
-    var w = model.width,
-        d = model.depth;
-    
     var scene = this.scene;
+    var fieldObj = this.fields[x][y];
     
-    var GW = EnvironmentView.GW,
-        GH = EnvironmentView.GH;
+    var GW = EnvironmentView3D.GW,
+        GH = EnvironmentView3D.GH;
     var x0 = -GW*(model.width/2),
         y0 = GW*(model.depth/2);
     
@@ -656,14 +727,11 @@
       return materials;
     }
     
-    var ZIEGEL_MATERIAL = createCubeMaterial({ color: 0xff0000, wireframe: true });
-    var QUADER_MATERIAL = createCubeMaterial({ color: 0x666666 });
+    var ZIEGEL_MATERIAL = createCubeMaterial({ color: ENVIRONMENT_COLORS.ziegel.hex, wireframe: true });
+    var QUADER_MATERIAL = createCubeMaterial({ color: ENVIRONMENT_COLORS.quader.hex });
     
-    //var M = T.MeshBasicMaterial({ color: 0xff0000 });
+    //var M = T.MeshBasicMaterial({ color: ENVIRONMENT_COLORS.ziegel.hex });
     //var MATERIALS = [[M], [M], [M], [M], [M], [M]];
-    
-    var fieldObj = this.fields[x][y];
-    var field = model.fields[x][y];
     
     while (field.ziegel < fieldObj.ziegel.length) {
       scene.removeObject(fieldObj.ziegel.pop());
@@ -693,7 +761,7 @@
     if (field.marke && !fieldObj.marke) {
       var marke = new T.Mesh(
         new Plane(GW, GW, 1, 1),
-        new T.MeshBasicMaterial({ color: 0xcccc55 })
+        new T.MeshBasicMaterial({ color: ENVIRONMENT_COLORS.marke.hex })
       );
       marke.position.x = GW/2 + x0 + x*GW;
       marke.position.y = -GW/2 + y0 - y*GW;
@@ -717,23 +785,24 @@
     }
   };
   
-  EnvironmentView.prototype.render = function() {
-    log('render');
+  EnvironmentView3D.prototype.render = function() {
+    log('render 3d');
     this.renderer.render(this.scene, this.camera);
   };
   
-  EnvironmentView.prototype.updateSize = function() {
-    var box = this.el.getBoundingClientRect(),
-        width = box.width,
-        height = box.height;
-    
-    var camera = this.camera = new T.Camera(75, width/height, 1, 1e5);
-    camera.up = new T.Vector3(0, 0, 1);
-    
-    this.renderer.setSize(width, height);
+  EnvironmentView3D.prototype.updateSize = function(dimensions) {
+    var w = dimensions.width, h = dimensions.height;
+    this.createCamera(w, h);
+    this.renderer.setSize(w, h);
   };
   
-  EnvironmentView.prototype.updateCameraPosition = function() {
+  EnvironmentView3D.prototype.createCamera = function(width, height) {
+    var camera = this.camera = new T.Camera(75, width/height, 1, 1e5);
+    camera.up = new T.Vector3(0, 0, 1);
+    this.updateCameraPosition();
+  };
+  
+  EnvironmentView3D.prototype.updateCameraPosition = function() {
     var degrees = this.degrees;
     var radian = degrees * (Math.PI/180);
     var position = this.camera.position;
@@ -744,17 +813,84 @@
     position.z = this.cameraZ;
   };
   
-  EnvironmentView.prototype.dimensionsChanged = function() {
-    this.updateSize();
-    this.render();
+  EnvironmentView3D.prototype.getElement = function() {
+    return this.renderer.domElement;
   };
   
-  EnvironmentView.prototype.inject = function() {
-    this.el.appendChild(this.renderer.domElement);
+  
+  function EnvironmentView2D(model) {
+    this.model = model;
+    
+    var boundDelayRender = bind(this.delayRender, this);
+    model.addEvent('change-field', boundDelayRender);
+    model.addEvent('change-robot', boundDelayRender);
+    model.addEvent('complete-change', bind(this.render, this));
+    
+    this.canvas = doc.createElement('canvas');
+  }
+  
+  EnvironmentView2D.prototype = new View();
+  
+  EnvironmentView2D.prototype.render = function() {
+    log('render 2d');
+    
+    var model = this.model;
+    var ctx = this.canvas.getContext('2d');
+    
+    var GAP = 4;
+    var GW = Math.min((this.width-GAP) / model.width, (this.height-GAP) / model.depth); // GridWidth
+    
+    ctx.save();
+    ctx.fillStyle = '#333';
+    ctx.fillRect(0, 0, this.width, this.height);
+    ctx.restore();
+    
+    function fill(x, y, color) {
+      ctx.save();
+      ctx.fillStyle = color;
+      ctx.fillRect(GAP+x*GW, GAP+y*GW, GW-GAP, GW-GAP);
+      ctx.restore();
+    }
+    
+    function letter(x, y, color, letter) {
+      ctx.save();
+      ctx.fillStyle = color;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.font = (0.5*GW) + 'px Helvetica, Arial, sans-serif';
+      ctx.fillText(letter, GAP + x*GW + 0.5*(GW-GAP), GAP + y*GW + 0.5*(GW-GAP));
+      ctx.restore();
+    }
+    
+    var position = model.position;
+    var direction = model.direction;
+    
+    model.eachField(function(x, y, field) {
+      var bg, fg;
+      if (field.quader)      { bg = ENVIRONMENT_COLORS.quader.css; }
+      else if (field.marke)  { bg = ENVIRONMENT_COLORS.marke.css;  fg = '#000'; }
+      else if (field.ziegel) { bg = ENVIRONMENT_COLORS.ziegel.css; fg = '#fff'; }
+      else                   { bg = '#fff'; fg = '#000'; }
+      fill(x, y, bg);
+      if (position.x == x && position.y == y) {
+        var char;
+        if (direction.isNorth())      char = '\u25b2';
+        else if (direction.isSouth()) char = '\u25bc';
+        else if (direction.isWest())  char = '\u25c4';
+        else                          char = '\u25ba';
+        letter(x, y, fg, char);
+      }
+      else if (field.ziegel) letter(x, y, fg, field.ziegel);
+    });
   };
   
-  EnvironmentView.prototype.dispose = function() {
-    this.el.removeChild(this.renderer.domElement);
+  EnvironmentView2D.prototype.updateSize = function(dimensions) {
+    this.width  = this.canvas.width  = dimensions.width;
+    this.height = this.canvas.height = dimensions.height;
+  };
+  
+  EnvironmentView2D.prototype.getElement = function() {
+    return this.canvas;
   };
   
   
@@ -767,7 +903,7 @@
     
     win.onBespinLoad = bind(this.initBespin, this);
     var self = this;
-    get('examples/maze.js', function(text) {
+    get('examples/pyramid.js', function(text) {
       self.exampleCode = text;
       self.initExampleCode();
     });
@@ -778,19 +914,33 @@
   }
   
   AppController.prototype.initModelAndView = function() {
-    var environmentElement = $('environment');
-    environmentElement.innerHTML = '';
     this.environment = new Environment(
-      Number($('width').value),
-      Number($('depth').value),
-      Number($('height').value)
+      parseInt($('width').value, 10),
+      parseInt($('depth').value, 10),
+      parseInt($('height').value, 10)
     );
     var self = this;
     this.environment.addEvent('line', function(lineNumber) {
       self.editor.setLineNumber(lineNumber);
     });
     
-    this.environmentView = new EnvironmentView(environmentElement, this.environment);
+    $('environment').innerHTML = '';
+    this.environmentView3D = new EnvironmentView3D(this.environment);
+    this.environmentView2D = new EnvironmentView2D(this.environment);
+    this.updateViewPrecedence();
+  };
+  
+  AppController.prototype.updateViewPrecedence = function() {
+    var environmentEl = $('environment');
+    var d3 = this.environmentView3D,
+        d2 = this.environmentView2D;
+    if ($('view-select-3d').checked) {
+      d2.dispose();
+      d3.inject(environmentEl);
+    } else {
+      d3.dispose();
+      d2.inject(environmentEl);
+    }
   };
   
   AppController.prototype.initBespin = function() {
@@ -817,7 +967,6 @@
     } catch (exc) {
       alert(exc);
     }
-    this.environmentView.render();
   };
   
   AppController.prototype.initButtons = function() {
@@ -826,6 +975,8 @@
     addEvent($('run-button'),        'click', bind(this.run, this));
     addEvent($('replay-button'),     'click', bind(this.replay, this));
     addEvent($('reset-button'),      'click', bind(this.reset, this));
+    addEvent($('view-select-3d'),    'change', bind(this.updateViewPrecedence, this));
+    addEvent($('view-select-2d'),    'change', bind(this.updateViewPrecedence, this));
     addEvent($('new-button'),        'click', bind(this.toggleNewPane, this));
     addEvent($('new-cancel-button'), 'click', bind(this.toggleNewPane, this));
     addEvent($('new-apply-button'),  'click', function() {
@@ -872,7 +1023,8 @@
     var self = this;
     function resize() {
       self.bespinEnv.dimensionsChanged();
-      self.environmentView.dimensionsChanged();
+      self.environmentView2D.dimensionsChanged();
+      self.environmentView3D.dimensionsChanged();
     }
     
     var resizeTimeout = null;
