@@ -8651,8 +8651,10 @@ var Events = {
   };
 
   AppController.prototype.sendCommand = function(cmd) {
+    if (!(cmd instanceof Array)) cmd = [cmd];
+    var env = this.environment;
     try {
-      this.environment[cmd]();
+      each(cmd, function(c) { env[c](); });
     } catch (exc) {
       alert(exc);
     }
@@ -8685,17 +8687,18 @@ var Events = {
   AppController.prototype.initKeyboard = function() {
     var self = this;
     var actions = {
-      'left': 'linksDrehen',
-      'right': 'rechtsDrehen',
-      'up': 'schritt',
-      'space': 'marke',
-      'h': 'hinlegen',
-      'enter': 'hinlegen',
-      'a': 'aufheben',
-      'backspace': 'aufheben',
-      'm': 'marke',
-      'q': 'quader',
-      'e': 'entfernen',
+      left:  'linksDrehen',
+      right: 'rechtsDrehen',
+      up:    'schritt',
+      down:  ['linksDrehen', 'linksDrehen', 'schritt', 'linksDrehen', 'linksDrehen'],
+      space: 'marke',
+      h:     'hinlegen',
+      enter: 'hinlegen',
+      a:     'aufheben',
+      backspace: 'aufheben',
+      m:     'marke',
+      q:     'quader',
+      e:     'entfernen',
       'delete': 'entfernen'
     };
     addEvent(doc, 'keydown', function(evt) {
