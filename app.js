@@ -8465,7 +8465,7 @@ var Events = {
       );
       marke.position.x = GW/2 + x0 + x*GW;
       marke.position.y = -GW/2 + y0 - y*GW;
-      marke.position.z = fieldObj.ziegel.length*GH;
+      marke.position.z = fieldObj.ziegel.length*GH + 1;
       scene.addObject(marke);
       fieldObj.marke = marke;
     }
