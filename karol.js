@@ -244,6 +244,7 @@
   };
   
   Environment.prototype.istZiegel = function(n) {
+    if (this.istWand()) return false;
     var ziegel = this.getField(this.forward()).ziegel;
     return n ? (ziegel == n) : !!ziegel;
   };
@@ -903,7 +904,7 @@
     
     win.onBespinLoad = bind(this.initBespin, this);
     var self = this;
-    get('examples/pyramid.js', function(text) {
+    get('examples/maze.js', function(text) {
       self.exampleCode = text;
       self.initExampleCode();
     });

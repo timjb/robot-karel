@@ -110,13 +110,13 @@ function count_possibilities() {
 }
 
 function is_valid() {
-  return !karol.istWand() && karol.istZiegel(1);
+  return karol.istZiegel(1);
 }
 
 function break_through() {
   karol.aufheben();
   each_direction(function() {
-    if (!karol.istWand() && karol.istZiegel()) karol.hinlegen();
+    if (karol.istZiegel()) karol.hinlegen();
   });
   (2).times(function() {
     karol.schritt();
@@ -136,7 +136,7 @@ function turn_back() {
 
 function build_3m_walls() {
   each_direction(function() {
-    if (!karol.istWand() && (karol.istZiegel(1) || karol.istZiegel(2))) {
+    if (karol.istZiegel(1) || karol.istZiegel(2)) {
       while (!karol.istZiegel(3)) {
         karol.hinlegen();
       }
@@ -146,7 +146,7 @@ function build_3m_walls() {
 
 function go_back() {
   each_direction(function() {
-    if (!karol.istWand() && karol.istZiegel()) karol.hinlegen();
+    if (karol.istZiegel()) karol.hinlegen();
   });
   karol.markeLoeschen();
   karol.schritt();
@@ -154,7 +154,7 @@ function go_back() {
   karol.markeLoeschen();
   karol.schritt();
   each_direction(function() {
-    if (!karol.istWand() && karol.istZiegel()) karol.aufheben();
+    if (karol.istZiegel()) karol.aufheben();
   });
 }
 
