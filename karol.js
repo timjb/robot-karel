@@ -623,6 +623,7 @@
     this.degrees = 45;
     this.cameraZ = 120;
     this.createGrid();
+    this.createLights();
   }
   
   EnvironmentView3D.GW = 40; // Grid Width
@@ -691,6 +692,14 @@
     this.scene.addObject(plane);
   };
   
+  EnvironmentView3D.prototype.createLights = function() {
+    var l = new T.AmbientLight(0x888888);
+    this.scene.addLight(l);
+    
+    var l = this.light = new T.DirectionalLight(0xaaaaaa);
+    this.scene.addLight(l);
+  };
+  
   EnvironmentView3D.prototype.createFields = function() {
     var model = this.model;
     var w = model.width,
@@ -728,7 +737,7 @@
       return materials;
     }
     
-    var ZIEGEL_MATERIAL = createCubeMaterial({ color: ENVIRONMENT_COLORS.ziegel.hex, wireframe: true });
+    //var ZIEGEL_MATERIAL = createCubeMaterial({ color: ENVIRONMENT_COLORS.ziegel.hex });
     var QUADER_MATERIAL = createCubeMaterial({ color: ENVIRONMENT_COLORS.quader.hex });
     
     //var M = T.MeshBasicMaterial({ color: ENVIRONMENT_COLORS.ziegel.hex });
@@ -743,7 +752,10 @@
     
     while (field.ziegel > fieldObj.ziegel.length) {
       var z = fieldObj.ziegel.length;
-      var cube = new T.Mesh(new Cube(GW, GW, GH, 1, 1, ZIEGEL_MATERIAL), new T.MeshFaceMaterial());
+      var cube = new T.Mesh(
+        new Cube(GW, GW, GH, 1, 1, new T.MeshLambertMaterial({ color: ENVIRONMENT_COLORS.ziegel.hex, shading: T.FlatShading })),
+        new T.MeshFaceMaterial()
+      );
       cube.position.x = GW/2 + x0 + x*GW;
       cube.position.y = -GW/2 + y0 - y*GW;
       cube.position.z = GH/2 + z*GH;
@@ -806,12 +818,15 @@
   EnvironmentView3D.prototype.updateCameraPosition = function() {
     var degrees = this.degrees;
     var radian = degrees * (Math.PI/180);
-    var position = this.camera.position;
+    var p1 = this.camera.position;
+    var p2 = this.light.position;
     
     var RADIUS = 400;
-    position.x =  Math.sin(radian) * RADIUS;
-    position.y = -Math.cos(radian) * RADIUS;
-    position.z = this.cameraZ;
+    p1.x = p2.x =  Math.sin(radian) * RADIUS;
+    p1.y = p2.y = -Math.cos(radian) * RADIUS;
+    p1.z = p2.z = this.cameraZ;
+    
+    p2.normalize();
   };
   
   EnvironmentView3D.prototype.getElement = function() {
@@ -904,7 +919,7 @@
     
     win.onBespinLoad = bind(this.initBespin, this);
     var self = this;
-    get('examples/maze.js', function(text) {
+    get('examples/pyramid.js', function(text) {
       self.exampleCode = text;
       self.initExampleCode();
     });
