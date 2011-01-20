@@ -2,12 +2,10 @@
   * "schnell" and "langsam"
 * Show a little, cute robot
 * Buttons for running step by step or fast
-* Highlight current line
-* Fix style of the ziegel and the grid
 * Translate API
 * README
 * Docs
 * Examples
   * Time (digital clock using marks)
   * Live stock quotes
-  * Maze
+  * Conway's Game of Life
