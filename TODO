@@ -1,6 +1,8 @@
 * Commands:
   * "schnell" and "langsam"
+  * Transaction API
 * Show a little, cute robot
+* Add marks in 2D View with right click and move the robot with left click
 * Buttons for running step by step or fast
 * Translate API
 * README
@@ -8,4 +10,3 @@
 * Examples
   * Time (digital clock using marks)
   * Live stock quotes
-  * Conway's Game of Life
