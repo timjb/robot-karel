@@ -8320,7 +8320,7 @@ var Events = {
   }
 
   EnvironmentView3D.GW = 40; // Grid Width
-  EnvironmentView3D.GH = 25; // Grid Height
+  EnvironmentView3D.GH = 22; // Grid Height
 
   EnvironmentView3D.prototype = new View();
 
