@@ -729,20 +729,6 @@
     var x0 = -GW*(model.width/2),
         y0 = GW*(model.depth/2);
     
-    function createCubeMaterial(props) {
-      var materials = [];
-      for (var i = 0; i < 6; i++) {
-        materials.push([new T.MeshBasicMaterial(props)]);
-      }
-      return materials;
-    }
-    
-    //var ZIEGEL_MATERIAL = createCubeMaterial({ color: ENVIRONMENT_COLORS.ziegel.hex });
-    var QUADER_MATERIAL = createCubeMaterial({ color: ENVIRONMENT_COLORS.quader.hex });
-    
-    //var M = T.MeshBasicMaterial({ color: ENVIRONMENT_COLORS.ziegel.hex });
-    //var MATERIALS = [[M], [M], [M], [M], [M], [M]];
-    
     while (field.ziegel < fieldObj.ziegel.length) {
       scene.removeObject(fieldObj.ziegel.pop());
       if (fieldObj.marke) {
@@ -784,7 +770,7 @@
     }
     
     if (field.quader && !fieldObj.quader) {
-      var cube = new T.Mesh(new Cube(GW, GW, 2*GH, 1, 1, QUADER_MATERIAL), new T.MeshFaceMaterial());
+      var cube = new T.Mesh(new Cube(GW, GW, 2*GH, 1, 1), new T.MeshLambertMaterial({ color: ENVIRONMENT_COLORS.quader.hex, shading: T.FlatShading }));
       cube.position.x = GW/2 + x0 + x*GW;
       cube.position.y = -GW/2 + y0 - y*GW;
       cube.position.z = GH;
