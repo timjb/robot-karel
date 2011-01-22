@@ -371,6 +371,16 @@
     return this.direction.equals(new Position(1, 0));
   };
   
+  Environment.prototype.probiere = function(fn) {
+    var clone = this.clone();
+    try {
+      return fn();
+    } catch(exc) {
+      this.copy(clone);
+      this._fireEvent('complete-change');
+    }
+  };
+  
   Environment.prototype.run = function(code) {
     this.backup = this.clone();
     
@@ -429,7 +439,7 @@
       }
     }
     
-    each(['istWand', 'schritt', 'linksDrehen', 'rechtsDrehen', 'hinlegen', 'aufheben', 'istZiegel', 'markeSetzen', 'markeLoeschen', 'istMarke', 'istNorden', 'istSueden', 'istWesten', 'istOsten', 'ton'], function(name) {
+    each(['istWand', 'schritt', 'linksDrehen', 'rechtsDrehen', 'hinlegen', 'aufheben', 'istZiegel', 'markeSetzen', 'markeLoeschen', 'istMarke', 'istNorden', 'istSueden', 'istWesten', 'istOsten', 'ton', 'probiere'], function(name) {
       karol[name] = function(n) {
         n = n || 1;
         
