@@ -8519,6 +8519,7 @@ var Events = {
     model.addEvent('complete-change', bind(this.render, this));
 
     this.canvas = doc.createElement('canvas');
+    this.initMouse();
   }
 
   EnvironmentView2D.prototype = new View();
@@ -8529,12 +8530,11 @@ var Events = {
     var model = this.model;
     var ctx = this.canvas.getContext('2d');
 
-    var GAP = 4;
-    var GW = Math.min((this.width-GAP) / model.width, (this.height-GAP) / model.depth); // GridWidth
+    var GAP = this.GAP, GW = this.GW;
 
     ctx.save();
     ctx.fillStyle = '#333';
-    ctx.fillRect(0, 0, this.width, this.height);
+    ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
     ctx.restore();
 
     function fill(x, y, color) {
@@ -8577,12 +8577,40 @@ var Events = {
   };
 
   EnvironmentView2D.prototype.updateSize = function(dimensions) {
-    this.width  = this.canvas.width  = dimensions.width;
-    this.height = this.canvas.height = dimensions.height;
+    var w = this.canvas.width  = dimensions.width;
+    var h = this.canvas.height = dimensions.height;
+    var m = this.model;
+    var GAP = this.GAP = 4;
+    this.GW = Math.min((w-GAP) / m.width, (h-GAP) / m.depth); // GridWidth
   };
 
   EnvironmentView2D.prototype.getElement = function() {
     return this.canvas;
+  };
+
+  EnvironmentView2D.prototype.initMouse = function() {
+    addEvent(this.canvas, 'mousedown', bind(function(evt) {
+      var rect = this.canvas.getBoundingClientRect(),
+          x = evt.clientX - rect.left,
+          y = evt.clientY - rect.top;
+      var position = new Position(
+        Math.floor((x-this.GAP) / this.GW),
+        Math.floor((y-this.GAP) / this.GW)
+      );
+
+      if (evt.button == 0) { // left click
+        this.model.position = position;
+        this.model._fireEvent('change-robot');
+      } else {
+        var field = this.model.getField(position);
+        field.marke = !field.marke;
+        this.model._fireEvent('change-field', position);
+      }
+    }, this));
+    addEvent(this.canvas, 'contextmenu', function(evt) {
+      evt.preventDefault();
+      return false;
+    });
   };
 
 
