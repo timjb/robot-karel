@@ -1,5 +1,3 @@
-//= require <BespinEmbedded.uncompressed>
-
 (function(win, doc, undefined) {
   // Settings
   var HIGHLIGHT_LINE = false;
@@ -940,14 +938,8 @@
   
   function AppController() {
     this.initModelAndView();
-    
-    win.onBespinLoad = bind(this.initBespin, this);
-    var self = this;
-    get('examples/conways_game_of_life.js', function(text) {
-      self.exampleCode = text;
-      self.initExampleCode();
-    });
-    
+    this.initEditor();
+    this.loadExampleCode();
     this.initButtons();
     this.initKeyboard();
     this.addEvents();
@@ -961,7 +953,7 @@
     );
     var self = this;
     this.environment.addEvent('line', function(lineNumber) {
-      self.editor.setLineNumber(lineNumber);
+      self.editor.gotoLine(lineNumber);
     });
     
     $('environment').innerHTML = '';
@@ -983,22 +975,19 @@
     }
   };
   
-  AppController.prototype.initBespin = function() {
-    var self = this;
-    bespin.useBespin($('editor')).then(function(env) {
-      self.bespinEnv = env;
-      self.editor = env.editor;
-      self.editor.syntax = 'js';
-      self.initExampleCode();
-    }, function() {
-      log('Bespin launch failed');
-    });
+  AppController.prototype.initEditor = function() {
+    var e = this.editor = ace.edit($('editor'));
+    var s = e.getSession();
+    e.setTheme('ace/theme/textmate');
+    s.setMode(new (require('ace/mode/javascript').Mode));
+    s.setTabSize(2);
+    s.setUseSoftTabs(true);
+    e.setShowPrintMargin(false);
   };
   
-  AppController.prototype.initExampleCode = function() {
-    if (this.exampleCode && this.editor) {
-      this.editor.value = this.exampleCode;
-    }
+  AppController.prototype.loadExampleCode = function() {
+    var s = this.editor.getSession();
+    get('examples/conways_game_of_life.js', bind(s.setValue, s));
   };
   
   AppController.prototype.sendCommand = function(cmd) {
@@ -1065,7 +1054,6 @@
   AppController.prototype.addEvents = function() {
     var self = this;
     function resize() {
-      self.bespinEnv.dimensionsChanged();
       self.environmentView2D.dimensionsChanged();
       self.environmentView3D.dimensionsChanged();
     }
@@ -1078,7 +1066,7 @@
   };
   
   AppController.prototype.run = function() {
-    this.environment.run(this.editor.value);
+    this.environment.run(this.editor.getSession().getValue());
   };
   
   AppController.prototype.replay = function() {

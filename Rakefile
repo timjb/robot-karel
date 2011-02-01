@@ -4,7 +4,7 @@ task :default do
   secretary = Sprockets::Secretary.new(
     :load_path => [
       "./frameworks/regal.js/",
-      "./frameworks/bespin-embedded/",
+      "./frameworks/ace/build/src/",
       "./frameworks/three.js/build/",
       "./frameworks/three.js/src/extras/primitives/",
       "./frameworks/javascript-stacktrace/"

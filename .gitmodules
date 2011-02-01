@@ -4,3 +4,6 @@
 [submodule "frameworks/regal.js"]
 	path = frameworks/regal.js
 	url = git://github.com/timjb/regal.js.git
+[submodule "frameworks/ace"]
+	path = frameworks/ace
+	url = https://github.com/ajaxorg/ace.git
