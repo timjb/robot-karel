@@ -3,16 +3,16 @@ function EnvironmentView3D(model) {
   this.createFields();
   
   var self = this;
-  model.addEvent('change-field', function (position) {
+  model.bind('change-field', function (position) {
     var x = position.x, y = position.y;
     self.updateField(x, y, model.fields[x][y]);
     self.delayRender();
   });
-  model.addEvent('change-robot', function() {
+  model.bind('change-robot', function() {
     // TODO: Update the position of the robot
     self.delayRender();
   });
-  model.addEvent('complete-change', function() {
+  model.bind('complete-change', function() {
     self.updateAllFields();
     self.render();
   });
@@ -34,7 +34,7 @@ EnvironmentView3D.prototype = new View();
 EnvironmentView3D.prototype.createMouseListener = function() {
   var self = this;
   
-  addEvent(this.renderer.domElement, 'mousedown', function(evt) {
+  $(this.renderer.domElement).mousedown(function(evt) {
     var down = { x: evt.clientX, y: evt.clientY };
     document.body.style.cursor = 'move';
     
@@ -51,12 +51,14 @@ EnvironmentView3D.prototype.createMouseListener = function() {
     
     function onMouseUp() {
       document.body.style.cursor = 'default';
-      removeEvent(document.body, 'mousemove', onMouseMove);
-      removeEvent(document.body, 'mouseup', onMouseUp);
+      $('body')
+        .unbind('mousemove', onMouseMove)
+        .unbind('mouseup', onMouseUp);
     }
     
-    addEvent(document.body, 'mousemove', onMouseMove);
-    addEvent(document.body, 'mouseup', onMouseUp);
+    $('body')
+      .mousemove(onMouseMove)
+      .mouseup(onMouseUp);
   });
 };
 
@@ -116,7 +118,7 @@ EnvironmentView3D.prototype.createFields = function() {
 };
 
 EnvironmentView3D.prototype.updateAllFields = function() {
-  this.model.eachField(bind(this.updateField, this));
+  this.model.eachField(_.bind(this.updateField, this));
 };
 
 EnvironmentView3D.prototype.updateField = function(x, y, field) {
@@ -189,10 +191,9 @@ EnvironmentView3D.prototype.render = function() {
   this.renderer.render(this.scene, this.camera);
 };
 
-EnvironmentView3D.prototype.updateSize = function(dimensions) {
-  var w = dimensions.width, h = dimensions.height;
-  this.createCamera(w, h);
-  this.renderer.setSize(w, h);
+EnvironmentView3D.prototype.updateSize = function(width, height) {
+  this.createCamera(width, height);
+  this.renderer.setSize(width, height);
 };
 
 EnvironmentView3D.prototype.createCamera = function(width, height) {
@@ -216,5 +217,10 @@ EnvironmentView3D.prototype.updateCameraPosition = function() {
 };
 
 EnvironmentView3D.prototype.getElement = function() {
-  return this.renderer.domElement;
+  return $(this.renderer.domElement);
+};
+
+EnvironmentView3D.prototype.inject = function() {
+  View.prototype.inject.apply(this, arguments);
+  this.createMouseListener();
 };

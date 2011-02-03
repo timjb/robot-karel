@@ -10,7 +10,7 @@ function Environment(width, depth, height) {
   this.initBeepSound();
 }
 
-mixin(Environment.prototype, Events);
+_.extend(Environment.prototype, Backbone.Events);
 
 Environment.prototype.createFields = function() {
   var w = this.width,
@@ -41,37 +41,37 @@ Environment.prototype.istZiegel = function(n) {
 };
 
 Environment.prototype.hinlegen = function() {
-  if (this.istWand()) throw new Error("Karol kann keinen Ziegel hinlegen. Er steht vor einer Wand.");
+  if (this.istWand()) error("Karol kann keinen Ziegel hinlegen. Er steht vor einer Wand.");
   var nextPosition = this.forward();
   var field = this.getField(nextPosition);
-  if (field.ziegel >= this.height) throw new Error("Karol kann keinen Ziegel hinlegen, da die Maximalhoehe erreicht wurde.");
+  if (field.ziegel >= this.height) error("Karol kann keinen Ziegel hinlegen, da die Maximalhoehe erreicht wurde.");
   field.ziegel += 1;
-  this._fireEvent('change-field', nextPosition);
+  this.trigger('change-field', nextPosition);
 };
 
 Environment.prototype.aufheben = function() {
-  if (this.istWand()) throw new Error("Karol kann keinen Ziegel aufheben. Er steht vor einer Wand.");
+  if (this.istWand()) error("Karol kann keinen Ziegel aufheben. Er steht vor einer Wand.");
   var nextPosition = this.forward();
   var field = this.getField(nextPosition);
-  if (!field.ziegel) throw new Error("Karol kann keinen Ziegel aufheben, da kein Ziegel vor ihm liegt.");
+  if (!field.ziegel) error("Karol kann keinen Ziegel aufheben, da kein Ziegel vor ihm liegt.");
   field.ziegel--;
-  this._fireEvent('change-field', nextPosition);
+  this.trigger('change-field', nextPosition);
 };
 
 Environment.prototype.markeSetzen = function() {
   this.getField(this.position).marke = true;
-  this._fireEvent('change-field', this.position);
+  this.trigger('change-field', this.position);
 };
 
 Environment.prototype.markeLoeschen = function() {
   this.getField(this.position).marke = false;
-  this._fireEvent('change-field', this.position);
+  this.trigger('change-field', this.position);
 };
 
 Environment.prototype.marke = function() {
   var field = this.getField(this.position);
   field.marke = !field.marke;
-  this._fireEvent('change-field', this.position);
+  this.trigger('change-field', this.position);
 };
 
 Environment.prototype.istMarke = function() {
@@ -91,49 +91,49 @@ Environment.prototype.istWand = function() {
 
 Environment.prototype.linksDrehen = function() {
   this.direction = new Position(this.direction.y, -this.direction.x);
-  this._fireEvent('change-robot');
+  this.trigger('change-robot');
 };
 
 Environment.prototype.rechtsDrehen = function() {
   this.direction = new Position(-this.direction.y, this.direction.x);
-  this._fireEvent('change-robot');
+  this.trigger('change-robot');
 };
 
 Environment.prototype.schritt = function() {
-  if (this.istWand()) throw new Error("Karol kann keinen Schritt machen, er steht vor einer Wand.");
+  if (this.istWand()) error("Karol kann keinen Schritt machen, er steht vor einer Wand.");
   var newPosition = this.forward();
   if (Math.abs(this.getField(this.position).ziegel - this.getField(newPosition).ziegel) > 1)
-    throw new Error("Karol kann nur einen Ziegel pro Schritt nach oben oder unten springen.");
+    error("Karol kann nur einen Ziegel pro Schritt nach oben oder unten springen.");
   this.position = newPosition;
-  this._fireEvent('change-robot');
+  this.trigger('change-robot');
 };
 
 Environment.prototype.quader = function() {
   var position = this.forward();
-  if (!this.isValid(position)) throw new Error("Karol kann keinen Quader hinlegen. Er steht vor einer Wand.");
+  if (!this.isValid(position)) error("Karol kann keinen Quader hinlegen. Er steht vor einer Wand.");
   var field = this.getField(position);
-  if (field.quader) throw new Error("Karol kann keinen Quader hinlegen, da schon einer liegt.");
-  if (field.ziegel) throw new Error("Karol kann keinen Quader hinlegen, da auf dem Feld schon Ziegel liegen.");
+  if (field.quader) error("Karol kann keinen Quader hinlegen, da schon einer liegt.");
+  if (field.ziegel) error("Karol kann keinen Quader hinlegen, da auf dem Feld schon Ziegel liegen.");
   field.quader = true;
-  this._fireEvent('change-field', position);
+  this.trigger('change-field', position);
 };
 
 Environment.prototype.entfernen = function() {
   var position = this.forward();
-  if (!this.isValid(position)) throw new Error("Karol kann keinen Quader entfernen. Er steht vor einer Wand.");
+  if (!this.isValid(position)) error("Karol kann keinen Quader entfernen. Er steht vor einer Wand.");
   var field = this.getField(position);
-  if (!field.quader) throw new Error("Karol kann keinen Quader entfernen, da auf dem Feld kein Quader liegt.");
+  if (!field.quader) error("Karol kann keinen Quader entfernen, da auf dem Feld kein Quader liegt.");
   field.quader = false;
-  this._fireEvent('change-field', position);
+  this.trigger('change-field', position);
 };
 
 Environment.prototype.initBeepSound = function() {
   if (window.Audio) {
     var sound = this.beepSound = new window.Audio();
     if (sound.canPlayType('audio/ogg; codecs="vorbis"')) {
-      sound.src = 'beep.ogg';
+      sound.src = 'assets/beep.ogg';
     } else if (sound.canPlayType('audio/mpeg;')) {
-      sound.src = 'beep.mp3';
+      sound.src = 'assets/beep.mp3';
     }
   }
 };
@@ -168,7 +168,7 @@ Environment.prototype.probiere = function(fn) {
     return fn();
   } catch(exc) {
     this.copy(clone);
-    this._fireEvent('complete-change');
+    this.trigger('complete-change');
   }
 };
 
@@ -230,13 +230,13 @@ Environment.prototype.execute = function(code, callback) {
     }
   }
   
-  each(['istWand', 'schritt', 'linksDrehen', 'rechtsDrehen', 'hinlegen', 'aufheben', 'istZiegel', 'markeSetzen', 'markeLoeschen', 'istMarke', 'istNorden', 'istSueden', 'istWesten', 'istOsten', 'ton', 'probiere'], function(name) {
+  _.each(['istWand', 'schritt', 'linksDrehen', 'rechtsDrehen', 'hinlegen', 'aufheben', 'istZiegel', 'markeSetzen', 'markeLoeschen', 'istMarke', 'istNorden', 'istSueden', 'istWesten', 'istOsten', 'ton', 'probiere'], function(name) {
     karol[name] = function(n) {
       n = n || 1;
       
       if (HIGHLIGHT_LINE) {
         try {
-          throw new Error();
+          error();
         } catch (exc) {
           var lineNumber = getLineNumber(exc.stack, 1);
         }
@@ -313,7 +313,7 @@ Environment.prototype.next = function() {
   }
   
   if (lineNumber) {
-    this._fireEvent('line', lineNumber);
+    this.trigger('line', lineNumber);
   }
 };
 
@@ -333,7 +333,7 @@ Environment.prototype.replay = function() {
 
 Environment.prototype.reset = function() {
   this.copy(this.backup);
-  this._fireEvent('complete-change');
+  this.trigger('complete-change');
 };
 
 Environment.prototype.eachField = function(fn) {

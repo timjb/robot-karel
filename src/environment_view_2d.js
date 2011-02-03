@@ -1,13 +1,12 @@
 function EnvironmentView2D(model) {
   this.model = model;
   
-  var boundDelayRender = bind(this.delayRender, this);
-  model.addEvent('change-field', boundDelayRender);
-  model.addEvent('change-robot', boundDelayRender);
-  model.addEvent('complete-change', bind(this.render, this));
+  var boundDelayRender = _.bind(this.delayRender, this);
+  model.bind('change-field', boundDelayRender);
+  model.bind('change-robot', boundDelayRender);
+  model.bind('complete-change', _.bind(this.render, this));
   
   this.canvas = document.createElement('canvas');
-  this.initMouse();
 }
 
 EnvironmentView2D.prototype = new View();
@@ -64,39 +63,43 @@ EnvironmentView2D.prototype.render = function() {
   });
 };
 
-EnvironmentView2D.prototype.updateSize = function(dimensions) {
-  var w = this.canvas.width  = dimensions.width;
-  var h = this.canvas.height = dimensions.height;
+EnvironmentView2D.prototype.updateSize = function(width, height) {
+  var w = this.canvas.width  = width;
+  var h = this.canvas.height = height;
   var m = this.model;
   var GAP = this.GAP = 4;
   this.GW = Math.min((w-GAP) / m.width, (h-GAP) / m.depth); // GridWidth
 };
 
 EnvironmentView2D.prototype.getElement = function() {
-  return this.canvas;
+  return $(this.canvas);
 };
 
 EnvironmentView2D.prototype.initMouse = function() {
-  addEvent(this.canvas, 'mousedown', bind(function(evt) {
-    var rect = this.canvas.getBoundingClientRect(),
-        x = evt.clientX - rect.left,
-        y = evt.clientY - rect.top;
-    var position = new Position(
-      Math.floor((x-this.GAP) / this.GW),
-      Math.floor((y-this.GAP) / this.GW)
-    );
-    
-    if (evt.button == 0) { // left click
-      this.model.position = position;
-      this.model._fireEvent('change-robot');
-    } else {
-      var field = this.model.getField(position);
-      field.marke = !field.marke;
-      this.model._fireEvent('change-field', position);
-    }
-  }, this));
-  addEvent(this.canvas, 'contextmenu', function(evt) {
-    evt.preventDefault();
-    return false;
-  });
+  var self = this;
+  $(this.canvas)
+    .mousedown(function(evt) {
+      var rect = $(this).offset(),
+          x = evt.clientX - rect.left,
+          y = evt.clientY - rect.top;
+      var position = new Position(
+        Math.floor((x-self.GAP) / self.GW),
+        Math.floor((y-self.GAP) / self.GW)
+      );
+      
+      if (evt.which == 1) { // left click
+        self.model.position = position;
+        self.model.trigger('change-robot');
+      } else {
+        var field = self.model.getField(position);
+        field.marke = !field.marke;
+        self.model.trigger('change-field', position);
+      }
+    })
+    .bind('contextmenu', false);
+};
+
+EnvironmentView2D.prototype.inject = function() {
+  View.prototype.inject.apply(this, arguments);
+  this.initMouse();
 };

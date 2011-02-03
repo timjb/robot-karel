@@ -1,29 +1,27 @@
 function View() {}
 
 View.prototype.inject = function(p) {
-  p.appendChild(this.getElement());
+  p.append(this.getElement());
   this.dimensionsChanged();
 };
 
 View.prototype.dispose = function() {
-  var el = this.getElement(),
-      p  = el.parentElement;
-  if (p) p.removeChild(el);
+  this.getElement().remove();
 };
 
 View.prototype.isVisible = function() {
-  return !!this.getElement().parentElement;
+  return !!this.getElement().parent();
 };
 
 View.prototype.dimensionsChanged = function() {
-  var p = this.getElement().parentElement;
-  if (p) this.updateSize(p.getBoundingClientRect());
+  var p = this.getElement().parent();
+  if (p) this.updateSize(p.innerWidth(), p.innerHeight());
   if (this.render) this.render();
 };
 
 View.prototype.delayRender = function() {
   if (this.isVisible()) {
     clearTimeout(this.renderTimeout);
-    this.renderTimeout = setTimeout(bind(this.render, this), 50);
+    this.renderTimeout = setTimeout(_.bind(this.render, this), 50);
   }
 };

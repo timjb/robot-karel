@@ -1,1 +1,0 @@
-(.+?): <%=(.+?)%> # Hack: there's a regex for erb-style templating (<%= %>) in the bespin source, that's the same syntax that sprocket uses for constants

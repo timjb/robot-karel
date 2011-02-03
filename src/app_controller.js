@@ -9,26 +9,26 @@ function AppController() {
 
 AppController.prototype.initModelAndView = function() {
   this.environment = new Environment(
-    parseInt($('width').value, 10),
-    parseInt($('depth').value, 10),
-    parseInt($('height').value, 10)
+    parseInt($('#width' ).val(), 10),
+    parseInt($('#depth' ).val(), 10),
+    parseInt($('#height').val(), 10)
   );
   var self = this;
-  this.environment.addEvent('line', function(lineNumber) {
+  this.environment.bind('line', function(lineNumber) {
     self.editor.gotoLine(lineNumber);
   });
   
-  $('environment').innerHTML = '';
+  $('#environment').innerHTML = '';
   this.environmentView3D = new EnvironmentView3D(this.environment);
   this.environmentView2D = new EnvironmentView2D(this.environment);
   this.updateViewPrecedence();
 };
 
 AppController.prototype.updateViewPrecedence = function() {
-  var environmentEl = $('environment');
+  var environmentEl = $('#environment');
   var d3 = this.environmentView3D,
       d2 = this.environmentView2D;
-  if ($('view-select-3d').checked) {
+  if ($('input[name=view-select]:checked').val() == '3d') {
     d2.dispose();
     d3.inject(environmentEl);
   } else {
@@ -38,7 +38,7 @@ AppController.prototype.updateViewPrecedence = function() {
 };
 
 AppController.prototype.initEditor = function() {
-  var e = this.editor = ace.edit($('editor'));
+  var e = this.editor = ace.edit('editor');
   var s = e.getSession();
   s.setMode(new (require('ace/mode/javascript').Mode));
   s.setTabSize(2);
@@ -48,7 +48,11 @@ AppController.prototype.initEditor = function() {
 
 AppController.prototype.loadExampleCode = function() {
   var s = this.editor.getSession();
-  xhr('examples/conways_game_of_life.js', bind(s.setValue, s));
+  $.ajax({
+    url: 'examples/conways_game_of_life.js',
+    dataType: 'text',
+    success: _.bind(s.setValue, s)
+  });
 };
 
 AppController.prototype.sendCommand = function(cmd) {
@@ -64,22 +68,20 @@ AppController.prototype.sendCommand = function(cmd) {
 AppController.prototype.initButtons = function() {
   var self = this;
   
-  addEvent($('run-button'),        'click', bind(this.run, this));
-  addEvent($('replay-button'),     'click', bind(this.replay, this));
-  addEvent($('reset-button'),      'click', bind(this.reset, this));
-  addEvent($('view-select-3d'),    'change', bind(this.updateViewPrecedence, this));
-  addEvent($('view-select-2d'),    'change', bind(this.updateViewPrecedence, this));
-  addEvent($('new-button'),        'click', bind(this.toggleNewPane, this));
-  addEvent($('new-cancel-button'), 'click', bind(this.toggleNewPane, this));
-  addEvent($('new-apply-button'),  'click', function() {
+  $('#run-button').click(_.bind(this.run, this));
+  $('#replay-button').click(_.bind(this.replay, this));
+  $('#reset-button').click(_.bind(this.reset, this));
+  $('input[name=view-select]').change(_.bind(this.updateViewPrecedence, this));
+  $('#new-button, #new-cancel-button').click(_.bind(this.toggleNewPane, this));
+  $('#new-apply-button' ).click(function() {
     self.initModelAndView();
     self.toggleNewPane();
   });
   
-  each(['links-drehen', 'schritt', 'rechts-drehen', 'hinlegen', 'aufheben', 'marke', 'quader', 'entfernen'], function(name) {
-    var button = $(name);
+  _.each(['links-drehen', 'schritt', 'rechts-drehen', 'hinlegen', 'aufheben', 'marke', 'quader', 'entfernen'], function(name) {
+    var button = $('#'+name);
     var command = capitalize(name);
-    addEvent(button, 'click', function() {
+    button.click(function() {
       self.sendCommand(command);
     });
   });
@@ -102,7 +104,7 @@ AppController.prototype.initKeyboard = function() {
     e:     'entfernen',
     'delete': 'entfernen'
   };
-  addEvent(document, 'keydown', function(evt) {
+  $(document).keydown(function(evt) {
     if (!self.editor.focus) {
       var key = getKey(evt);
       if (actions.hasOwnProperty(key)) {
@@ -120,7 +122,7 @@ AppController.prototype.addEvents = function() {
   }
   
   var resizeTimeout = null;
-  addEvent(window, 'resize', function() {
+  $(window).resize(function() {
     window.clearTimeout(resizeTimeout);
     window.setTimeout(resize, 25);
   });
@@ -139,7 +141,7 @@ AppController.prototype.reset = function() {
 };
 
 AppController.prototype.toggleNewPane = function() {
-  var el = $('new-pane');
+  var el = $('#new-pane');
   var classRegex = /(^|\s)visible(\s|$)/
   if (el.className.match(classRegex)) {
     el.className = el.className.replace(classRegex, ' ');

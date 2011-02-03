@@ -5,7 +5,7 @@
 <meta charset=utf-8>
 <title>Karol.js</title>
 <meta name=author content="Tim Baumann">
-<link rel=stylesheet href=style.css>
+<link rel=stylesheet href=assets/style.css>
 
 <body>
 <div class=bar id=top-bar>
@@ -14,8 +14,8 @@
     <input type=button class=left id=run-button value=Run>
     <input type=button class=left id=replay-button value=Replay>
     <input type=button class=left id=reset-button value=Reset>
-    <label class="left radio"><input type=radio name=view-select id=view-select-3d value=3D checked> <span>3D<span></label>
-    <label class="left radio"><input type=radio name=view-select id=view-select-2d value=2D> <span>2D<span></label>
+    <label class="left radio"><input type=radio name=view-select id=view-select-3d value=3d checked> <span>3D<span></label>
+    <label class="left radio"><input type=radio name=view-select id=view-select-2d value=2d> <span>2D<span></label>
     <input type=button class=right id=new-button value="New World">
     <div id=new-pane>
       <label><span>Width</span> <input id=width type=number value=11></label>
@@ -46,12 +46,9 @@
 <script src=frameworks/three.js/src/extras/primitives/Cube.js></script>
 <script src=frameworks/three.js/src/extras/primitives/Plane.js></script>
 
-<script src=frameworks/regal.js/xhr.js></script>
-<script src=frameworks/regal.js/each.js></script>
-<script src=frameworks/regal.js/bind.js></script>
-<script src=frameworks/regal.js/addevent.js></script>
-<script src=frameworks/regal.js/mixin.js></script>
-<script src=frameworks/regal.js/events.js></script>
+<script src=frameworks/jquery.js></script>
+<script src=frameworks/underscore.js></script>
+<script src=frameworks/backbone.js></script>
 
 <script src=src/settings.js></script>
 <script src=src/helpers.js></script>

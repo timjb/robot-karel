@@ -1,10 +1,6 @@
-function $(id) {
-  return document.getElementById(id);
-}
-
 function log() {
-  if (window.console && typeof window.console.log == 'function') {
-    window.console.log.apply(console, arguments);
+  if (window.console && typeof console.log == 'function') {
+    console.log.apply(console, arguments);
   }
 }
 
@@ -29,11 +25,12 @@ function toArray(obj) {
   return [];
 }
 
+function error(msg) {
+  throw new Error(msg);
+}
+
 function errorFunction(msg) {
-  var error = new Error(msg);
-  return function() {
-    throw error;
-  };
+  return _(error).bind(null, msg);
 }
 
 function removeFromArray(arr, obj) {
