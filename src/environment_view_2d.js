@@ -1,12 +1,16 @@
 function EnvironmentView2D(model) {
   this.model = model;
   
-  var boundDelayRender = _.bind(this.delayRender, this);
-  model.bind('change-field', boundDelayRender);
-  model.bind('change-robot', boundDelayRender);
-  model.bind('complete-change', _.bind(this.render, this));
+  _.bindAll(this, 'render', 'delayRender');
   
-  this.canvas = document.createElement('canvas');
+  model
+    .bind('change-field',    this.delayRender)
+    .bind('change-robot',    this.delayRender)
+    .bind('complete-change', this.render);
+  
+  var canvas = document.createElement('canvas');
+  this.ctx = canvas.getContext('2d');
+  this.canvas = $(canvas);
 }
 
 EnvironmentView2D.prototype = new View();
@@ -15,13 +19,13 @@ EnvironmentView2D.prototype.render = function() {
   log('render 2d');
   
   var model = this.model;
-  var ctx = this.canvas.getContext('2d');
+  var ctx = this.ctx;
   
   var GAP = this.GAP, GW = this.GW;
   
   ctx.save();
   ctx.fillStyle = '#333';
-  ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+  ctx.fillRect(0, 0, this.canvas.attr('width'), this.canvas.attr('height'));
   ctx.restore();
   
   function fill(x, y, color) {
@@ -41,12 +45,12 @@ EnvironmentView2D.prototype.render = function() {
     ctx.restore();
   }
   
-  var position = model.position;
-  var direction = model.direction;
+  var position = model.get('position');
+  var direction = model.get('direction');
   
   model.eachField(function(x, y, field) {
     var bg, fg;
-    if (field.quader)      { bg = ENVIRONMENT_COLORS.quader.css; }
+    if      (field.quader) { bg = ENVIRONMENT_COLORS.quader.css; }
     else if (field.marke)  { bg = ENVIRONMENT_COLORS.marke.css;  fg = '#000'; }
     else if (field.ziegel) { bg = ENVIRONMENT_COLORS.ziegel.css; fg = '#fff'; }
     else                   { bg = '#fff'; fg = '#000'; }
@@ -58,21 +62,20 @@ EnvironmentView2D.prototype.render = function() {
       else if (direction.isWest())  char = '\u25c4';
       else                          char = '\u25ba';
       letter(x, y, fg, char);
-    }
-    else if (field.ziegel) letter(x, y, fg, field.ziegel);
+    } else if (field.ziegel) letter(x, y, fg, field.ziegel);
   });
 };
 
-EnvironmentView2D.prototype.updateSize = function(width, height) {
-  var w = this.canvas.width  = width;
-  var h = this.canvas.height = height;
+EnvironmentView2D.prototype.updateSize = function(w, h) {
+  this.canvas.attr({ width: w, height: h });
   var m = this.model;
+  var x = m.get('width'), y = m.get('depth');
   var GAP = this.GAP = 4;
-  this.GW = Math.min((w-GAP) / m.width, (h-GAP) / m.depth); // GridWidth
+  this.GW = Math.min((w-GAP)/x, (h-GAP)/y); // GridWidth
 };
 
 EnvironmentView2D.prototype.getElement = function() {
-  return $(this.canvas);
+  return this.canvas;
 };
 
 EnvironmentView2D.prototype.initMouse = function() {
@@ -88,7 +91,7 @@ EnvironmentView2D.prototype.initMouse = function() {
       );
       
       if (evt.which == 1) { // left click
-        self.model.position = position;
+        self.model.set({ position: position });
         self.model.trigger('change-robot');
       } else {
         var field = self.model.getField(position);

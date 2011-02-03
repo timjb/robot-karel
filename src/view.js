@@ -10,12 +10,12 @@ View.prototype.dispose = function() {
 };
 
 View.prototype.isVisible = function() {
-  return !!this.getElement().parent();
+  return !!this.getElement().parent().length;
 };
 
 View.prototype.dimensionsChanged = function() {
   var p = this.getElement().parent();
-  if (p) this.updateSize(p.innerWidth(), p.innerHeight());
+  if (p.length) this.updateSize(p.innerWidth(), p.innerHeight());
   if (this.render) this.render();
 };
 

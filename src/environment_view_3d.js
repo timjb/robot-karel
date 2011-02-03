@@ -3,19 +3,20 @@ function EnvironmentView3D(model) {
   this.createFields();
   
   var self = this;
-  model.bind('change-field', function (position) {
-    var x = position.x, y = position.y;
-    self.updateField(x, y, model.fields[x][y]);
-    self.delayRender();
-  });
-  model.bind('change-robot', function() {
-    // TODO: Update the position of the robot
-    self.delayRender();
-  });
-  model.bind('complete-change', function() {
-    self.updateAllFields();
-    self.render();
-  });
+  model
+    .bind('change-field', function (position) {
+      var x = position.x, y = position.y;
+      self.updateField(x, y, model.get('fields')[x][y]);
+      self.delayRender();
+    })
+    .bind('change-robot', function() {
+      // TODO: Update the position of the robot
+      self.delayRender();
+    })
+    .bind('complete-change', function() {
+      self.updateAllFields();
+      self.render();
+    });
   
   this.renderer = new THREE.CanvasRenderer();
   this.createMouseListener();
@@ -36,7 +37,6 @@ EnvironmentView3D.prototype.createMouseListener = function() {
   
   $(this.renderer.domElement).mousedown(function(evt) {
     var down = { x: evt.clientX, y: evt.clientY };
-    document.body.style.cursor = 'move';
     
     function onMouseMove(evt) {
       var newDown = { x: evt.clientX, y: evt.clientY };
@@ -50,13 +50,14 @@ EnvironmentView3D.prototype.createMouseListener = function() {
     }
     
     function onMouseUp() {
-      document.body.style.cursor = 'default';
       $('body')
+        .css('cursor', 'default')
         .unbind('mousemove', onMouseMove)
         .unbind('mouseup', onMouseUp);
     }
     
     $('body')
+      .css('cursor', 'move')
       .mousemove(onMouseMove)
       .mouseup(onMouseUp);
   });
@@ -64,9 +65,9 @@ EnvironmentView3D.prototype.createMouseListener = function() {
 
 EnvironmentView3D.prototype.createGrid = function() {
   var model = this.model;
-  var w = model.width,
-      d = model.depth,
-      h = model.height;
+  var w = model.get('width')
+  ,   d = model.get('depth')
+  ,   h = model.get('height');
   
   var material = new THREE.MeshBasicMaterial({ color: 0x5555cc, wireframe: true });
   var GW = EnvironmentView3D.GW;
@@ -103,18 +104,10 @@ EnvironmentView3D.prototype.createLights = function() {
 };
 
 EnvironmentView3D.prototype.createFields = function() {
-  var model = this.model;
-  var w = model.width,
-      d = model.depth;
-  
-  var fields = this.fields = [];
-  for (var i = 0; i < w; i++) {
-    var row = [];
-    for (var j = 0; j < d; j++) {
-      row.push({ ziegel: [], marke: null });
-    }
-    fields.push(row);
-  }
+  var m = this.model;
+  this.fields = matrix(m.get('width'), m.get('depth'), function() {
+    return { ziegel: [], marke: null };
+  });
 };
 
 EnvironmentView3D.prototype.updateAllFields = function() {
@@ -125,11 +118,12 @@ EnvironmentView3D.prototype.updateField = function(x, y, field) {
   var model = this.model;
   var scene = this.scene;
   var fieldObj = this.fields[x][y];
+  log(fieldObj);
   
   var GW = EnvironmentView3D.GW,
       GH = EnvironmentView3D.GH;
-  var x0 = -GW*(model.width/2),
-      y0 = GW*(model.depth/2);
+  var x0 = -GW*(model.get('width')/2),
+      y0 = GW*(model.get('depth')/2);
   
   while (field.ziegel < fieldObj.ziegel.length) {
     scene.removeObject(fieldObj.ziegel.pop());

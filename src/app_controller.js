@@ -8,11 +8,11 @@ function AppController() {
 }
 
 AppController.prototype.initModelAndView = function() {
-  this.environment = new Environment(
-    parseInt($('#width' ).val(), 10),
-    parseInt($('#depth' ).val(), 10),
-    parseInt($('#height').val(), 10)
-  );
+  this.environment = new Environment({
+    width:  parseInt($('#width' ).val(), 10),
+    depth:  parseInt($('#depth' ).val(), 10),
+    height: parseInt($('#height').val(), 10)
+  });
   var self = this;
   this.environment.bind('line', function(lineNumber) {
     self.editor.gotoLine(lineNumber);
@@ -59,7 +59,7 @@ AppController.prototype.sendCommand = function(cmd) {
   if (!(cmd instanceof Array)) cmd = [cmd];
   var env = this.environment;
   try {
-    each(cmd, function(c) { env[c](); });
+    _(cmd).each(function(c) { env[c](); });
   } catch (exc) {
     alert(exc);
   }
