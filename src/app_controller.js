@@ -4,7 +4,6 @@ function AppController() {
   this.loadExampleCode();
   this.initButtons();
   this.initKeyboard();
-  this.addEvents();
 }
 
 AppController.prototype.initModelAndView = function() {
@@ -19,21 +18,21 @@ AppController.prototype.initModelAndView = function() {
   });
   
   $('#environment').innerHTML = '';
-  this.environmentView3D = new EnvironmentView3D(this.environment);
-  this.environmentView2D = new EnvironmentView2D(this.environment);
+  this.environmentView3D = new EnvironmentView3D({ model: this.environment });
+  this.environmentView2D = new EnvironmentView2D({ model: this.environment });
   this.updateViewPrecedence();
 };
 
 AppController.prototype.updateViewPrecedence = function() {
   var environmentEl = $('#environment');
-  var d3 = this.environmentView3D,
-      d2 = this.environmentView2D;
+  var d3 = this.environmentView3D
+  ,   d2 = this.environmentView2D;
   if ($('input[name=view-select]:checked').val() == '3d') {
-    d2.dispose();
-    d3.inject(environmentEl);
+    d2.remove();
+    d3.appendTo(environmentEl);
   } else {
-    d3.dispose();
-    d2.inject(environmentEl);
+    d3.remove();
+    d2.appendTo(environmentEl);
   }
 };
 
@@ -58,11 +57,11 @@ AppController.prototype.loadExampleCode = function() {
 AppController.prototype.sendCommand = function(cmd) {
   if (!(cmd instanceof Array)) cmd = [cmd];
   var env = this.environment;
-  try {
+  //try {
     _(cmd).each(function(c) { env[c](); });
-  } catch (exc) {
-    alert(exc);
-  }
+  //} catch (exc) {
+  //  alert(exc);
+  //}
 };
 
 AppController.prototype.initButtons = function() {
@@ -111,20 +110,6 @@ AppController.prototype.initKeyboard = function() {
         self.sendCommand(actions[key]);
       }
     }
-  });
-};
-
-AppController.prototype.addEvents = function() {
-  var self = this;
-  function resize() {
-    self.environmentView2D.dimensionsChanged();
-    self.environmentView3D.dimensionsChanged();
-  }
-  
-  var resizeTimeout = null;
-  $(window).resize(function() {
-    window.clearTimeout(resizeTimeout);
-    window.setTimeout(resize, 25);
   });
 };
 

@@ -15,7 +15,7 @@ View.prototype.isVisible = function() {
 
 View.prototype.dimensionsChanged = function() {
   var p = this.getElement().parent();
-  if (p.length) this.updateSize(p.innerWidth(), p.innerHeight());
+  if (p.length) this.resize(p.innerWidth(), p.innerHeight());
   if (this.render) this.render();
 };
 
