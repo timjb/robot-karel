@@ -1,10 +1,82 @@
+function Position(x, y) {
+  this.x = x
+  this.y = y
+}
+
+Position.prototype.plus = function(another) {
+  return new Position(this.x + another.x, this.y + another.y)
+}
+
+
+function Direction(x, y) {
+  this.x = x
+  this.y = y
+}
+
+Direction.NORTH = new Direction(0, -1)
+Direction.prototype.isNorth = function() {
+  return this.equals(Direction.NORTH)
+}
+
+Direction.SOUTH = new Direction(0, 1)
+Direction.prototype.isSouth = function() {
+  return this.equals(Direction.SOUTH)
+}
+
+Direction.WEST = new Direction(-1, 0)
+Direction.prototype.isWest = function() {
+  return this.equals(Direction.WEST)
+}
+
+Direction.EAST = new Direction(1, 0)
+Direction.prototype.isEast = function() {
+  return this.equals(Direction.EAST)
+}
+
+Direction.prototype.turnRight = function() {
+  return new Direction(-this.y, this.x)
+}
+
+Direction.prototype.turnLeft = function() {
+  return new Direction(this.y, -this.x)
+}
+
+
+Position.prototype.clone = Direction.prototype.clone = function() {
+  return new this.constructor(this.x, this.y)
+}
+
+Position.prototype.equals = Direction.prototype.equals = function(another) {
+  return another instanceof this.constructor
+    && another.x == this.x
+    && another.y == this.y
+}
+
+
+
+function Field() {
+  this.ziegel = 0
+  this.marke = false
+  this.quader = false
+}
+
+Field.prototype.clone = function() {
+  var f = new Field()
+  f.ziegel = this.ziegel
+  f.marke  = this.marke
+  f.quader = this.quader
+  return f
+}
+
+
+
 var Environment = Backbone.Model.extend({
 
   initialize: function() {
     if (!this.get('position')) { // not cloned
       this.set({
         position: new Position(0, 0),
-        direction: Position.SOUTH.clone(),
+        direction: Direction.SOUTH.clone(),
         fields: matrix(
           this.get('width'),
           this.get('depth'),
@@ -16,19 +88,33 @@ var Environment = Backbone.Model.extend({
     this
       .bind('change:position',  _.bind(this.trigger, this, 'change:robot'))
       .bind('change:direction', _.bind(this.trigger, this, 'change:robot'))
+    
+    // Cache (for performance reasons
+    this.$fields = this.get('fields')
+    this.$position = this.get('position')
+    this.$currentField = this.getField(this.$position)
+    this.$direction = this.get('direction')
+    this
+      .bind('change:position', _(function() {
+        this.$position = this.get('position')
+        this.$currentField = this.getField(this.$position)
+      }).bind(this))
+      .bind('change:direction', _(function() {
+        this.$direction = this.get('direction')
+      }).bind(this))
   },
 
   triggerChangeField: function(p) {
-    this.trigger('change-field', p.x, p.y, this.getField(p))
+    this.trigger('change:field', p.x, p.y, this.getField(p))
     this.trigger('change')
   },
 
   getField: function(position) {
-    return this.get('fields')[position.x][position.y]
+    return this.$fields[position.x][position.y]
   },
 
   forward: function() {
-    return this.get('position').plus(this.get('direction'))
+    return this.$position.plus(this.$direction)
   },
 
   istZiegel: function(n) {
@@ -56,23 +142,22 @@ var Environment = Backbone.Model.extend({
   },
 
   markeSetzen: function() {
-    this.getField(this.get('position')).marke = true
-    this.triggerChangeField(this.get('position'))
+    this.$currentField.marke = true
+    this.triggerChangeField(this.$position)
   },
 
   markeLoeschen: function() {
-    this.getField(this.get('position')).marke = false
-    this.triggerChangeField(this.get('position'))
+    this.$currentField.marke = false
+    this.triggerChangeField(this.$position)
   },
 
   marke: function() {
-    var field = this.getField(this.get('position'))
-    field.marke = !field.marke
-    this.triggerChangeField(this.get('position'))
+    this.$currentField.marke = !this.$currentField.marke
+    this.triggerChangeField(this.$position)
   },
 
   istMarke: function() {
-    return this.getField(this.get('position')).marke
+    return this.$currentField.marke
   },
 
   isValid: function(position) {
@@ -87,19 +172,17 @@ var Environment = Backbone.Model.extend({
   },
 
   linksDrehen: function() {
-    var d = this.get('direction')
-    this.set({ direction: new Position(d.y, -d.x) })
+    this.set({ direction: this.$direction.turnLeft() })
   },
 
   rechtsDrehen: function() {
-    var d = this.get('direction')
-    this.set({ direction: new Position(-d.y, d.x) })
+    this.set({ direction: this.$direction.turnRight() })
   },
 
   schritt: function() {
     if (this.istWand()) error("Karol kann keinen Schritt machen, er steht vor einer Wand.")
     var newPosition = this.forward()
-    if (Math.abs(this.getField(this.get('position')).ziegel - this.getField(newPosition).ziegel) > 1)
+    if (Math.abs(this.$currentField.ziegel - this.getField(newPosition).ziegel) > 1)
       error("Karol kann nur einen Ziegel pro Schritt nach oben oder unten springen.")
     this.set({ position: newPosition })
   },
@@ -127,29 +210,19 @@ var Environment = Backbone.Model.extend({
     beep()
   },
 
-  istNorden: function() {
-    return this.direction.isNorth()
-  },
-
-  istSueden: function() {
-    return this.direction.isSouth()
-  },
-
-  istWesten: function() {
-    return this.direction.isWest()
-  },
-
-  istOsten: function() {
-    return this.direction.isEast()
-  },
+  istNorden: function() { return this.$direction.isNorth() },
+  istSueden: function() { return this.$direction.isSouth() },
+  istWesten: function() { return this.$direction.isWest() },
+  istOsten:  function() { return this.$direction.isEast() },
 
   probiere: function(fn) {
     var clone = this.clone()
     try {
       return fn()
     } catch(exc) {
-      this.copy(clone)
-      this.trigger('complete-change')
+      this.copy(clone) // TODO
+      this.trigger('change:all')
+      this.trigger('change')
     }
   },
 
@@ -158,24 +231,13 @@ var Environment = Backbone.Model.extend({
     
     var self = this
     this.execute(code, function(stack) {
-      log('Commands: ' + stack.join(', '))
+      log('Commands: ', stack)
       self.stack = stack
     })
   },
 
-  /*clone: function() {
-    var env = new Environment(this.width, this.depth, this.height)
-    env.copy(this)
-    return env
-  },
-
-  copy: function(other) {
-    this.get('position') = other.position.clone()
-    this.direction = other.direction.clone()
-    this.fields = clone(other.fields)
-  },*/
-
   execute: function(code, callback) {
+    // TODO: refactor?
     var iframe = document.createElement('iframe')
     iframe.style.display = 'none'
     document.body.appendChild(iframe)
@@ -255,14 +317,15 @@ var Environment = Backbone.Model.extend({
       return interval
     }
     
-    win.laden = function(url, fn) {
-      var req = xhr(url, function(responseText, responseXML) {
-        log(url, responseText, responseXML)
-        removeFromArray(timed, req)
-        exec(bind(fn, null, responseText, responseXML))
-      }, function() {
-        log('Loading failed: ' + url)
-      })
+    win.laden = function(opts, fn) {
+      var req = $.ajax(opts)
+        .success(function(responseText) {
+          removeFromArray(timed, req)
+          exec(_.bind(fn, null, responseText))
+        })
+        .error(function() {
+          removeFromArray(timed, req)
+        })
       timed.push(req)
       return req
     }
@@ -293,9 +356,7 @@ var Environment = Backbone.Model.extend({
       alert(command)
     }
     
-    if (lineNumber) {
-      this.trigger('line', lineNumber)
-    }
+    if (lineNumber) this.trigger('line', lineNumber)
   },
 
   replay: function() {
@@ -307,18 +368,19 @@ var Environment = Backbone.Model.extend({
         clearInterval(interval)
       } else {
         self.next()
-        self.onchange && self.onchange()
+        self.onchange && self.onchange() // TODO
       }
     }, 150)
   },
 
   reset: function() {
-    this.copy(this.backup)
-    this.trigger('complete-change')
+    this.copy(this.backup) // TODO
+    this.trigger('change:all')
+    this.trigger('change')
   },
 
   eachField: function(fn) {
-    var fields = this.get('fields')
+    var fields = this.$fields
     ,   w = this.get('width')
     ,   d = this.get('depth')
     for (var x = 0; x < w; x++) {

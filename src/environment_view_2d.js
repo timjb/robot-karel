@@ -3,9 +3,7 @@ var EnvironmentView2D = Backbone.View.extend({
   initialize: function() {
     _(this).bindAll('render', 'delayRender', 'delegateEvents')
     
-    this.model
-      .bind('change', this.delayRender)
-      .bind('complete-change', this.render)
+    this.model.bind('change', this.delayRender)
     
     this
       .bind('dom:insert', this.delegateEvents)

@@ -1,74 +1,74 @@
 function log() {
   if (window.console && typeof console.log == 'function') {
-    console.log.apply(console, arguments);
+    console.log.apply(console, arguments)
   }
 }
 
 function clone(obj) {
   if (obj instanceof Array) {
-    var n = [];
+    var n = []
     for (var i = 0, l = obj.length; i < l; i++) {
-      n[i] = clone(obj[i]);
+      n[i] = clone(obj[i])
     }
-    return n;
+    return n
   } else {
     if (typeof obj.clone == 'function') {
-      obj = obj.clone();
+      obj = obj.clone()
     }
-    return obj;
+    return obj
   }
 }
 
 function toArray(obj) {
-  if (obj instanceof Array) return obj;
-  if (obj != undefined && obj != null) return [obj];
-  return [];
+  if (obj instanceof Array) return obj
+  if (obj != undefined && obj != null) return [obj]
+  return []
 }
 
 function error(msg) {
-  throw new Error(msg);
+  throw new Error(msg)
 }
 
 function errorFunction(msg) {
-  return _(error).bind(null, msg);
+  return _(error).bind(null, msg)
 }
 
 function removeFromArray(arr, obj) {
-  var index = arr.indexOf(obj);
-  if (index != -1) arr.splice(index, 1);
+  var index = arr.indexOf(obj)
+  if (index != -1) arr.splice(index, 1)
 }
 
 function stop(obj) {
-  clearTimeout(obj);
-  clearInterval(obj);
-  if (typeof obj.abort == 'function') obj.abort();
+  clearTimeout(obj)
+  clearInterval(obj)
+  if (typeof obj.abort == 'function') obj.abort()
 }
 
 function matrix(x, y, fn) {
-  var result = [];
+  var result = []
   for (var i = 0; i < x; i++) {
-    var row = [];
+    var row = []
     for (var j = 0; j < y; j++) {
-      row.push(fn());
+      row.push(fn())
     }
-    result.push(row);
+    result.push(row)
   }
-  return result;
+  return result
 }
 
 var beep = (function() {
-  //this.initBeepSound(); // Because Chrome can't replay
+  //this.initBeepSound() // Because Chrome can't replay
   if (window.Audio) {
-    var sound = this.beepSound = new Audio();
+    var sound = this.beepSound = new Audio()
     if (sound.canPlayType('audio/ogg; codecs="vorbis"')) {
-      sound.src = 'assets/beep.ogg';
+      sound.src = 'assets/beep.ogg'
     } else if (sound.canPlayType('audio/mpeg;')) {
-      sound.src = 'assets/beep.mp3';
+      sound.src = 'assets/beep.mp3'
     }
-    return _.bind(sound.play, sound);
+    return _.bind(sound.play, sound)
   }
-  return function() {};
-});
+  return function() {}
+})
 
 var keys = {
   13: 'enter',
@@ -82,60 +82,60 @@ var keys = {
   9:  'tab',
   46: 'delete',
   16: 'shift'
-};
+}
 
 function getKey(evt) {
-  var key = keys[evt.keyCode];
+  var key = keys[evt.keyCode]
   if (!key) {
-    key = String.fromCharCode(evt.keyCode);
+    key = String.fromCharCode(evt.keyCode)
     if (!evt.shiftKey) {
-      key = key.toLowerCase();
+      key = key.toLowerCase()
     }
   }
-  return key;
+  return key
 }
 
 // Browser detection
 // https://github.com/mootools/mootools-core/blob/601c6dd6a6a98d8635c1a8e6ee840b8b3f7022d1/Source/Browser/Browser.js
 var browser = (function() {
-  var ua = navigator.userAgent.toLowerCase();
-  var UA = ua.match(/(opera|ie|firefox|chrome|version)[\s\/:]([\w\d\.]+)?.*?(safari|version[\s\/:]([\w\d\.]+)|$)/) || [null, 'unknown', 0];
-  return (UA[1] == 'version') ? UA[3] : UA[1];
-})();
+  var ua = navigator.userAgent.toLowerCase()
+  var UA = ua.match(/(opera|ie|firefox|chrome|version)[\s\/:]([\w\d\.]+)?.*?(safari|version[\s\/:]([\w\d\.]+)|$)/) || [null, 'unknown', 0]
+  return (UA[1] == 'version') ? UA[3] : UA[1]
+})()
 
-log('browser detected: ' + browser);
+log('browser detected: ' + browser)
 
 function getLineNumber(stack, n) {
-  var self = getLineNumber;
+  var self = getLineNumber
   if (self.hasOwnProperty(browser)) {
-    return self[browser](stack, n);
+    return self[browser](stack, n)
   } else {
-    return null;
+    return null
   }
 }
 
 getLineNumber.chrome = function(stack, n) {
-  var lines = stack.split("\n");
-  var line = lines[1+n];
-  var match = line.match(/:(\d+):\d+\)?$/);
+  var lines = stack.split("\n")
+  var line = lines[1+n]
+  var match = line.match(/:(\d+):\d+\)?$/)
   if (match) {
-    return Number(match[1]);
+    return Number(match[1])
   } else {
-    return null;
+    return null
   }
-};
+}
 
 getLineNumber.firefox = function(stack, n) {
-  var lines = stack.split("\n");
-  var line = lines[1+n];
-  var match = line.match(/:(\d+)$/);
+  var lines = stack.split("\n")
+  var line = lines[1+n]
+  var match = line.match(/:(\d+)$/)
   if (match) {
-    return Number(match[1]);
+    return Number(match[1])
   } else {
-    return null;
+    return null
   }
-};
+}
 
 getLineNumber.possible = function() {
-  return this.hasOwnProperty(browser);
-};
+  return this.hasOwnProperty(browser)
+}
