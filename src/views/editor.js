@@ -1,4 +1,4 @@
-var EditorView = Backbone.View.extend({
+App.Views.Editor = Backbone.View.extend({
 
   initialize: function() {
     var e = this.editor  = ace.edit($(this.el).get(0))

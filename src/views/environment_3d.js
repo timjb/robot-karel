@@ -1,4 +1,4 @@
-var EnvironmentView3D = Backbone.View.extend({
+App.Views.Environment3D = Backbone.View.extend({
 
   initialize: function() {
     _(this).bindAll(
@@ -28,6 +28,9 @@ var EnvironmentView3D = Backbone.View.extend({
     this.createGrid()
     this.createLights()
   },
+
+  GW: 40, // Grid Width
+  GH: 22, // Grid Height
 
   events: {
     mousedown: 'onMousedown'
@@ -63,8 +66,8 @@ var EnvironmentView3D = Backbone.View.extend({
     ,   h = model.get('height')
     
     var material = new THREE.MeshBasicMaterial({ color: 0x5555cc, wireframe: true })
-    var GW = EnvironmentView3D.GW
-    ,   GH = EnvironmentView3D.GH
+    var GW = this.GW
+    ,   GH = this.GH
     
     // Ground
     var plane = new THREE.Mesh(new Plane(w*GW, d*GW, w, d), material)
@@ -108,13 +111,12 @@ var EnvironmentView3D = Backbone.View.extend({
   },
 
   updateField: function(x, y, field) {
-    log(x, y, field)
     var model = this.model
     var scene = this.scene
     var fieldObj = this.fields[x][y]
     
-    var GW = EnvironmentView3D.GW
-    ,   GH = EnvironmentView3D.GH
+    var GW = this.GW
+    ,   GH = this.GH
     var x0 = -GW*(model.get('width')/2)
     ,   y0 = GW*(model.get('depth')/2)
     
@@ -217,6 +219,3 @@ var EnvironmentView3D = Backbone.View.extend({
   }
 
 })
-
-EnvironmentView3D.GW = 40 // Grid Width
-EnvironmentView3D.GH = 22 // Grid Height

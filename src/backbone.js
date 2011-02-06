@@ -20,4 +20,4 @@ _(Backbone.View.prototype).extend({
   preventDefault: function(evt) {
     evt.preventDefault()
   }
-});
+})

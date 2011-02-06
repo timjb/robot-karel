@@ -1,4 +1,4 @@
-var EnvironmentToolbarView = Backbone.View.extend({
+App.Views.EnvironmentToolbar = Backbone.View.extend({
 
   initialize: function() {
     this.initButtons()

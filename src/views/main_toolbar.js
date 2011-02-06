@@ -1,4 +1,4 @@
-var MainToolbarView = Backbone.View.extend({
+App.Views.MainToolbar = Backbone.View.extend({
 
   initialize: function(opts) {
     this.controller = opts.controller
