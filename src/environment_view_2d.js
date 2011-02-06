@@ -4,10 +4,8 @@ var EnvironmentView2D = Backbone.View.extend({
     _(this).bindAll('render', 'delayRender', 'delegateEvents')
     
     this.model
-      .bind('change-field',     this.delayRender)
-      .bind('change:direction', this.delayRender)
-      .bind('change:position',  this.delayRender)
-      .bind('complete-change',  this.render)
+      .bind('change', this.delayRender)
+      .bind('complete-change', this.render)
     
     this
       .bind('dom:insert', this.delegateEvents)

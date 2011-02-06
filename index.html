@@ -8,14 +8,14 @@
 <link rel=stylesheet href=assets/style.css>
 
 <body>
-<div class=bar id=top-bar>
+<div class=toolbar id=main-toolbar>
   <h1>Karol.js</h1>
   <div id=tools>
     <input type=button class=left id=run-button value=Run>
     <input type=button class=left id=replay-button value=Replay>
     <input type=button class=left id=reset-button value=Reset>
-    <label class="left radio"><input type=radio name=view-select id=view-select-3d value=3d checked> <span>3D<span></label>
-    <label class="left radio"><input type=radio name=view-select id=view-select-2d value=2d> <span>2D<span></label>
+    <label class="left radio"><input type=radio name=view-select value=3D checked> <span>3D<span></label>
+    <label class="left radio"><input type=radio name=view-select value=2D> <span>2D<span></label>
     <input type=button class=right id=new-button value="New World">
     <div id=new-pane>
       <label><span>Width</span> <input id=width type=number value=11></label>
@@ -28,15 +28,15 @@
 </div>
 <div id=editor></div>
 <div id=environment></div>
-<div class=bar id=bottom-bar>
-  <input type=button id=links-drehen value="&larr;" title="Links drehen">
-  <input type=button id=schritt value="&uarr;" title=Schritt>
-  <input type=button id=rechts-drehen value="&rarr;" title="Rechts drehen">
-  <input type=button id=hinlegen value=H title=Hinlegen>
-  <input type=button id=aufheben value=A title=Aufheben>
-  <input type=button id=marke value=M title="Marke setzen bzw. löschen">
-  <input type=button id=quader value=Q title="Quader hinstellen">
-  <input type=button id=entfernen value=E title="Quader entfernen">
+<div class=toolbar id=environment-toolbar>
+  <input type=button data-method=linksDrehen  value="&larr;" title="Links drehen">
+  <input type=button data-method=schritt      value="&uarr;" title=Schritt>
+  <input type=button data-method=rechtsDrehen value="&rarr;" title="Rechts drehen">
+  <input type=button data-method=hinlegen     value=H        title=Hinlegen>
+  <input type=button data-method=aufheben     value=A        title=Aufheben>
+  <input type=button data-method=marke        value=M        title="Marke setzen bzw. löschen">
+  <input type=button data-method=quader       value=Q        title="Quader hinstellen">
+  <input type=button data-method=entfernen    value=E        title="Quader entfernen">
 </div>
 
 <script src=frameworks/ace/build/src/ace.js></script>
@@ -56,8 +56,10 @@
 <script src=src/field.js></script>
 <script src=src/position.js></script>
 <script src=src/environment.js></script>
-<script src=src/view.js></script>
 <script src=src/environment_view_3d.js></script>
 <script src=src/environment_view_2d.js></script>
+<script src=src/main_toolbar_view.js></script>
+<script src=src/environment_toolbar_view.js></script>
+<script src=src/editor_view.js></script>
 <script src=src/app_controller.js></script>
 <script src=src/main.js></script>

@@ -20,6 +20,7 @@ var Environment = Backbone.Model.extend({
 
   triggerChangeField: function(p) {
     this.trigger('change-field', p.x, p.y, this.getField(p))
+    this.trigger('change')
   },
 
   getField: function(position) {

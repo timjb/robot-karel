@@ -7,10 +7,11 @@ var EnvironmentView3D = Backbone.View.extend({
     )
     
     this.model
-      .bind('change', this.delayRender)
       .bind('change-field', this.updateField)
       .bind('change:robot', this.updateRobot)
       .bind('complete-change', this.updateAllFields)
+      .bind('change', this.delayRender)
+      .bind('complete-change',  this.render)
     
     this
       .bind('dom:insert', this.resizeAndRender)

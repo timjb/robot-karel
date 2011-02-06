@@ -44,12 +44,6 @@ function stop(obj) {
   if (typeof obj.abort == 'function') obj.abort();
 }
 
-function capitalize(str) {
-  return str.replace(/(?:\s|-|_)([a-z])/g, function(x, letter) {
-    return letter.toUpperCase();
-  });
-}
-
 function matrix(x, y, fn) {
   var result = [];
   for (var i = 0; i < x; i++) {
