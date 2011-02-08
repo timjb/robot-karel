@@ -8,7 +8,7 @@ App.Controllers.Application = Backbone.Controller.extend({
     this.environment.bind('line', _.bind(this.editor.gotoLine, this.editor))
     
     this.mainToolbar.model = this.environment
-    this.environmentToolbar = new App.Views.MainToolbar({
+    this.environmentToolbar = new App.Views.EnvironmentToolbar({
       el: $('#environment-toolbar'),
       model: this.environment
     })
