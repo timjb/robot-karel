@@ -31,6 +31,7 @@ App.Views.Environment3D = Backbone.View.extend({
 
   GW: 40, // Grid Width
   GH: 22, // Grid Height
+  WALL_HEIGHT: 5,
 
   events: {
     mousedown: 'onMousedown'
@@ -63,7 +64,7 @@ App.Views.Environment3D = Backbone.View.extend({
     var model = this.model
     var w = model.get('width')
     ,   d = model.get('depth')
-    ,   h = model.get('height')
+    ,   h = this.WALL_HEIGHT
     
     var material = new THREE.MeshBasicMaterial({ color: 0x5555cc, wireframe: true })
     var GW = this.GW

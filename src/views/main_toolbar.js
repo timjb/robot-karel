@@ -41,9 +41,8 @@ App.Views.MainToolbar = Backbone.View.extend({
 
   getNewDimensions: function() {
     return {
-      width:  parseInt(this.$('#width' ).val(), 10),
-      depth:  parseInt(this.$('#depth' ).val(), 10),
-      height: parseInt(this.$('#height').val(), 10)
+      width: parseInt(this.$('#width').val(), 10),
+      depth: parseInt(this.$('#depth').val(), 10)
     }
   }
 

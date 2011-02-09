@@ -126,9 +126,7 @@ App.Models.Environment = Backbone.Model.extend({
   hinlegen: function() {
     if (this.istWand()) error("Karol kann keinen Ziegel hinlegen. Er steht vor einer Wand.")
     var nextPosition = this.forward()
-    var field = this.getField(nextPosition)
-    if (field.ziegel >= this.height) error("Karol kann keinen Ziegel hinlegen, da die Maximalhoehe erreicht wurde.")
-    field.ziegel += 1
+    this.getField(nextPosition).ziegel += 1
     this.triggerChangeField(nextPosition)
   },
 
