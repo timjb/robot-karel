@@ -25,8 +25,11 @@ App.Views.Environment3D = Backbone.View.extend({
     this.scene = new THREE.Scene()
     this.degrees = 45
     this.cameraZ = 120
+    this.radius = 400
     this.createGrid()
     this.createLights()
+    
+    this.initScrollEvents()
   },
 
   GW: 40, // Grid Width
@@ -34,7 +37,7 @@ App.Views.Environment3D = Backbone.View.extend({
   WALL_HEIGHT: 5,
 
   events: {
-    mousedown: 'onMousedown'
+    mousedown:  'onMousedown'
   },
 
   onMousedown: function(evt) {
@@ -58,6 +61,31 @@ App.Views.Environment3D = Backbone.View.extend({
           .unbind('mousemove')
           .unbind('mouseup')
       })
+  },
+
+  initScrollEvents: function() {
+    var hover = false
+    $(this.el)
+      .mouseover(function() { hover = true })
+      .mouseout (function() { hover = false })
+    console.log('hi')
+    
+    var zoom = _(function(r) {
+      if (hover) {
+        this.radius *= r
+        this.updateCameraPosition()
+        this.render()
+      }
+    }).bind(this)
+    
+    // IE, Webkit, Opera
+    $(document).bind('mousewheel', function(evt) {
+      zoom(1 - evt.wheelDelta/2400)
+    })
+    // Firefox
+    $(window).bind('DOMMouseScroll', function(evt) {
+      zoom(1 + evt.detail/20)
+    })
   },
 
   createGrid: function() {
@@ -211,9 +239,8 @@ App.Views.Environment3D = Backbone.View.extend({
     var p1 = this.camera.position
     var p2 = this.light.position
     
-    var RADIUS = 400
-    p1.x = p2.x =  Math.sin(radian) * RADIUS
-    p1.y = p2.y = -Math.cos(radian) * RADIUS
+    p1.x = p2.x =  Math.sin(radian) * this.radius
+    p1.y = p2.y = -Math.cos(radian) * this.radius
     p1.z = p2.z = this.cameraZ
     
     p2.normalize()
