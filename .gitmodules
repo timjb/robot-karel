@@ -4,3 +4,9 @@
 [submodule "frameworks/ace"]
 	path = frameworks/ace
 	url = https://github.com/ajaxorg/ace.git
+[submodule "frameworks/backbone"]
+	path = frameworks/backbone
+	url = https://github.com/documentcloud/backbone.git
+[submodule "frameworks/underscore"]
+	path = frameworks/underscore
+	url = https://github.com/documentcloud/underscore.git

@@ -195,7 +195,7 @@ App.Views.Environment3D = Backbone.View.extend({
   },
 
   render: function() {
-    log('Render 3D')
+    console.log('Render 3D')
     this.renderer.render(this.scene, this.camera)
   },
 

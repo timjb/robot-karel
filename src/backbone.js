@@ -13,7 +13,7 @@ _(Backbone.View.prototype).extend({
   delayRender: function() {
     if (this.isVisible()) {
       clearTimeout(this.renderTimeout)
-      this.renderTimeout = setTimeout(_.bind(this.render, this), 50)
+      this.renderTimeout = setTimeout(_.bind(this.render, this), 20)
     }
   },
 

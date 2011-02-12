@@ -1,7 +1,6 @@
 App.Views.EnvironmentToolbar = Backbone.View.extend({
 
   initialize: function() {
-    log('init')
     this.initButtons()
     this.initKeyboard()
   },
@@ -18,7 +17,7 @@ App.Views.EnvironmentToolbar = Backbone.View.extend({
       left:  'linksDrehen',
       right: 'rechtsDrehen',
       up:    'schritt',
-    //down:  'rueckwaerts',
+      down:  'schrittRueckwaerts',
       space:     'marke',
       enter:     'hinlegen',
       backspace: 'aufheben',
@@ -32,7 +31,7 @@ App.Views.EnvironmentToolbar = Backbone.View.extend({
     
     $(document).keydown(_(function(evt) {
       var key = getKey(evt)
-      log('key pressed: ' + key)
+      console.log('key pressed: ' + key)
       if (actions.hasOwnProperty(key)) {
         this.model[actions[key]]()
       }

@@ -39,7 +39,7 @@ App.Views.Environment2D = Backbone.View.extend({
   },
 
   render: function() {
-    log('Render 2D')
+    console.log('Render 2D')
     
     var parent = $(this.el).parent()
     ,   width  = parent.innerWidth()
@@ -59,10 +59,8 @@ App.Views.Environment2D = Backbone.View.extend({
     var ctx = this.el.getContext('2d')
     
     // Fill everything => border between squares
-    ctx.save();
     ctx.fillStyle = '#333'
     ctx.fillRect(0, 0, width, height)
-    ctx.restore()
     
     function fill(x, y, color) {
       ctx.fillStyle = color

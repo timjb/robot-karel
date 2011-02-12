@@ -72,11 +72,14 @@ Field.prototype.clone = function() {
 
 App.Models.Environment = Backbone.Model.extend({
 
+  defaults: {
+    position: new Position(0, 0),
+    direction: Direction.SOUTH
+  },
+
   initialize: function() {
-    if (!this.get('position')) { // not cloned
+    if (!this.get('fields')) {
       this.set({
-        position: new Position(0, 0),
-        direction: Direction.SOUTH.clone(),
         fields: matrix(
           this.get('width'),
           this.get('depth'),
@@ -88,20 +91,38 @@ App.Models.Environment = Backbone.Model.extend({
     this
       .bind('change:position',  _.bind(this.trigger, this, 'change:robot'))
       .bind('change:direction', _.bind(this.trigger, this, 'change:robot'))
+      .bind('change:fields',    _.bind(this.trigger, this, 'change:all'))
     
-    // Cache (for performance reasons
-    this.$fields = this.get('fields')
-    this.$position = this.get('position')
-    this.$currentField = this.getField(this.$position)
-    this.$direction = this.get('direction')
+    // Cache (for performance reasons)
+    var setCurrentField = _(function() {
+      this.$currentField = this.getField(this.$position)
+    }).bind(this)
+    setCurrentField()
     this
-      .bind('change:position', _(function() {
-        this.$position = this.get('position')
-        this.$currentField = this.getField(this.$position)
-      }).bind(this))
-      .bind('change:direction', _(function() {
-        this.$direction = this.get('direction')
-      }).bind(this))
+      .bind('change:position', setCurrentField)
+      .bind('change:fields',   setCurrentField)
+  },
+
+  // Overwrite backbone's set method for performance reasons
+  set: function(attrs, options) {
+    // - validations, - escaped attributes, - changes tracking
+    if (attrs.attributes) attrs = attrs.attributes
+    var silent = options && options.silent
+    var change = false
+    for (var attr in attrs) {
+      change = true
+      var val = attrs[attr]
+      this.attributes[attr] = val
+      this['$'+attr] = val
+      if (!silent) this.trigger('change:'+attr)
+    }
+    if (change && !silent) this.trigger('change')
+  },
+
+  // Overwrite backbone's clone method
+  clone: function() {
+    // + make a copy of the attributes
+    return new this.constructor(clone(this.attributes))
   },
 
   triggerChangeField: function(p) {
@@ -159,8 +180,8 @@ App.Models.Environment = Backbone.Model.extend({
   },
 
   isValid: function(position) {
-    var x = position.x,
-        z = position.y
+    var x = position.x
+    ,   z = position.y
     return x >= 0 && x < this.get('width') && z >= 0 && z < this.get('depth')
   },
 
@@ -180,9 +201,20 @@ App.Models.Environment = Backbone.Model.extend({
   schritt: function() {
     if (this.istWand()) error("Karol kann keinen Schritt machen, er steht vor einer Wand.")
     var newPosition = this.forward()
-    if (Math.abs(this.$currentField.ziegel - this.getField(newPosition).ziegel) > 1)
+    if (Math.abs(this.$currentField.ziegel - this.getField(newPosition).ziegel) > 1) {
       error("Karol kann nur einen Ziegel pro Schritt nach oben oder unten springen.")
+    }
     this.set({ position: newPosition })
+  },
+
+  schrittRueckwaerts: function() {
+    this.probiere(_(function() {
+      this.linksDrehen()
+      this.linksDrehen()
+      this.schritt()
+      this.linksDrehen()
+      this.linksDrehen()
+    }).bind(this))
   },
 
   quader: function() {
@@ -204,9 +236,7 @@ App.Models.Environment = Backbone.Model.extend({
     this.triggerChangeField(position)
   },
 
-  ton: function() {
-    beep()
-  },
+  ton: beep,
 
   istNorden: function() { return this.$direction.isNorth() },
   istSueden: function() { return this.$direction.isSouth() },
@@ -218,7 +248,7 @@ App.Models.Environment = Backbone.Model.extend({
     try {
       return fn()
     } catch(exc) {
-      this.copy(clone) // TODO
+      this.set(clone)
       this.trigger('change:all')
       this.trigger('change')
     }
@@ -229,7 +259,7 @@ App.Models.Environment = Backbone.Model.extend({
     
     var self = this
     this.execute(code, function(stack) {
-      log('Commands: ', stack)
+      console.log('Commands: ', stack)
       self.stack = stack
     })
   },
@@ -372,13 +402,12 @@ App.Models.Environment = Backbone.Model.extend({
         clearInterval(interval)
       } else {
         self.next()
-        self.onchange && self.onchange() // TODO
       }
     }, 150)
   },
 
   reset: function() {
-    this.copy(this.backup) // TODO
+    this.set(this.backup.attributes)
     this.trigger('change:all')
     this.trigger('change')
   },
