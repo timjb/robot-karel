@@ -473,7 +473,7 @@ App.Models.Environment = Backbone.Model.extend({
     // Position of the robot
     var px = _int(), py = _int(), pz = _int()
     
-    var env = new Environment({
+    var env = new App.Models.Environment({
       width: x,
       depth: y,
       position: new Position(px, py)

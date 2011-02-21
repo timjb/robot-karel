@@ -5,22 +5,36 @@ App.Controllers.Application = Backbone.Controller.extend({
     this.editor = new App.Views.Editor({ el: $('#editor') })
     
     this.environment = new App.Models.Environment(this.mainToolbar.getNewDimensions())
-    this.environment.bind('line', _.bind(this.editor.gotoLine, this.editor))
+    this.initEnvironment()
     
     this.mainToolbar.model = this.environment
     this.environmentToolbar = new App.Views.EnvironmentToolbar({
       el: $('#environment-toolbar'),
       model: this.environment
     })
+  },
+
+  initEnvironment: function() {
+    this.environment.bind('line', _.bind(this.editor.gotoLine, this.editor))
     
     $('#environment').html('') // clear
     this.environment2D = new App.Views.Environment2D({ model: this.environment })
     this.environment3D = new App.Views.Environment3D({ model: this.environment })
     this.mainToolbar.changeView()
+    
+    var onDropEnvironment = _.bind(function(textData) {
+      this.environment = App.Models.Environment.fromString(textData)
+      this.initEnvironment()
+      this.environment.trigger('change:all')
+      this.environment.trigger('change', 'all')
+    }, this)
+    this.environment2D.bind('drop-environment', onDropEnvironment)
+    this.environment3D.bind('drop-environment', onDropEnvironment)
   },
 
   routes: {
-    'examples/:name': 'loadExample'
+    'examples/:name': 'loadExample',
+    'export': 'showSource'
   },
 
   loadExample: function(name) {
@@ -29,6 +43,24 @@ App.Controllers.Application = Backbone.Controller.extend({
       dataType: 'text',
       success: _.bind(this.editor.setValue, this.editor)
     })
+  },
+
+  showSource: function() {
+    history.pushState(null, "export", 'welt.kdw')
+    var overlay = $('<div class="export" />')
+      .text(this.environment.toString())
+      .appendTo($('body'))
+    
+    var selection = window.getSelection()
+    var range = document.createRange()
+    range.selectNodeContents(overlay.get(0))
+    selection.removeAllRanges()
+    selection.addRange(range)
+    
+    window.onpopstate = function() {
+      overlay.remove()
+      delete window.onpushstate
+    }
   },
 
   show2D: function() {

@@ -37,7 +37,10 @@ App.Views.Environment3D = App.Views.EnvironmentBase.extend({
   WALL_HEIGHT: 5,
 
   events: {
-    mousedown:  'onMousedown'
+    mousedown: 'onMousedown',
+    dragover:  'preventDefault',
+    dragenter: 'preventDefault',
+    drop:      'onDrop'
   },
 
   onMousedown: function(evt) {

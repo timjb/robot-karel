@@ -15,8 +15,11 @@ App.Views.Environment2D = App.Views.EnvironmentBase.extend({
   tagName: 'canvas',
 
   events: {
-    mousedown: 'onMousedown',
-    contextmenu: 'preventDefault'
+    mousedown:   'onMousedown',
+    contextmenu: 'preventDefault',
+    dragover:    'preventDefault',
+    dragenter:   'preventDefault',
+    drop:        'onDrop'
   },
 
   onMousedown: function(evt) {
