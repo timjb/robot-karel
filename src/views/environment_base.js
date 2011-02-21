@@ -1,6 +1,15 @@
-// Freedom-patch Backbone
+App.Views.EnvironmentBase = Backbone.View.extend({
 
-_(Backbone.View.prototype).extend({
+  onDrop: function(evt) {
+    evt.preventDefault()
+    evt = evt.originalEvent
+    var reader = new FileReader()
+    reader.onloadend = _.bind(function(evt) {
+      this.trigger('drop-environment', evt.target.result)
+    }, this)
+    reader.readAsText(evt.dataTransfer.files[0])
+  },
+
   appendTo: function(p) {
     p.append(this.el)
     this.trigger('dom:insert')
@@ -20,4 +29,5 @@ _(Backbone.View.prototype).extend({
   preventDefault: function(evt) {
     evt.preventDefault()
   }
+
 })

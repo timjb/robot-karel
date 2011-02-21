@@ -1,4 +1,4 @@
-App.Views.Environment2D = Backbone.View.extend({
+App.Views.Environment2D = App.Views.EnvironmentBase.extend({
 
   initialize: function() {
     _(this).bindAll('render', 'delayRender', 'delegateEvents')

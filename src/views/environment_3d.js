@@ -1,4 +1,4 @@
-App.Views.Environment3D = Backbone.View.extend({
+App.Views.Environment3D = App.Views.EnvironmentBase.extend({
 
   initialize: function() {
     _(this).bindAll(
