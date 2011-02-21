@@ -421,6 +421,78 @@ App.Models.Environment = Backbone.Model.extend({
         fn(x, y, fields[x][y])
       }
     }
+  },
+
+  toString: function() {
+    var tokens = []
+    var p = function(c) { tokens.push(c) }
+    
+    p('KarolVersion2Deutsch')
+    
+    p(this.get('width'))
+    p(this.get('depth'))
+    p(5)
+    
+    p(this.$position.x)
+    p(this.$position.y)
+    p(this.$currentField.ziegel)
+    
+    var fields = this.get('fields')
+    var x = this.get('width')
+    ,   y = this.get('depth')
+    for (var i = 0; i < x; i++) {
+      for (var j = 0; j < y; j++) {
+        var field = fields[i][j]
+        if (field.quader) tokens = tokens.concat(['q','q','n','n','n'])
+        for (var k = 0; k < 5; k++) p(k < field.ziegel ? 'z' : 'n')
+        p(field.marke ? 'm' : 'o')
+      }
+    }
+    
+    return tokens.join(' ')
+  }
+
+}, {
+
+  Field: Field,
+  Position: Position,
+  Direction: Direction,
+  
+  fromString: function(str) {
+    // Parse .kdw files
+    
+    var tokens = str.split(/\s/)
+    var shift = _(tokens.shift).bind(tokens)
+    var _int = function() { return parseInt(shift(), 10) }
+    
+    tokens.shift() // "KarolVersion2Deutsch"
+    
+    // Dimensions of the world
+    var x = _int(), y = _int(), z = _int()
+    
+    // Position of the robot
+    var px = _int(), py = _int(), pz = _int()
+    
+    var env = new Environment({
+      width: x,
+      depth: y,
+      position: new Position(px, py)
+    })
+    var fields = env.get('fields')
+    
+    for (var i = 0; i < x; i++) {
+      for (var j = 0; j < y; j++) {
+        var field = new Field()
+        if (tokens[0] == 'q') field.quader = true
+        for (var k = 0; k < z; k++) {
+          if (shift() == 'z') field.ziegel++
+        }
+        field.marke = (shift() == 'm')
+        fields[i][j] = field
+      }
+    }
+    
+    return env
   }
 
 })
