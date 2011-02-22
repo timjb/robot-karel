@@ -425,26 +425,35 @@ App.Models.Environment = Backbone.Model.extend({
 
   toString: function() {
     var tokens = []
-    var p = function(c) { tokens.push(c) }
+    var p = function(c) { field_height--; tokens.push(c) }
+    
+    var fields = this.get('fields')
+    var height = Math.max(5, 1 + _.max(_.map(fields, function(row) {
+      return _.max(_.pluck(row, 'ziegel'))
+    })))
     
     p('KarolVersion2Deutsch')
     
     p(this.get('width'))
     p(this.get('depth'))
-    p(5)
+    p(height)
     
     p(this.$position.x)
     p(this.$position.y)
     p(this.$currentField.ziegel)
     
-    var fields = this.get('fields')
     var x = this.get('width')
     ,   y = this.get('depth')
     for (var i = 0; i < x; i++) {
       for (var j = 0; j < y; j++) {
         var field = fields[i][j]
-        if (field.quader) tokens = tokens.concat(['q','q','n','n','n'])
-        for (var k = 0; k < 5; k++) p(k < field.ziegel ? 'z' : 'n')
+        ,   field_height = height
+        if (field.quader) {
+          p('q'); p('q')
+        } else {
+          _.times(field.ziegel, function() { p('z') })
+        }
+        while (field_height > 0) p('n')
         p(field.marke ? 'm' : 'o')
       }
     }
