@@ -1,3 +1,6 @@
+(function() {
+var _ = require('underscore')
+
 module.exports = require('backbone').Controller.extend({
 
   initialize: function() {
@@ -83,3 +86,5 @@ module.exports = require('backbone').Controller.extend({
 }, {
   path: 'controllers/application'
 })
+
+})()

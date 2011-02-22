@@ -1,3 +1,6 @@
+(function() {
+var _ = require('underscore')
+
 module.exports = require('backbone').View.extend({
 
   onDrop: function(evt) {
@@ -33,3 +36,5 @@ module.exports = require('backbone').View.extend({
 }, {
   path: 'views/environment_base'
 })
+
+})()

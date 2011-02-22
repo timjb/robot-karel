@@ -1,3 +1,6 @@
+(function() {
+var _ = require('underscore')
+
 module.exports = require('views/environment_base').extend({
 
   initialize: function() {
@@ -99,3 +102,5 @@ module.exports = require('views/environment_base').extend({
 }, {
   path: 'views/environment_2d'
 })
+
+})()

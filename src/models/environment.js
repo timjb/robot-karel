@@ -1,5 +1,6 @@
 (function() {
-var beep          = require('helpers/beep')
+var _             = require('underscore')
+,   beep          = require('helpers/beep')
 ,   clone         = require('helpers/clone')
 ,   getLineNumber = require('helpers/get_line_number')
 ,   matrix        = require('helpers/matrix')

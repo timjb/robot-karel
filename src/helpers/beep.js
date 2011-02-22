@@ -1,7 +1,7 @@
 (function() {
 
 //this.initBeepSound() // Because Chrome can't replay
-if (window.Audio) {
+if (this.window && window.Audio) {
   var sound = new Audio()
   if (sound.canPlayType('audio/ogg; codecs="vorbis"')) {
     sound.src = 'assets/beep.ogg'

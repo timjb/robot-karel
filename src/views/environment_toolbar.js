@@ -1,3 +1,6 @@
+(function() {
+var _ = require('underscore')
+
 module.exports = require('backbone').View.extend({
 
   initialize: function() {
@@ -41,3 +44,5 @@ module.exports = require('backbone').View.extend({
 }, {
   path: 'views/environment_toolbar'
 })
+
+})()
