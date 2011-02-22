@@ -1,14 +1,17 @@
-App.Controllers.Application = Backbone.Controller.extend({
+module.exports = require('backbone').Controller.extend({
 
   initialize: function() {
-    this.mainToolbar = new App.Views.MainToolbar({ controller: this, el: $('#main-toolbar') })
-    this.editor = new App.Views.Editor({ el: $('#editor') })
+    this.mainToolbar = new (require('views/main_toolbar'))({
+      controller: this,
+      el: $('#main-toolbar')
+    })
+    this.editor = new (require('views/editor'))({ el: $('#editor') })
     
-    this.environment = new App.Models.Environment(this.mainToolbar.getNewDimensions())
+    this.environment = new (require('models/environment'))(this.mainToolbar.getNewDimensions())
     this.initEnvironment()
     
     this.mainToolbar.model = this.environment
-    this.environmentToolbar = new App.Views.EnvironmentToolbar({
+    this.environmentToolbar = new (require('views/environment_toolbar'))({
       el: $('#environment-toolbar'),
       model: this.environment
     })
@@ -18,12 +21,12 @@ App.Controllers.Application = Backbone.Controller.extend({
     this.environment.bind('line', _.bind(this.editor.gotoLine, this.editor))
     
     $('#environment').html('') // clear
-    this.environment2D = new App.Views.Environment2D({ model: this.environment })
-    this.environment3D = new App.Views.Environment3D({ model: this.environment })
+    this.environment2D = new (require('views/environment_2d'))({ model: this.environment })
+    this.environment3D = new (require('views/environment_3d'))({ model: this.environment })
     this.mainToolbar.changeView()
     
     var onDropEnvironment = _.bind(function(textData) {
-      this.environment = App.Models.Environment.fromString(textData)
+      this.environment = require('models/environment').fromString(textData)
       this.initEnvironment()
       this.environment.trigger('change:all')
       this.environment.trigger('change', 'all')
@@ -77,4 +80,6 @@ App.Controllers.Application = Backbone.Controller.extend({
     this.environment.run(this.editor.getValue())
   }
 
+}, {
+  path: 'controllers/application'
 })

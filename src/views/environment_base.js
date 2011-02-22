@@ -1,4 +1,4 @@
-App.Views.EnvironmentBase = Backbone.View.extend({
+module.exports = require('backbone').View.extend({
 
   onDrop: function(evt) {
     evt.preventDefault()
@@ -30,4 +30,6 @@ App.Views.EnvironmentBase = Backbone.View.extend({
     evt.preventDefault()
   }
 
+}, {
+  path: 'views/environment_base'
 })

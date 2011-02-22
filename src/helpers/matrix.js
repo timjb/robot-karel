@@ -1,7 +1,4 @@
-function removeFromArray(arr, obj) {
-  var index = arr.indexOf(obj)
-  if (index != -1) arr.splice(index, 1)
-}
+(function() {
 
 function matrix(x, y, fn) {
   var result = []
@@ -14,3 +11,8 @@ function matrix(x, y, fn) {
   }
   return result
 }
+
+matrix.path = 'helpers/matrix'
+module.exports = matrix
+
+})()

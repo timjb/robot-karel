@@ -1,4 +1,4 @@
-App.Views.MainToolbar = Backbone.View.extend({
+module.exports = require('backbone').View.extend({
 
   initialize: function(opts) {
     this.controller = opts.controller
@@ -46,4 +46,6 @@ App.Views.MainToolbar = Backbone.View.extend({
     }
   }
 
+}, {
+  path: 'views/main_toolbar'
 })

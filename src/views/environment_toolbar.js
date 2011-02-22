@@ -1,4 +1,4 @@
-App.Views.EnvironmentToolbar = Backbone.View.extend({
+module.exports = require('backbone').View.extend({
 
   initialize: function() {
     this.initButtons()
@@ -38,4 +38,6 @@ App.Views.EnvironmentToolbar = Backbone.View.extend({
     }).bind(this))
   }
 
+}, {
+  path: 'views/environment_toolbar'
 })

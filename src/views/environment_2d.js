@@ -1,4 +1,4 @@
-App.Views.Environment2D = App.Views.EnvironmentBase.extend({
+module.exports = require('views/environment_base').extend({
 
   initialize: function() {
     _(this).bindAll('render', 'delayRender', 'delegateEvents')
@@ -96,4 +96,6 @@ App.Views.Environment2D = App.Views.EnvironmentBase.extend({
     });
   }
 
-});
+}, {
+  path: 'views/environment_2d'
+})

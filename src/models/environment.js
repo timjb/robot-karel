@@ -1,3 +1,19 @@
+(function() {
+var beep          = require('helpers/beep')
+,   clone         = require('helpers/clone')
+,   getLineNumber = require('helpers/get_line_number')
+,   matrix        = require('helpers/matrix')
+
+function error(msg) {
+  throw new Error(msg)
+}
+
+function errorFunction(msg) {
+  return _(error).bind(null, msg)
+}
+
+
+
 function Position(x, y) {
   this.x = x
   this.y = y
@@ -70,7 +86,7 @@ Field.prototype.clone = function() {
 
 
 
-App.Models.Environment = Backbone.Model.extend({
+module.exports = require('backbone').Model.extend({
 
   defaults: {
     position: new Position(0, 0),
@@ -275,6 +291,11 @@ App.Models.Environment = Backbone.Model.extend({
     var stack = []
     var self = this
     var timed = []
+    var addTimed = _.bind(timed.push, timed)
+    var removeTimed = function(obj) {
+      var index = timed.indexOf(obj)
+      if (index != -1) timed.splice(index, 1)
+    }
     var END_EXC = new Error('end')
     
     function stop(obj) {
@@ -336,10 +357,10 @@ App.Models.Environment = Backbone.Model.extend({
     
     win.warten = function(fn, ms) {
       var timeout = setTimeout(function() {
-        removeFromArray(timed, timeout)
+        removeTimed(timeout)
         exec(fn)
       }, ms)
-      timed.push(timeout)
+      addTimed(timeout)
       return timeout
     }
     
@@ -347,26 +368,26 @@ App.Models.Environment = Backbone.Model.extend({
       var interval = setInterval(function() {
         exec(fn)
       }, ms)
-      timed.push(interval)
+      addTimed(interval)
       return interval
     }
     
     win.laden = function(opts, fn) {
       var req = $.ajax(opts)
         .success(function(responseText) {
-          removeFromArray(timed, req)
+          removeTimed(req)
           exec(_.bind(fn, null, responseText))
         })
         .error(function() {
-          removeFromArray(timed, req)
+          removeTimed(req)
         })
-      timed.push(req)
+      addTimed(req)
       return req
     }
     
     win.stoppen = function(obj) {
       stop(obj)
-      removeFromArray(timed, obj)
+      removeTimed(obj)
       end()
     }
     
@@ -462,6 +483,7 @@ App.Models.Environment = Backbone.Model.extend({
   }
 
 }, {
+  path: 'models/environment',
 
   Field: Field,
   Position: Position,
@@ -505,3 +527,5 @@ App.Models.Environment = Backbone.Model.extend({
   }
 
 })
+
+})()

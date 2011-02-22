@@ -14,18 +14,3 @@ var ENVIRONMENT_COLORS = (function() {
   
   return C
 })()
-
-var App = {
-  Models: {},
-  Views: {},
-  Controllers: {},
-  
-  start: function() {
-    new App.Controllers.Application()
-      
-    Backbone.history.start()
-    if(location.hash == '') {
-      location.hash = 'examples/conways_game_of_life'
-    }
-  }
-}

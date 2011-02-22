@@ -1,4 +1,4 @@
-App.Views.Editor = Backbone.View.extend({
+module.exports = require('backbone').View.extend({
 
   initialize: function() {
     var e = this.editor  = ace.edit($(this.el).get(0))
@@ -35,4 +35,6 @@ App.Views.Editor = Backbone.View.extend({
   gotoLine: function(n) {
     this.editor.gotoLine(n)
   }
+}, {
+  path: 'views/editor'
 })

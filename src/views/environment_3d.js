@@ -1,4 +1,8 @@
-App.Views.Environment3D = App.Views.EnvironmentBase.extend({
+(function() {
+var matrix = require('helpers/matrix')
+,   three  = require('three')
+
+module.exports = require('views/environment_base').extend({
 
   initialize: function() {
     _(this).bindAll(
@@ -20,9 +24,9 @@ App.Views.Environment3D = App.Views.EnvironmentBase.extend({
     $(window).resize(this.resizeAndRender)
     
     this.createFields()
-    this.renderer = new THREE.CanvasRenderer()
+    this.renderer = new three.CanvasRenderer()
     this.el = $(this.renderer.domElement)
-    this.scene = new THREE.Scene()
+    this.scene = new three.Scene()
     this.degrees = 45
     this.cameraZ = 120
     this.radius = 400
@@ -71,7 +75,6 @@ App.Views.Environment3D = App.Views.EnvironmentBase.extend({
     $(this.el)
       .mouseover(function() { hover = true })
       .mouseout (function() { hover = false })
-    console.log('hi')
     
     var zoom = _(function(r) {
       if (hover) {
@@ -97,17 +100,17 @@ App.Views.Environment3D = App.Views.EnvironmentBase.extend({
     ,   d = model.get('depth')
     ,   h = this.WALL_HEIGHT
     
-    var material = new THREE.MeshBasicMaterial({ color: 0x5555cc, wireframe: true })
+    var material = new three.MeshBasicMaterial({ color: 0x5555cc, wireframe: true })
     var GW = this.GW
     ,   GH = this.GH
     
     // Ground
-    var plane = new THREE.Mesh(new Plane(w*GW, d*GW, w, d), material)
+    var plane = new three.Mesh(new Plane(w*GW, d*GW, w, d), material)
     plane.doubleSided = true
     this.scene.addObject(plane)
     
     // Back
-    var plane = new THREE.Mesh(new Plane(w*GW, h*GH, w, h), material)
+    var plane = new three.Mesh(new Plane(w*GW, h*GH, w, h), material)
     plane.position.y = (d/2)*GW
     plane.position.z = (h/2)*GH
     plane.rotation.x = Math.PI/2
@@ -115,7 +118,7 @@ App.Views.Environment3D = App.Views.EnvironmentBase.extend({
     this.scene.addObject(plane)
     
     // Left Side
-    var plane = new THREE.Mesh(new Plane(h*GH, d*GW, h, d), material)
+    var plane = new three.Mesh(new Plane(h*GH, d*GW, h, d), material)
     plane.position.x = -(w/2)*GW
     plane.position.z = (h/2)*GH
     plane.rotation.y = Math.PI/2
@@ -124,10 +127,10 @@ App.Views.Environment3D = App.Views.EnvironmentBase.extend({
   },
 
   createLights: function() {
-    var l = new THREE.AmbientLight(0x888888)
+    var l = new three.AmbientLight(0x888888)
     this.scene.addLight(l)
     
-    var l = this.light = new THREE.DirectionalLight(0xaaaaaa)
+    var l = this.light = new three.DirectionalLight(0xaaaaaa)
     this.scene.addLight(l)
   },
 
@@ -161,9 +164,9 @@ App.Views.Environment3D = App.Views.EnvironmentBase.extend({
     
     while (field.ziegel > fieldObj.ziegel.length) {
       var z = fieldObj.ziegel.length
-      var cube = new THREE.Mesh(
-        new Cube(GW, GW, GH, 1, 1, new THREE.MeshLambertMaterial({ color: ENVIRONMENT_COLORS.ziegel.hex, shading: THREE.FlatShading })),
-        new THREE.MeshFaceMaterial()
+      var cube = new three.Mesh(
+        new Cube(GW, GW, GH, 1, 1, new three.MeshLambertMaterial({ color: ENVIRONMENT_COLORS.ziegel.hex, shading: three.FlatShading })),
+        new three.MeshFaceMaterial()
       )
       cube.position.x = GW/2 + x0 + x*GW
       cube.position.y = -GW/2 + y0 - y*GW
@@ -181,9 +184,9 @@ App.Views.Environment3D = App.Views.EnvironmentBase.extend({
     }
     
     if (field.marke && !fieldObj.marke) {
-      var marke = new THREE.Mesh(
+      var marke = new three.Mesh(
         new Plane(GW, GW, 1, 1),
-        new THREE.MeshBasicMaterial({ color: ENVIRONMENT_COLORS.marke.hex })
+        new three.MeshBasicMaterial({ color: ENVIRONMENT_COLORS.marke.hex })
       )
       marke.position.x = GW/2 + x0 + x*GW
       marke.position.y = -GW/2 + y0 - y*GW
@@ -193,7 +196,7 @@ App.Views.Environment3D = App.Views.EnvironmentBase.extend({
     }
     
     if (field.quader && !fieldObj.quader) {
-      var cube = new THREE.Mesh(new Cube(GW, GW, 2*GH, 1, 1), new THREE.MeshLambertMaterial({ color: ENVIRONMENT_COLORS.quader.hex, shading: THREE.FlatShading }))
+      var cube = new three.Mesh(new Cube(GW, GW, 2*GH, 1, 1), new three.MeshLambertMaterial({ color: ENVIRONMENT_COLORS.quader.hex, shading: three.FlatShading }))
       cube.position.x = GW/2 + x0 + x*GW
       cube.position.y = -GW/2 + y0 - y*GW
       cube.position.z = GH
@@ -231,8 +234,8 @@ App.Views.Environment3D = App.Views.EnvironmentBase.extend({
   },
 
   createCamera: function(width, height) {
-    this.camera = new THREE.Camera(75, width/height, 1, 1e5)
-    this.camera.up = new THREE.Vector3(0, 0, 1)
+    this.camera = new three.Camera(75, width/height, 1, 1e5)
+    this.camera.up = new three.Vector3(0, 0, 1)
     this.updateCameraPosition()
   },
 
@@ -249,4 +252,8 @@ App.Views.Environment3D = App.Views.EnvironmentBase.extend({
     p2.normalize()
   }
 
+}, {
+  path: 'views/environment_3d'
 })
+
+})()

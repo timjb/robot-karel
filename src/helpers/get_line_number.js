@@ -1,13 +1,13 @@
+(function() {
+
 function getLineNumber(stack, n) {
-  var self = getLineNumber
-  if (self.hasOwnProperty(browser)) {
-    return self[browser](stack, n)
-  } else {
-    return null
-  }
+  var fn
+  if ($.browser.webkit)  fn = getLineNumber.webkit
+  if ($.browser.mozilla) fn = getLineNumber.mozilla
+  return fn ? fn(stack, n) : null
 }
 
-getLineNumber.chrome = function(stack, n) {
+getLineNumber.webkit = function(stack, n) {
   var lines = stack.split("\n")
   var line = lines[1+n]
   var match = line.match(/:(\d+):\d+\)?$/)
@@ -18,7 +18,7 @@ getLineNumber.chrome = function(stack, n) {
   }
 }
 
-getLineNumber.firefox = function(stack, n) {
+getLineNumber.mozilla = function(stack, n) {
   var lines = stack.split("\n")
   var line = lines[1+n]
   var match = line.match(/:(\d+)$/)
@@ -30,5 +30,10 @@ getLineNumber.firefox = function(stack, n) {
 }
 
 getLineNumber.possible = function() {
-  return this.hasOwnProperty(browser)
+  return $.browser.webkit || $.browser.mozilla
 }
+
+getLineNumber.path = 'helpers/get_line_number'
+module.exports = getLineNumber
+
+})()

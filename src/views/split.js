@@ -1,4 +1,4 @@
-App.Views.Split = Backbone.View.extend({
+module.exports = require('backbone').View.extend({
 
   initialize: function(opts) {
     this.left  = opts.left
@@ -10,4 +10,6 @@ App.Views.Split = Backbone.View.extend({
     'mousedown .separator': 'resize'
   }
 
+}, {
+  path: 'views/split'
 })

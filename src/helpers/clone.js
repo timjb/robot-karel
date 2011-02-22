@@ -1,3 +1,5 @@
+(function() {
+
 // deep clone
 function clone(obj) {
   if (typeof obj.clone == 'function') {
@@ -18,3 +20,8 @@ function clone(obj) {
     return obj
   }
 }
+
+clone.path = 'helpers/clone'
+module.exports = clone
+
+})()
