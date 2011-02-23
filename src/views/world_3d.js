@@ -3,7 +3,7 @@ var _      = require('underscore')
 ,   matrix = require('helpers/matrix')
 ,   three  = require('three')
 
-module.exports = require('views/environment_base').extend({
+module.exports = require('views/world_base').extend({
 
   initialize: function() {
     _(this).bindAll(
@@ -254,7 +254,7 @@ module.exports = require('views/environment_base').extend({
   }
 
 }, {
-  path: 'views/environment_3d'
+  path: 'views/world_3d'
 })
 
 })()

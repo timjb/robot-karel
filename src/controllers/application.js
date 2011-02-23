@@ -10,32 +10,32 @@ module.exports = require('backbone').Controller.extend({
     })
     this.editor = new (require('views/editor'))({ el: $('#editor') })
     
-    this.environment = new (require('models/environment'))(this.mainToolbar.getNewDimensions())
-    this.initEnvironment()
+    this.world = new (require('models/world'))(this.mainToolbar.getNewDimensions())
+    this.initWorld()
     
-    this.mainToolbar.model = this.environment
-    this.environmentToolbar = new (require('views/environment_toolbar'))({
-      el: $('#environment-toolbar'),
-      model: this.environment
+    this.mainToolbar.model = this.world
+    this.worldToolbar = new (require('views/world_toolbar'))({
+      el: $('#world-toolbar'),
+      model: this.world
     })
   },
 
-  initEnvironment: function() {
-    this.environment.bind('line', _.bind(this.editor.gotoLine, this.editor))
+  initWorld: function() {
+    this.world.bind('line', _.bind(this.editor.gotoLine, this.editor))
     
-    $('#environment').html('') // clear
-    this.environment2D = new (require('views/environment_2d'))({ model: this.environment })
-    this.environment3D = new (require('views/environment_3d'))({ model: this.environment })
+    $('#world').html('') // clear
+    this.world2D = new (require('views/world_2d'))({ model: this.world })
+    this.world3D = new (require('views/world_3d'))({ model: this.world })
     this.mainToolbar.changeView()
     
-    var onDropEnvironment = _.bind(function(textData) {
-      this.environment = require('models/environment').fromString(textData)
-      this.initEnvironment()
-      this.environment.trigger('change:all')
-      this.environment.trigger('change', 'all')
+    var onDropWorld = _.bind(function(textData) {
+      this.world = require('models/world').fromString(textData)
+      this.initWorld()
+      this.world.trigger('change:all')
+      this.world.trigger('change', 'all')
     }, this)
-    this.environment2D.bind('drop-environment', onDropEnvironment)
-    this.environment3D.bind('drop-environment', onDropEnvironment)
+    this.world2D.bind('drop-world', onDropWorld)
+    this.world3D.bind('drop-world', onDropWorld)
   },
 
   routes: {
@@ -54,7 +54,7 @@ module.exports = require('backbone').Controller.extend({
   showSource: function() {
     history.pushState(null, "export", 'welt.kdw')
     var overlay = $('<div class="export" />')
-      .text(this.environment.toString())
+      .text(this.world.toString())
       .appendTo($('body'))
     
     var selection = window.getSelection()
@@ -70,17 +70,17 @@ module.exports = require('backbone').Controller.extend({
   },
 
   show2D: function() {
-    this.environment3D.remove()
-    this.environment2D.appendTo($('#environment'))
+    this.world3D.remove()
+    this.world2D.appendTo($('#world'))
   },
 
   show3D: function() {
-    this.environment2D.remove()
-    this.environment3D.appendTo($('#environment'))
+    this.world2D.remove()
+    this.world3D.appendTo($('#world'))
   },
 
   run: function() {
-    this.environment.run(this.editor.getValue())
+    this.world.run(this.editor.getValue())
   }
 
 }, {

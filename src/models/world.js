@@ -1,74 +1,9 @@
 (function() {
 var _             = require('underscore')
-,   beep          = require('helpers/beep')
 ,   clone         = require('helpers/clone')
 ,   getLineNumber = require('helpers/get_line_number')
 ,   matrix        = require('helpers/matrix')
-
-function error(msg) {
-  throw new Error(msg)
-}
-
-function errorFunction(msg) {
-  return _(error).bind(null, msg)
-}
-
-
-
-function Position(x, y) {
-  this.x = x
-  this.y = y
-}
-
-Position.prototype.plus = function(another) {
-  return new Position(this.x + another.x, this.y + another.y)
-}
-
-
-function Direction(x, y) {
-  this.x = x
-  this.y = y
-}
-
-Direction.NORTH = new Direction(0, -1)
-Direction.prototype.isNorth = function() {
-  return this.equals(Direction.NORTH)
-}
-
-Direction.SOUTH = new Direction(0, 1)
-Direction.prototype.isSouth = function() {
-  return this.equals(Direction.SOUTH)
-}
-
-Direction.WEST = new Direction(-1, 0)
-Direction.prototype.isWest = function() {
-  return this.equals(Direction.WEST)
-}
-
-Direction.EAST = new Direction(1, 0)
-Direction.prototype.isEast = function() {
-  return this.equals(Direction.EAST)
-}
-
-Direction.prototype.turnRight = function() {
-  return new Direction(-this.y, this.x)
-}
-
-Direction.prototype.turnLeft = function() {
-  return new Direction(this.y, -this.x)
-}
-
-
-Position.prototype.clone = Direction.prototype.clone = function() {
-  return new this.constructor(this.x, this.y)
-}
-
-Position.prototype.equals = Direction.prototype.equals = function(another) {
-  return another instanceof this.constructor
-    && another.x == this.x
-    && another.y == this.y
-}
-
+,   Robot         = require('models/robot')
 
 
 function Field() {
@@ -86,13 +21,7 @@ Field.prototype.clone = function() {
 }
 
 
-
 module.exports = require('backbone').Model.extend({
-
-  defaults: {
-    position: new Position(0, 0),
-    direction: Direction.SOUTH
-  },
 
   initialize: function() {
     if (!this.get('fields')) {
@@ -105,35 +34,24 @@ module.exports = require('backbone').Model.extend({
       })
     }
     
-    this
-      .bind('change:position',  _.bind(this.trigger, this, 'change:robot'))
-      .bind('change:direction', _.bind(this.trigger, this, 'change:robot'))
-      .bind('change:fields',    _.bind(this.trigger, this, 'change:all'))
+    this.$fields = this.get('fields')
+    this.bind('change:fields', function() {
+      this.trigger('change:all')
+      this.$fields = this.get('fields')
+    })
     
-    // Cache (for performance reasons)
-    var setCurrentField = _(function() {
-      this.$currentField = this.getField(this.$position)
-    }).bind(this)
-    setCurrentField()
-    this
-      .bind('change:position', setCurrentField)
-      .bind('change:fields',   setCurrentField)
+    this.createRobot()
+    
+    this.get('robot').bind('change', _.bind(function() {
+      this.trigger('change:robot')
+      this.trigger('change', 'robot')
+    }, this))
   },
 
-  // Overwrite backbone's set method for performance reasons
-  set: function(attrs, options) {
-    // - validations, - escaped attributes, - changes tracking
-    if (attrs.attributes) attrs = attrs.attributes
-    var silent = options && options.silent
-    var change = false
-    for (var attr in attrs) {
-      change = true
-      var val = attrs[attr]
-      this.attributes[attr] = val
-      this['$'+attr] = val
-      if (!silent) this.trigger('change:'+attr)
-    }
-    if (change && !silent) this.trigger('change')
+  createRobot: function() {
+    var r = new Robot({ world: this })
+    this.set({ robot: r })
+    return r
   },
 
   // Overwrite backbone's clone method
@@ -149,126 +67,6 @@ module.exports = require('backbone').Model.extend({
 
   getField: function(position) {
     return this.$fields[position.x][position.y]
-  },
-
-  forward: function() {
-    return this.$position.plus(this.$direction)
-  },
-
-  istZiegel: function(n) {
-    if (this.istWand()) return false
-    var ziegel = this.getField(this.forward()).ziegel
-    return n ? (ziegel == n) : !!ziegel
-  },
-
-  hinlegen: function() {
-    if (this.istWand()) error("karel kann keinen Ziegel hinlegen. Er steht vor einer Wand.")
-    var nextPosition = this.forward()
-    this.getField(nextPosition).ziegel += 1
-    this.triggerChangeField(nextPosition)
-  },
-
-  aufheben: function() {
-    if (this.istWand()) error("karel kann keinen Ziegel aufheben. Er steht vor einer Wand.")
-    var nextPosition = this.forward()
-    var field = this.getField(nextPosition)
-    if (!field.ziegel) error("karel kann keinen Ziegel aufheben, da kein Ziegel vor ihm liegt.")
-    field.ziegel--
-    this.triggerChangeField(nextPosition)
-  },
-
-  markeSetzen: function() {
-    this.$currentField.marke = true
-    this.triggerChangeField(this.$position)
-  },
-
-  markeLoeschen: function() {
-    this.$currentField.marke = false
-    this.triggerChangeField(this.$position)
-  },
-
-  marke: function() {
-    this.$currentField.marke = !this.$currentField.marke
-    this.triggerChangeField(this.$position)
-  },
-
-  istMarke: function() {
-    return this.$currentField.marke
-  },
-
-  isValid: function(position) {
-    var x = position.x
-    ,   z = position.y
-    return x >= 0 && x < this.get('width') && z >= 0 && z < this.get('depth')
-  },
-
-  istWand: function() {
-    var next = this.forward()
-    return !this.isValid(next) || this.getField(next).quader
-  },
-
-  linksDrehen: function() {
-    this.set({ direction: this.$direction.turnLeft() })
-  },
-
-  rechtsDrehen: function() {
-    this.set({ direction: this.$direction.turnRight() })
-  },
-
-  schritt: function() {
-    if (this.istWand()) error("karel kann keinen Schritt machen, er steht vor einer Wand.")
-    var newPosition = this.forward()
-    if (Math.abs(this.$currentField.ziegel - this.getField(newPosition).ziegel) > 1) {
-      error("karel kann nur einen Ziegel pro Schritt nach oben oder unten springen.")
-    }
-    this.set({ position: newPosition })
-  },
-
-  schrittRueckwaerts: function() {
-    this.probiere(_(function() {
-      this.linksDrehen()
-      this.linksDrehen()
-      this.schritt()
-      this.linksDrehen()
-      this.linksDrehen()
-    }).bind(this))
-  },
-
-  quader: function() {
-    var position = this.forward()
-    if (!this.isValid(position)) error("karel kann keinen Quader hinlegen. Er steht vor einer Wand.")
-    var field = this.getField(position)
-    if (field.quader) error("karel kann keinen Quader hinlegen, da schon einer liegt.")
-    if (field.ziegel) error("karel kann keinen Quader hinlegen, da auf dem Feld schon Ziegel liegen.")
-    field.quader = true
-    this.triggerChangeField(position)
-  },
-
-  entfernen: function() {
-    var position = this.forward()
-    if (!this.isValid(position)) error("karel kann keinen Quader entfernen. Er steht vor einer Wand.")
-    var field = this.getField(position)
-    if (!field.quader) error("karel kann keinen Quader entfernen, da auf dem Feld kein Quader liegt.")
-    field.quader = false
-    this.triggerChangeField(position)
-  },
-
-  ton: beep,
-
-  istNorden: function() { return this.$direction.isNorth() },
-  istSueden: function() { return this.$direction.isSouth() },
-  istWesten: function() { return this.$direction.isWest() },
-  istOsten:  function() { return this.$direction.isEast() },
-
-  probiere: function(fn) {
-    var clone = this.clone()
-    try {
-      return fn()
-    } catch(exc) {
-      this.set(clone)
-      this.trigger('change:all')
-      this.trigger('change')
-    }
   },
 
   run: function(code) {
@@ -329,13 +127,14 @@ module.exports = require('backbone').Model.extend({
       }
     }
     
+    var robot = this.get('robot')
     _.each(['istWand', 'schritt', 'linksDrehen', 'rechtsDrehen', 'hinlegen', 'aufheben', 'istZiegel', 'markeSetzen', 'markeLoeschen', 'istMarke', 'istNorden', 'istSueden', 'istWesten', 'istOsten', 'ton', 'probiere'], function(name) {
       karel[name] = function(n) {
         n = n || 1
         
         if (HIGHLIGHT_LINE) {
           try {
-            error()
+            throw new Error()
           } catch (exc) {
             var lineNumber = getLineNumber(exc.stack, 1)
           }
@@ -343,13 +142,13 @@ module.exports = require('backbone').Model.extend({
           var lineNumber = null
         }
         
-        if (self[name].length == 0) {
+        if (robot[name].length == 0) {
           for (var i = 0; i < n; i++) {
-            var result = self[name]()
+            var result = robot[name]()
             stack.push([name, lineNumber])
           }
         } else {
-          var result = self[name].apply(self, arguments)
+          var result = robot[name].apply(robot, arguments)
           stack.push([name, lineNumber])
         }
         return result
@@ -484,11 +283,9 @@ module.exports = require('backbone').Model.extend({
   }
 
 }, {
-  path: 'models/environment',
-
+  path: 'models/world',
+  
   Field: Field,
-  Position: Position,
-  Direction: Direction,
   
   fromString: function(str) {
     // Parse .kdw files

@@ -26,8 +26,8 @@
   </div>
 </div>
 <div id=editor></div>
-<div id=environment></div>
-<div class=toolbar id=environment-toolbar>
+<div id=world></div>
+<div class=toolbar id=world-toolbar>
   <input type=button data-method=linksDrehen  value="&larr;" title="Links drehen">
   <input type=button data-method=schritt      value="&uarr;" title="Schritt">
   <input type=button data-method=rechtsDrehen value="&rarr;" title="Rechts drehen">
@@ -59,13 +59,15 @@
 <script src=src/helpers/get_line_number.js></script>
 <script src=src/helpers/matrix.js></script>
 
-<script src=src/models/environment.js></script>
+<script src=src/models/position_and_direction.js></script>
+<script src=src/models/robot.js></script>
+<script src=src/models/world.js></script>
 
-<script src=src/views/environment_base.js></script>
-<script src=src/views/environment_3d.js></script>
-<script src=src/views/environment_2d.js></script>
+<script src=src/views/world_base.js></script>
+<script src=src/views/world_3d.js></script>
+<script src=src/views/world_2d.js></script>
 <script src=src/views/main_toolbar.js></script>
-<script src=src/views/environment_toolbar.js></script>
+<script src=src/views/world_toolbar.js></script>
 <script src=src/views/editor.js></script>
 
 <script src=src/controllers/application.js></script>

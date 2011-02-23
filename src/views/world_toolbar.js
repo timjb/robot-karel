@@ -1,5 +1,6 @@
 (function() {
-var _ = require('underscore')
+var _      = require('underscore')
+,   getKey = require('helpers/get_key')
 
 module.exports = require('backbone').View.extend({
 
@@ -36,13 +37,13 @@ module.exports = require('backbone').View.extend({
       var key = getKey(evt)
       console.log('key pressed: ' + key)
       if (actions.hasOwnProperty(key)) {
-        this.model[actions[key]]()
+        this.model.get('robot')[actions[key]]()
       }
     }).bind(this))
   }
 
 }, {
-  path: 'views/environment_toolbar'
+  path: 'views/world_toolbar'
 })
 
 })()

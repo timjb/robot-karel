@@ -8,7 +8,7 @@ module.exports = require('backbone').View.extend({
     evt = evt.originalEvent
     var reader = new FileReader()
     reader.onloadend = _.bind(function(evt) {
-      this.trigger('drop-environment', evt.target.result)
+      this.trigger('drop-world', evt.target.result)
     }, this)
     reader.readAsText(evt.dataTransfer.files[0])
   },
@@ -34,7 +34,7 @@ module.exports = require('backbone').View.extend({
   }
 
 }, {
-  path: 'views/environment_base'
+  path: 'views/world_base'
 })
 
 })()

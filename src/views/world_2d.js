@@ -1,7 +1,8 @@
 (function() {
-var _ = require('underscore')
+var _        = require('underscore')
+,   Position = require('models/position_and_direction').Position
 
-module.exports = require('views/environment_base').extend({
+module.exports = require('views/world_base').extend({
 
   initialize: function() {
     _(this).bindAll('render', 'delayRender', 'delegateEvents')
@@ -36,7 +37,7 @@ module.exports = require('views/environment_base').extend({
     )
     
     if (evt.which == 1) { // left click
-      this.model.set({ position: position })
+      this.model.get('robot').set({ position: position })
     } else {
       var field = this.model.getField(position)
       field.marke = !field.marke
@@ -52,8 +53,9 @@ module.exports = require('views/environment_base').extend({
     ,   height = parent.innerHeight()
     
     var model     = this.model
-    ,   position  = model.get('position')
-    ,   direction = model.get('direction')
+    ,   robot     = model.get('robot')
+    ,   position  = robot.get('position')
+    ,   direction = robot.get('direction')
     
     var GAP = this.GAP = 4
     ,   GW  = this.GW  = Math.round(Math.min(
@@ -100,7 +102,7 @@ module.exports = require('views/environment_base').extend({
   }
 
 }, {
-  path: 'views/environment_2d'
+  path: 'views/world_2d'
 })
 
 })()
