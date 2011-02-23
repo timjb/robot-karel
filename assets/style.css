@@ -101,7 +101,24 @@ label input[type=radio] { display: none; }
   width: 55%;
   top: 40px;
   bottom: 40px;
+  display: -webkit-box; display: -moz-box; display: box;
+  -webkit-box-pack: center; -moz-box-pack: center; box-pack: center;
+  -webkit-box-align: center; -moz-box-align: center; box-align: center;
 }
+
+.world-2d {
+  border-spacing: 0;
+  border-collapse: collapse;
+}
+.world-2d td {
+  border: 1px solid #000;
+  width: 40px; height: 40px; line-height: 40px;
+  font-size: 24px;
+  text-align: center;
+}
+.world-2d td.marke, .world-2d td.marke.ziegel  { background: #cc5; color: #000; }
+.world-2d td.quader { background: #666; color: #fff; }
+.world-2d td.ziegel { background: #f00; color: #fff; }
 
 .export {
   background: #fff;
