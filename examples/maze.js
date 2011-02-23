@@ -17,45 +17,45 @@ function rand(n) {
 
 function goto_corner() {
   (2).times(function() {
-    while (!karol.istWand()) karol.schritt();
-    karol.linksDrehen();
+    while (!karel.istWand()) karel.schritt();
+    karel.linksDrehen();
   });
 }
 
 function turn_around() {
-  karol.linksDrehen();
-  karol.linksDrehen();
+  karel.linksDrehen();
+  karel.linksDrehen();
 }
 
 function sidestep_left() {
-  karol.linksDrehen();
-  karol.schritt();
-  karol.rechtsDrehen();
+  karel.linksDrehen();
+  karel.schritt();
+  karel.rechtsDrehen();
 }
 
 function backwards() {
   turn_around();
-  karol.schritt();
+  karel.schritt();
   turn_around();
 }
 
 function is_marke_ahead() {
-  karol.schritt();
-  var result = karol.istMarke();
+  karel.schritt();
+  var result = karel.istMarke();
   backwards();
   return result;
 }
 
 function each_direction(fn) {
   (4).times(function() {
-    karol.linksDrehen();
+    karel.linksDrehen();
     fn();
   });
 }
 
 function remove_all_ziegels() {
-  while (karol.istZiegel()) {
-    karol.aufheben();
+  while (karel.istZiegel()) {
+    karel.aufheben();
   }
 }
 
@@ -65,9 +65,9 @@ function remove_all_ziegels() {
  */
 
 function stripe() {
-  while (!karol.istWand()) {
-    if (!karol.istZiegel()) karol.hinlegen();
-    karol.schritt();
+  while (!karel.istWand()) {
+    if (!karel.istZiegel()) karel.hinlegen();
+    karel.schritt();
   }
 }
 
@@ -76,12 +76,12 @@ function create_stripes() {
     stripe();
     turn_around();
     stripe();
-    karol.rechtsDrehen();
+    karel.rechtsDrehen();
     for (var i = 0; i < 2; i++) {
-      if (karol.istWand()) break outer_loop;
-      karol.schritt();
+      if (karel.istWand()) break outer_loop;
+      karel.schritt();
     }
-    karol.rechtsDrehen();
+    karel.rechtsDrehen();
   }
 }
 
@@ -110,24 +110,24 @@ function count_possibilities() {
 }
 
 function is_valid() {
-  return karol.istZiegel(1);
+  return karel.istZiegel(1);
 }
 
 function break_through() {
-  karol.aufheben();
+  karel.aufheben();
   each_direction(function() {
-    if (karol.istZiegel()) karol.hinlegen();
+    if (karel.istZiegel()) karel.hinlegen();
   });
   (2).times(function() {
-    karol.schritt();
-    karol.markeSetzen();
+    karel.schritt();
+    karel.markeSetzen();
   });
 }
 
 function turn_back() {
   for (var i = 0; i < 4; i++) {
-    karol.linksDrehen();
-    if (!karol.istWand() && !karol.istZiegel() && is_marke_ahead()) {
+    karel.linksDrehen();
+    if (!karel.istWand() && !karel.istZiegel() && is_marke_ahead()) {
       return true;
     }
   }
@@ -136,9 +136,9 @@ function turn_back() {
 
 function build_3m_walls() {
   each_direction(function() {
-    if (karol.istZiegel(1) || karol.istZiegel(2)) {
-      while (!karol.istZiegel(3)) {
-        karol.hinlegen();
+    if (karel.istZiegel(1) || karel.istZiegel(2)) {
+      while (!karel.istZiegel(3)) {
+        karel.hinlegen();
       }
     }
   });
@@ -146,26 +146,26 @@ function build_3m_walls() {
 
 function go_back() {
   each_direction(function() {
-    if (karol.istZiegel()) karol.hinlegen();
+    if (karel.istZiegel()) karel.hinlegen();
   });
-  karol.markeLoeschen();
-  karol.schritt();
+  karel.markeLoeschen();
+  karel.schritt();
   build_3m_walls();
-  karol.markeLoeschen();
-  karol.schritt();
+  karel.markeLoeschen();
+  karel.schritt();
   each_direction(function() {
-    if (karol.istZiegel()) karol.aufheben();
+    if (karel.istZiegel()) karel.aufheben();
   });
 }
 
 function create_connections() {
-  karol.markeSetzen();
+  karel.markeSetzen();
   while (true) {
     var possibilities = count_possibilities();
     if (possibilities) {
       var turns = rand(possibilities) + 1;
       while (turns) {
-        karol.linksDrehen();
+        karel.linksDrehen();
         if (is_valid()) turns--;
       }
       break_through();

@@ -12,31 +12,31 @@
  */
 
 function turn_around() {
-  karol.linksDrehen();
-  karol.linksDrehen();
+  karel.linksDrehen();
+  karel.linksDrehen();
 }
 
 function each_until_wall(fn) {
   while (true) {
     fn();
-    if (karol.istWand()) break;
-    karol.schritt();
+    if (karel.istWand()) break;
+    karel.schritt();
   }
 }
 
 function goto_wall() {
-  while (!karol.istWand()) karol.schritt();
+  while (!karel.istWand()) karel.schritt();
 }
 
 function each_field(fn) {
   while (true) {
-    karol.linksDrehen();
+    karel.linksDrehen();
     each_until_wall(fn);
     turn_around();
     goto_wall();
-    karol.linksDrehen();
-    if (karol.istWand()) break;
-    karol.schritt();
+    karel.linksDrehen();
+    if (karel.istWand()) break;
+    karel.schritt();
   }
   turn_around();
   goto_wall();
@@ -45,21 +45,21 @@ function each_field(fn) {
 
 function each_direction(fn) {
   for (var i = 0; i < 4; i++) {
-    karol.linksDrehen();
+    karel.linksDrehen();
     fn();
   }
 }
 
 function add_ziegel_here() {
-  karol.schritt();
+  karel.schritt();
   turn_around();
-  karol.hinlegen();
-  karol.schritt();
+  karel.hinlegen();
+  karel.schritt();
 }
 
 function add_ziegel_if_mark() {
-  if (karol.istMarke()) {
-    if (karol.istWand()) {
+  if (karel.istMarke()) {
+    if (karel.istWand()) {
       turn_around();
       add_ziegel_here();
     } else {
@@ -73,14 +73,14 @@ function count_living_neighbors() {
   var result = 0;
   each_direction(function() {
     // count the horizontal or vertically neighbors:
-    if (karol.istZiegel()) result++;
+    if (karel.istZiegel()) result++;
     // count the diagonal neighbors:
-    if (!karol.istWand()) {
-      karol.schritt();
-      karol.linksDrehen();
-      if (karol.istZiegel()) result++;
-      karol.linksDrehen();
-      karol.schritt();
+    if (!karel.istWand()) {
+      karel.schritt();
+      karel.linksDrehen();
+      if (karel.istZiegel()) result++;
+      karel.linksDrehen();
+      karel.schritt();
       turn_around();
     }
   });
@@ -89,16 +89,16 @@ function count_living_neighbors() {
 
 function live_or_die() {
   var n = count_living_neighbors();
-  if (karol.istMarke()) { // living
-    if (n < 2 || n > 3) karol.markeLoeschen(); // die
+  if (karel.istMarke()) { // living
+    if (n < 2 || n > 3) karel.markeLoeschen(); // die
   } else {
-    if (n == 3) karol.markeSetzen(); // new cell
+    if (n == 3) karel.markeSetzen(); // new cell
   }
 }
 
 function remove_neighbor_ziegels() {
   each_direction(function() {
-    if (karol.istZiegel()) karol.aufheben();
+    if (karel.istZiegel()) karel.aufheben();
   });
 }
 
@@ -112,7 +112,7 @@ function main() {
   //var interval = setInterval(step, 500);
   for (var i = 0; i < 2; i++) {
     goto_wall();
-    karol.linksDrehen();
+    karel.linksDrehen();
   }
   step();
 }

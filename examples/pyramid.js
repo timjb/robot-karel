@@ -1,4 +1,4 @@
-// Basiert auf dem Karol-Script von Norbert Handick
+// Basiert auf dem karel-Script von Norbert Handick
 
 Number.prototype.mal = function(fn) {
   for (var i = 0; i < this; i++) {
@@ -7,130 +7,130 @@ Number.prototype.mal = function(fn) {
 };
 
 function umdrehen() {
-  karol.linksDrehen();
-  karol.linksDrehen();
+  karel.linksDrehen();
+  karel.linksDrehen();
 }
 
 function unterlegen() {
-  karol.schritt();
+  karel.schritt();
   umdrehen();
-  karol.hinlegen();
+  karel.hinlegen();
   umdrehen();
 }
 
 function diagonal_1() {
-  karol.schritt();
-  karol.linksDrehen();
-  karol.schritt();
-  karol.rechtsDrehen();
+  karel.schritt();
+  karel.linksDrehen();
+  karel.schritt();
+  karel.rechtsDrehen();
 }
 
 function kranz() {
   4..mal(function() {
-    while (!karol.istWand()) {
-      karol.hinlegen();
-      karol.schritt();
-      karol.markeSetzen();
+    while (!karel.istWand()) {
+      karel.hinlegen();
+      karel.schritt();
+      karel.markeSetzen();
     }
-    karol.linksDrehen();
+    karel.linksDrehen();
   });
   diagonal_1();
 }
 
 function kranz_fuellen() {
-  while (!karol.istMarke()) {
+  while (!karel.istMarke()) {
     unterlegen();
-    if (karol.istMarke()) {
-      karol.linksDrehen();
-      karol.schritt();
-      karol.linksDrehen();
-      karol.schritt();
-      while (!karol.istMarke()) {
-        karol.schritt();
+    if (karel.istMarke()) {
+      karel.linksDrehen();
+      karel.schritt();
+      karel.linksDrehen();
+      karel.schritt();
+      while (!karel.istMarke()) {
+        karel.schritt();
       }
       umdrehen();
-      karol.schritt();
+      karel.schritt();
     }
   }
-  karol.rechtsDrehen();
-  karol.schritt();
-  karol.rechtsDrehen();
-  karol.schritt();
+  karel.rechtsDrehen();
+  karel.schritt();
+  karel.rechtsDrehen();
+  karel.schritt();
 }
 
 function pyramidenring() {
   4..mal(function() {
-    while (!karol.istMarke()) {
-      karol.markeSetzen();
+    while (!karel.istMarke()) {
+      karel.markeSetzen();
       unterlegen();
     }
     umdrehen();
-    karol.schritt();
-    karol.rechtsDrehen();
-    karol.schritt();
+    karel.schritt();
+    karel.rechtsDrehen();
+    karel.schritt();
   });
 }
 
 function ausgangsposition() {
   2..mal(function() {
-    while (!karol.istWand()) {
-      karol.schritt();
+    while (!karel.istWand()) {
+      karel.schritt();
     }
-    karol.linksDrehen();
+    karel.linksDrehen();
   });
 }
 
 function zum_start() {
-  karol.rechtsDrehen();
+  karel.rechtsDrehen();
   2..mal(function() {
-    while (!karol.istWand()) {
-      karol.schritt();
+    while (!karel.istWand()) {
+      karel.schritt();
     }
-    karol.linksDrehen();
+    karel.linksDrehen();
   });
 }
 
 function kranz_marke_weg() {
   4..mal(function() {
-    while (!karol.istWand()) {
-      karol.schritt();
-      karol.markeLoeschen();
+    while (!karel.istWand()) {
+      karel.schritt();
+      karel.markeLoeschen();
     }
-    karol.linksDrehen();
+    karel.linksDrehen();
   });
 }
 
 function ring_marke_weg() {
   4..mal(function() {
-    while (karol.istMarke()) {
-      karol.markeLoeschen();
-      karol.schritt();
+    while (karel.istMarke()) {
+      karel.markeLoeschen();
+      karel.schritt();
     }
     umdrehen();
-    karol.schritt();
-    karol.rechtsDrehen();
-    karol.schritt();
+    karel.schritt();
+    karel.rechtsDrehen();
+    karel.schritt();
   });
-  karol.linksDrehen();
-  if (karol.istMarke()) {
-    karol.rechtsDrehen();
+  karel.linksDrehen();
+  if (karel.istMarke()) {
+    karel.rechtsDrehen();
   } else {
     umdrehen();
-    karol.schritt();
+    karel.schritt();
   }
 }
 
 function programm() {
   kranz();
   kranz_fuellen();
-  while (!karol.istMarke()) {
+  while (!karel.istMarke()) {
     pyramidenring();
     kranz_fuellen();
   }
   ausgangsposition();
   kranz_marke_weg();
   diagonal_1();
-  while (karol.istMarke()) {
+  while (karel.istMarke()) {
     ring_marke_weg();
   }
   zum_start();

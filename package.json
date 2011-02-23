@@ -1,10 +1,10 @@
 {
-  "name": "karol",
+  "name": "karel",
   "version": "0.1.0a"
   "description": "An environment for kids to learn programming",
   "author": "Tim Baumann",
-  "licenses": [{ "type": "MIT", "url": "https://github.com/timjb/karol.js/LICENSE" }],
-  "repository": { "type": "git", "url": "https://github.com/timjb/karol.js.git" },
+  "licenses": [{ "type": "MIT", "url": "https://github.com/timjb/karel.js/LICENSE" }],
+  "repository": { "type": "git", "url": "https://github.com/timjb/karel.js.git" },
   "dependencies": {
     "express": ">=1.0.7"
   },

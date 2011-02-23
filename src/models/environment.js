@@ -162,17 +162,17 @@ module.exports = require('backbone').Model.extend({
   },
 
   hinlegen: function() {
-    if (this.istWand()) error("Karol kann keinen Ziegel hinlegen. Er steht vor einer Wand.")
+    if (this.istWand()) error("karel kann keinen Ziegel hinlegen. Er steht vor einer Wand.")
     var nextPosition = this.forward()
     this.getField(nextPosition).ziegel += 1
     this.triggerChangeField(nextPosition)
   },
 
   aufheben: function() {
-    if (this.istWand()) error("Karol kann keinen Ziegel aufheben. Er steht vor einer Wand.")
+    if (this.istWand()) error("karel kann keinen Ziegel aufheben. Er steht vor einer Wand.")
     var nextPosition = this.forward()
     var field = this.getField(nextPosition)
-    if (!field.ziegel) error("Karol kann keinen Ziegel aufheben, da kein Ziegel vor ihm liegt.")
+    if (!field.ziegel) error("karel kann keinen Ziegel aufheben, da kein Ziegel vor ihm liegt.")
     field.ziegel--
     this.triggerChangeField(nextPosition)
   },
@@ -216,10 +216,10 @@ module.exports = require('backbone').Model.extend({
   },
 
   schritt: function() {
-    if (this.istWand()) error("Karol kann keinen Schritt machen, er steht vor einer Wand.")
+    if (this.istWand()) error("karel kann keinen Schritt machen, er steht vor einer Wand.")
     var newPosition = this.forward()
     if (Math.abs(this.$currentField.ziegel - this.getField(newPosition).ziegel) > 1) {
-      error("Karol kann nur einen Ziegel pro Schritt nach oben oder unten springen.")
+      error("karel kann nur einen Ziegel pro Schritt nach oben oder unten springen.")
     }
     this.set({ position: newPosition })
   },
@@ -236,19 +236,19 @@ module.exports = require('backbone').Model.extend({
 
   quader: function() {
     var position = this.forward()
-    if (!this.isValid(position)) error("Karol kann keinen Quader hinlegen. Er steht vor einer Wand.")
+    if (!this.isValid(position)) error("karel kann keinen Quader hinlegen. Er steht vor einer Wand.")
     var field = this.getField(position)
-    if (field.quader) error("Karol kann keinen Quader hinlegen, da schon einer liegt.")
-    if (field.ziegel) error("Karol kann keinen Quader hinlegen, da auf dem Feld schon Ziegel liegen.")
+    if (field.quader) error("karel kann keinen Quader hinlegen, da schon einer liegt.")
+    if (field.ziegel) error("karel kann keinen Quader hinlegen, da auf dem Feld schon Ziegel liegen.")
     field.quader = true
     this.triggerChangeField(position)
   },
 
   entfernen: function() {
     var position = this.forward()
-    if (!this.isValid(position)) error("Karol kann keinen Quader entfernen. Er steht vor einer Wand.")
+    if (!this.isValid(position)) error("karel kann keinen Quader entfernen. Er steht vor einer Wand.")
     var field = this.getField(position)
-    if (!field.quader) error("Karol kann keinen Quader entfernen, da auf dem Feld kein Quader liegt.")
+    if (!field.quader) error("karel kann keinen Quader entfernen, da auf dem Feld kein Quader liegt.")
     field.quader = false
     this.triggerChangeField(position)
   },
@@ -288,7 +288,7 @@ module.exports = require('backbone').Model.extend({
     document.body.appendChild(iframe)
     var win = iframe.contentWindow
     win.parent = null
-    var karol = win.karol = {}
+    var karel = win.karel = {}
     var stack = []
     var self = this
     var timed = []
@@ -330,7 +330,7 @@ module.exports = require('backbone').Model.extend({
     }
     
     _.each(['istWand', 'schritt', 'linksDrehen', 'rechtsDrehen', 'hinlegen', 'aufheben', 'istZiegel', 'markeSetzen', 'markeLoeschen', 'istMarke', 'istNorden', 'istSueden', 'istWesten', 'istOsten', 'ton', 'probiere'], function(name) {
-      karol[name] = function(n) {
+      karel[name] = function(n) {
         n = n || 1
         
         if (HIGHLIGHT_LINE) {
