@@ -1,8 +1,16 @@
+!!!!!!!!!!!
+!! Tests !!
+!!!!!!!!!!!
+
+
 * Commands:
   * "schnell" and "langsam"
 * Show a little, cute robot
 * Buttons for running step by step or fast
 * Translate API
+* s/karol/karel
+* Split Environment into World and Karel
+* views/environment_2d should use an HTML table
 * README
 * Docs
 * Examples
