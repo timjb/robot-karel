@@ -1,9 +1,5 @@
 module.exports = require('backbone').View.extend({
 
-  initialize: function(opts) {
-    this.controller = opts.controller
-  },
-
   events: {
     'click #run-button': 'run',
     'click #replay-button': 'replay',
@@ -27,7 +23,7 @@ module.exports = require('backbone').View.extend({
   },
 
   changeView: function() {
-    this.controller['show'+$('input[name=view-select]:checked').val()]()
+    this.trigger('change:view', $('input[name=view-select]:checked').val())
   },
 
   toggleNewPane: function() {

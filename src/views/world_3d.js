@@ -8,7 +8,7 @@ module.exports = require('views/world_base').extend({
   initialize: function() {
     _(this).bindAll(
       'updateRobot', 'updateField', 'updateAllFields', 'delegateEvents',
-      'resizeAndRender', 'resize', 'render', 'delayRender'
+      'resize', 'render', 'delayRender'
     )
     
     this.model
@@ -19,10 +19,8 @@ module.exports = require('views/world_base').extend({
       .bind('change', this.delayRender)
     
     this
-      .bind('dom:insert', this.resizeAndRender)
+      .bind('dom:insert', this.resize)
       .bind('dom:insert', this.delegateEvents)
-    
-    $(window).resize(this.resizeAndRender)
     
     this.createFields()
     this.renderer = new three.CanvasRenderer()
@@ -215,11 +213,6 @@ module.exports = require('views/world_base').extend({
     // TODO: Update the position of the robot
   },
 
-  resizeAndRender: function() {
-    this.resize()
-    this.render()
-  },
-
   resize: function() {
     var parent = $(this.el).parent()
     ,   width  = parent.innerWidth()
@@ -227,6 +220,8 @@ module.exports = require('views/world_base').extend({
     
     this.createCamera(width, height)
     this.renderer.setSize(width, height)
+    
+    if (this.isVisible()) this.render()
   },
 
   render: function() {

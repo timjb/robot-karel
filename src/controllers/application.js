@@ -4,20 +4,33 @@ var _ = require('underscore')
 module.exports = require('backbone').Controller.extend({
 
   initialize: function() {
-    this.mainToolbar = new (require('views/main_toolbar'))({
-      controller: this,
-      el: $('#main-toolbar')
-    })
-    this.editor = new (require('views/editor'))({ el: $('#editor') })
+    this.mainToolbar = new (require('views/main_toolbar'))({ el: $('#main-toolbar') })
+    this.mainToolbar.bind('change:view', _.bind(function(x) {
+      this.toggle.show(['2D', '3D'].indexOf(x))
+    }, this))
     
-    this.world = new (require('models/world'))(this.mainToolbar.getNewDimensions())
+    this.editor = new (require('views/editor'))()
+    this.world  = new (require('models/world'))(this.mainToolbar.getNewDimensions())
     this.initWorld()
+    
+    this.toggle = new (require('views/toggle'))({
+      subviews: [this.world2D, this.world3D]
+    })
+    this.split = new (require('views/split'))({
+      el: $('#split-view'),
+      left: this.editor,
+      right: this.toggle,
+      ratio: 0.4
+    })
+    this.split.render()
     
     this.mainToolbar.model = this.world
     this.worldToolbar = new (require('views/world_toolbar'))({
       el: $('#world-toolbar'),
       model: this.world
     })
+    
+    this.mainToolbar.changeView()
   },
 
   initWorld: function() {
@@ -26,7 +39,6 @@ module.exports = require('backbone').Controller.extend({
     $('#world').html('') // clear
     this.world2D = new (require('views/world_2d'))({ model: this.world })
     this.world3D = new (require('views/world_3d'))({ model: this.world })
-    this.mainToolbar.changeView()
     
     var onDropWorld = _.bind(function(textData) {
       this.world = require('models/world').fromString(textData)
@@ -67,16 +79,6 @@ module.exports = require('backbone').Controller.extend({
       overlay.remove()
       delete window.onpushstate
     }
-  },
-
-  show2D: function() {
-    this.world3D.remove()
-    this.world2D.appendTo($('#world'))
-  },
-
-  show3D: function() {
-    this.world2D.remove()
-    this.world3D.appendTo($('#world'))
   },
 
   run: function() {

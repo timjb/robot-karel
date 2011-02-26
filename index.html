@@ -25,8 +25,7 @@
     </div>
   </div>
 </div>
-<div id=editor></div>
-<div id=world></div>
+<div id="split-view" class="split-view"></div>
 <div class=toolbar id=world-toolbar>
   <input type=button data-method=linksDrehen  value="&larr;" title="Links drehen">
   <input type=button data-method=schritt      value="&uarr;" title="Schritt">
@@ -63,12 +62,15 @@
 <script src=src/models/robot.js></script>
 <script src=src/models/world.js></script>
 
+<script src=src/backbone.js></script>
 <script src=src/views/world_base.js></script>
 <script src=src/views/world_3d.js></script>
 <script src=src/views/world_2d.js></script>
 <script src=src/views/main_toolbar.js></script>
 <script src=src/views/world_toolbar.js></script>
 <script src=src/views/editor.js></script>
+<script src=src/views/split.js></script>
+<script src=src/views/toggle.js></script>
 
 <script src=src/controllers/application.js></script>
 

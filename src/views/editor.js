@@ -3,8 +3,15 @@ var _ = require('underscore')
 
 module.exports = require('backbone').View.extend({
 
-  initialize: function() {
-    var e = this.editor  = ace.edit($(this.el).get(0))
+  className: 'editor',
+
+  render: function() {
+    $(this.el).css({ position: 'relative' })
+    var el = $('<div />')
+      .css({ position: 'absolute', left: 0, right: 0, top: 0, bottom: 0 })
+      .appendTo(this.el)
+    
+    var e = this.editor  = ace.edit(el.get(0))
     var s = this.session = e.getSession()
     
     s.setMode(new (require('ace/mode/javascript').Mode))
@@ -25,6 +32,10 @@ module.exports = require('backbone').View.extend({
     $(this.el).keydown(function(evt) {
       if (focused) evt.stopPropagation()
     })
+  },
+
+  resize: function() {
+    this.editor.resize()
   },
 
   getValue: function() {

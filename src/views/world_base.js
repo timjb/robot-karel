@@ -13,11 +13,6 @@ module.exports = require('backbone').View.extend({
     reader.readAsText(evt.dataTransfer.files[0])
   },
 
-  appendTo: function(p) {
-    p.append(this.el)
-    this.trigger('dom:insert')
-  },
-
   isVisible: function() {
     return !!$(this.el).parent().length
   },
@@ -27,10 +22,6 @@ module.exports = require('backbone').View.extend({
       clearTimeout(this.renderTimeout)
       this.renderTimeout = setTimeout(_.bind(this.render, this), 20)
     }
-  },
-
-  preventDefault: function(evt) {
-    evt.preventDefault()
   }
 
 }, {
