@@ -12,7 +12,6 @@ module.exports = require('backbone').View.extend({
       v.remove()
     })
     
-    console.log(this.subviews[n])
     this.subviews[n].appendTo(this.el).render()
   },
 

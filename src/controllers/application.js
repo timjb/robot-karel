@@ -8,6 +8,7 @@ module.exports = require('backbone').Controller.extend({
     this.mainToolbar.bind('change:view', _.bind(function(x) {
       this.toggle.show(['2D', '3D'].indexOf(x))
     }, this))
+    this.mainToolbar.bind('run', _.bind(this.run, this))
     
     this.editor = new (require('views/editor'))()
     this.world  = new (require('models/world'))(this.mainToolbar.getNewDimensions())

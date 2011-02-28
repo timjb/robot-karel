@@ -11,7 +11,7 @@ module.exports = require('backbone').View.extend({
   },
 
   run: function() {
-    this.controller.run()
+    this.trigger('run')
   },
 
   replay: function() {
