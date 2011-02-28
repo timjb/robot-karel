@@ -12,26 +12,14 @@ module.exports = require('backbone').Controller.extend({
     
     this.editor = new (require('views/editor'))()
     this.world  = new (require('models/world'))(this.mainToolbar.getNewDimensions())
-    this.initWorld()
     
-    this.toggle = new (require('views/toggle'))({
-      subviews: [this.world2D, this.world3D]
-    })
-    this.split = new (require('views/split'))({
-      el: $('#split-view'),
-      left: this.editor,
-      right: this.toggle,
-      ratio: 0.4
-    })
-    this.split.render()
+    this.initWorld()
     
     this.mainToolbar.model = this.world
     this.worldToolbar = new (require('views/world_toolbar'))({
       el: $('#world-toolbar'),
       model: this.world
     })
-    
-    this.mainToolbar.changeView()
   },
 
   initWorld: function() {
@@ -47,8 +35,23 @@ module.exports = require('backbone').Controller.extend({
       this.world.trigger('change:all')
       this.world.trigger('change', 'all')
     }, this)
+    
     this.world2D.bind('drop-world', onDropWorld)
     this.world3D.bind('drop-world', onDropWorld)
+    
+    this.toggle = new (require('views/toggle'))({
+      subviews: [this.world2D, this.world3D]
+    })
+    if (this.split) this.split.el.html('')
+    this.split = new (require('views/split'))({
+      el: $('#split-view'),
+      left: this.editor,
+      right: this.toggle,
+      ratio: 0.4
+    })
+    this.split.render()
+    
+    this.mainToolbar.changeView()
   },
 
   routes: {

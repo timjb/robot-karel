@@ -134,13 +134,13 @@ var Robot = require('backbone').Model.extend({
   },
 
   moveBackwards: function() {
-    this.probiere(_(function() {
-      this.linksDrehen()
-      this.linksDrehen()
-      this.schritt()
-      this.linksDrehen()
-      this.linksDrehen()
-    }).bind(this))
+    var newPosition = this.$position.plus(this.$direction.turnLeft().turnLeft())
+    var field = this.getField(newPosition)
+    if (!this.isValid(newPosition) || field.quader) error("karel kann keinen Schritt rueckwaerts machen, hinter ihm ist eine Wand.")
+    if (Math.abs(this.$currentField.ziegel - field.ziegel) > 1) {
+      error("karel kann nur einen Ziegel pro Schritt nach oben oder unten springen.")
+    }
+    this.set({ position: newPosition })
   },
 
   putBlock: function() {
@@ -199,7 +199,7 @@ translate({
   moveBackwards: 'rueckwaerts',
   turnLeft:      'linksDrehen',
   turnRight:     'rechtsDrehen',
-  beep:          'ton',
+  beep:          'tonErzeugen',
   isNorth:       'istNorden',
   isSouth:       'istSueden',
   isWest:        'istWesten',
@@ -210,10 +210,10 @@ translate({
   removeBrick:   'aufheben',
   isMarker:      'istMarke',
   putMarker:     'markeSetzen',
-  toggleMarker:  'marke',
+  toggleMarker:  'markeUmschalten',
   removeMarker:  'markeLoeschen',
-  putBlock:      'quader',
-  removeBlock:   'entfernen'
+  putBlock:      'quaderAufstellen',
+  removeBlock:   'quaderEntfernen'
 })
 
 module.exports = Robot

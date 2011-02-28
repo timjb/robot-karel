@@ -3,6 +3,7 @@ var _             = require('underscore')
 ,   clone         = require('helpers/clone')
 ,   getLineNumber = require('helpers/get_line_number')
 ,   matrix        = require('helpers/matrix')
+,   Position      = require('models/position_and_direction').Position
 ,   Robot         = require('models/robot')
 
 
@@ -23,7 +24,7 @@ Field.prototype.clone = function() {
 
 module.exports = require('backbone').Model.extend({
 
-  initialize: function() {
+  initialize: function(opts) {
     if (!this.get('fields')) {
       this.set({
         fields: matrix(
@@ -40,16 +41,19 @@ module.exports = require('backbone').Model.extend({
       this.$fields = this.get('fields')
     })
     
-    this.createRobot()
+    this.createRobot(opts.robotOptions)
+  },
+
+  createRobot: function(opts) {
+    opts = opts || {}
+    opts.world = this
+    var r = new Robot(opts)
     
-    this.get('robot').bind('change', _.bind(function() {
+    r.bind('change', _.bind(function() {
       this.trigger('change:robot')
       this.trigger('change', 'robot')
     }, this))
-  },
-
-  createRobot: function() {
-    var r = new Robot({ world: this })
+    
     this.set({ robot: r })
     return r
   },
@@ -259,9 +263,10 @@ module.exports = require('backbone').Model.extend({
     p(this.get('depth'))
     p(height)
     
-    p(this.$position.x)
-    p(this.$position.y)
-    p(this.$currentField.ziegel)
+    var position = this.get('robot').get('position')
+    p(position.x)
+    p(position.y)
+    p(this.getField(position).ziegel)
     
     var x = this.get('width')
     ,   y = this.get('depth')
@@ -279,7 +284,7 @@ module.exports = require('backbone').Model.extend({
       }
     }
     
-    return tokens.join(' ')
+    return tokens.join(' ') + ' '
   }
 
 }, {
@@ -290,6 +295,7 @@ module.exports = require('backbone').Model.extend({
   fromString: function(str) {
     // Parse .kdw files
     
+    console.log('a')
     var tokens = str.split(/\s/)
     var shift = _(tokens.shift).bind(tokens)
     var _int = function() { return parseInt(shift(), 10) }
@@ -302,12 +308,15 @@ module.exports = require('backbone').Model.extend({
     // Position of the robot
     var px = _int(), py = _int(), pz = _int()
     
-    var env = new App.Models.Environment({
+    var world = new this({
       width: x,
       depth: y,
-      position: new Position(px, py)
+      robotOptions: {
+        position: new Position(px, py)
+      }
     })
-    var fields = env.get('fields')
+    
+    var fields = world.get('fields')
     
     for (var i = 0; i < x; i++) {
       for (var j = 0; j < y; j++) {
@@ -321,7 +330,7 @@ module.exports = require('backbone').Model.extend({
       }
     }
     
-    return env
+    return world
   }
 
 })
