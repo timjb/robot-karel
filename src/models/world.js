@@ -3,6 +3,7 @@ var _             = require('underscore')
 ,   clone         = require('helpers/clone')
 ,   getLineNumber = require('helpers/get_line_number')
 ,   matrix        = require('helpers/matrix')
+,   sandbox       = require('helpers/sandbox')
 ,   Position      = require('models/position_and_direction').Position
 ,   Robot         = require('models/robot')
 
@@ -85,12 +86,6 @@ module.exports = require('backbone').Model.extend({
 
   execute: function(code, callback) {
     // TODO: refactor?
-    var iframe = document.createElement('iframe')
-    iframe.style.display = 'none'
-    document.body.appendChild(iframe)
-    var win = iframe.contentWindow
-    win.parent = null
-    var karel = win.karel = {}
     var stack = []
     var self = this
     var timed = []
@@ -126,12 +121,14 @@ module.exports = require('backbone').Model.extend({
     
     function end() {
       if (!timed.length) {
-        document.body.removeChild(iframe)
         callback(stack)
       }
     }
     
+    var globals = {}
+    
     var robot = this.get('robot')
+    ,   karel = globals.karel = {}
     _.each(['istWand', 'schritt', 'linksDrehen', 'rechtsDrehen', 'hinlegen', 'aufheben', 'istZiegel', 'markeSetzen', 'markeLoeschen', 'istMarke', 'istNorden', 'istSueden', 'istWesten', 'istOsten', 'ton', 'probiere'], function(name) {
       karel[name] = function(n) {
         n = n || 1
@@ -159,7 +156,7 @@ module.exports = require('backbone').Model.extend({
       }
     })
     
-    win.warten = function(fn, ms) {
+    globals.warten = function(fn, ms) {
       var timeout = setTimeout(function() {
         removeTimed(timeout)
         exec(fn)
@@ -168,7 +165,7 @@ module.exports = require('backbone').Model.extend({
       return timeout
     }
     
-    win.periode = function(fn, ms) {
+    globals.periode = function(fn, ms) {
       var interval = setInterval(function() {
         exec(fn)
       }, ms)
@@ -176,7 +173,7 @@ module.exports = require('backbone').Model.extend({
       return interval
     }
     
-    win.laden = function(opts, fn) {
+    globals.laden = function(opts, fn) {
       var req = $.ajax(opts)
         .success(function(responseText) {
           removeTimed(req)
@@ -189,18 +186,18 @@ module.exports = require('backbone').Model.extend({
       return req
     }
     
-    win.stoppen = function(obj) {
+    globals.stoppen = function(obj) {
       stop(obj)
       removeTimed(obj)
       end()
     }
     
-    win.beenden = function() {
+    globals.beenden = function() {
       throw END_EXC
     }
     
     exec(function() {
-      win.document.write('<script>'+code+'</script>') // evil, I know
+      sandbox.run(code, globals)
     })
   },
 
