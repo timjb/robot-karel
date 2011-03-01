@@ -81,6 +81,7 @@ var Robot = require('backbone').Model.extend({
     var nextPosition = this.forward()
     this.getField(nextPosition).ziegel += 1
     this.$world.triggerChangeField(nextPosition)
+    return this
   },
 
   removeBrick: function() {
@@ -90,21 +91,25 @@ var Robot = require('backbone').Model.extend({
     if (!field.ziegel) error("karel kann keinen Ziegel aufheben, da kein Ziegel vor ihm liegt.")
     field.ziegel--
     this.$world.triggerChangeField(nextPosition)
+    return this
   },
 
   putMarker: function() {
     this.$currentField.marke = true
     this.$world.triggerChangeField(this.$position)
+    return this
   },
 
   removeMarker: function() {
     this.$currentField.marke = false
     this.$world.triggerChangeField(this.$position)
+    return this
   },
 
   toggleMarker: function() {
     this.$currentField.marke = !this.$currentField.marke
     this.$world.triggerChangeField(this.$position)
+    return this
   },
 
   isMarker: function() {
@@ -118,10 +123,12 @@ var Robot = require('backbone').Model.extend({
 
   turnLeft: function() {
     this.set({ direction: this.$direction.turnLeft() })
+    return this
   },
 
   turnRight: function() {
     this.set({ direction: this.$direction.turnRight() })
+    return this
   },
 
   move: function() {
@@ -131,6 +138,7 @@ var Robot = require('backbone').Model.extend({
       error("karel kann nur einen Ziegel pro Schritt nach oben oder unten springen.")
     }
     this.set({ position: newPosition })
+    return this
   },
 
   moveBackwards: function() {
@@ -141,6 +149,7 @@ var Robot = require('backbone').Model.extend({
       error("karel kann nur einen Ziegel pro Schritt nach oben oder unten springen.")
     }
     this.set({ position: newPosition })
+    return this
   },
 
   putBlock: function() {
@@ -151,6 +160,7 @@ var Robot = require('backbone').Model.extend({
     if (field.ziegel) error("karel kann keinen Quader hinlegen, da auf dem Feld schon Ziegel liegen.")
     field.quader = true
     this.$world.triggerChangeField(position)
+    return this
   },
 
   removeBlock: function() {
@@ -160,9 +170,13 @@ var Robot = require('backbone').Model.extend({
     if (!field.quader) error("karel kann keinen Quader entfernen, da auf dem Feld kein Quader liegt.")
     field.quader = false
     this.$world.triggerChangeField(position)
+    return this
   },
 
-  beep: beep,
+  beep: function() {
+    beep()
+    return this
+  },
 
   isNorth: function() { return this.$direction.isNorth() },
   isSouth: function() { return this.$direction.isSouth() },
@@ -178,6 +192,7 @@ var Robot = require('backbone').Model.extend({
       this.trigger('change:all')
       this.trigger('change')
     }
+    return this
   },
 
 }, {
