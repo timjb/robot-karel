@@ -6,9 +6,11 @@
   "licenses": [{ "type": "MIT", "url": "https://github.com/timjb/karel.js/LICENSE" }],
   "repository": { "type": "git", "url": "https://github.com/timjb/karel.js.git" },
   "dependencies": {
-    "express": ">=1.0.7",
+    "express":    ">=1.0.7",
     "underscore": ">=1.1.4",
-    "backbone": ">=0.3.3"
+    "backbone":   ">=0.3.3",
+    "cli":        ">=0.2.7",
+    "colors":     ">=0.3.0"
   },
   "scripts": {
     "start": "node server.js",
