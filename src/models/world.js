@@ -9,16 +9,16 @@ var _             = require('underscore')
 
 
 function Field() {
-  this.ziegel = 0
-  this.marke = false
-  this.quader = false
+  this.bricks = 0
+  this.marker = false
+  this.block  = false
 }
 
 Field.prototype.clone = function() {
   var f = new Field()
-  f.ziegel = this.ziegel
-  f.marke  = this.marke
-  f.quader = this.quader
+  f.bricks = this.bricks
+  f.marker = this.marker
+  f.block  = this.block 
   return f
 }
 
@@ -251,7 +251,7 @@ module.exports = require('backbone').Model.extend({
     
     var fields = this.get('fields')
     var height = Math.max(5, 1 + _.max(_.map(fields, function(row) {
-      return _.max(_.pluck(row, 'ziegel'))
+      return _.max(_.pluck(row, 'bricks'))
     })))
     
     p('KarolVersion2Deutsch')
@@ -263,7 +263,7 @@ module.exports = require('backbone').Model.extend({
     var position = this.get('robot').get('position')
     p(position.x)
     p(position.y)
-    p(this.getField(position).ziegel)
+    p(this.getField(position).bricks)
     
     var x = this.get('width')
     ,   y = this.get('depth')
@@ -271,13 +271,13 @@ module.exports = require('backbone').Model.extend({
       for (var j = 0; j < y; j++) {
         var field = fields[i][j]
         ,   field_height = height
-        if (field.quader) {
+        if (field.block) {
           p('q'); p('q')
         } else {
-          _.times(field.ziegel, function() { p('z') })
+          _.times(field.bricks, function() { p('z') })
         }
         while (field_height > 0) p('n')
-        p(field.marke ? 'm' : 'o')
+        p(field.marker ? 'm' : 'o')
       }
     }
     
@@ -318,11 +318,11 @@ module.exports = require('backbone').Model.extend({
     for (var i = 0; i < x; i++) {
       for (var j = 0; j < y; j++) {
         var field = new Field()
-        if (tokens[0] == 'q') field.quader = true
+        if (tokens[0] == 'q') field.block = true
         for (var k = 0; k < z; k++) {
-          if (shift() == 'z') field.ziegel++
+          if (shift() == 'z') field.bricks++
         }
-        field.marke = (shift() == 'm')
+        field.marker = (shift() == 'm')
         fields[i][j] = field
       }
     }

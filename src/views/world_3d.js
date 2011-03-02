@@ -136,7 +136,7 @@ module.exports = require('views/world_base').extend({
   createFields: function() {
     var m = this.model
     this.fields = matrix(m.get('width'), m.get('depth'), function() {
-      return { ziegel: [], marke: null }
+      return { bricks: [], marker: null }
     })
   },
 
@@ -154,15 +154,15 @@ module.exports = require('views/world_base').extend({
     var x0 = -GW*(model.get('width')/2)
     ,   y0 = GW*(model.get('depth')/2)
     
-    while (field.ziegel < fieldObj.ziegel.length) {
-      scene.removeObject(fieldObj.ziegel.pop())
-      if (fieldObj.marke) {
-        fieldObj.marke.position.z = fieldObj.ziegel.length*GH
+    while (field.bricks < fieldObj.bricks.length) {
+      scene.removeObject(fieldObj.bricks.pop())
+      if (fieldObj.marker) {
+        fieldObj.marker.position.z = fieldObj.bricks.length*GH
       }
     }
     
-    while (field.ziegel > fieldObj.ziegel.length) {
-      var z = fieldObj.ziegel.length
+    while (field.bricks > fieldObj.bricks.length) {
+      var z = fieldObj.bricks.length
       var cube = new three.Mesh(
         new Cube(GW, GW, GH, 1, 1, new three.MeshLambertMaterial({ color: ENVIRONMENT_COLORS.ziegel.hex, shading: three.FlatShading })),
         new three.MeshFaceMaterial()
@@ -171,41 +171,41 @@ module.exports = require('views/world_base').extend({
       cube.position.y = -GW/2 + y0 - y*GW
       cube.position.z = GH/2 + z*GH
       scene.addObject(cube)
-      fieldObj.ziegel.push(cube)
-      if (fieldObj.marke) {
-        fieldObj.marke.position.z = fieldObj.ziegel.length*GH
+      fieldObj.bricks.push(cube)
+      if (fieldObj.marker) {
+        fieldObj.marker.position.z = fieldObj.bricks.length*GH
       }
     }
     
-    if (!field.marke && fieldObj.marke) {
-      scene.removeObject(fieldObj.marke)
-      delete fieldObj.marke
+    if (!field.marker && fieldObj.marker) {
+      scene.removeObject(fieldObj.marker)
+      delete fieldObj.marker
     }
     
-    if (field.marke && !fieldObj.marke) {
-      var marke = new three.Mesh(
+    if (field.marker && !fieldObj.marker) {
+      var marker = new three.Mesh(
         new Plane(GW, GW, 1, 1),
         new three.MeshBasicMaterial({ color: ENVIRONMENT_COLORS.marke.hex })
       )
-      marke.position.x = GW/2 + x0 + x*GW
-      marke.position.y = -GW/2 + y0 - y*GW
-      marke.position.z = fieldObj.ziegel.length*GH + 1
-      scene.addObject(marke)
-      fieldObj.marke = marke
+      marker.position.x = GW/2 + x0 + x*GW
+      marker.position.y = -GW/2 + y0 - y*GW
+      marker.position.z = fieldObj.bricks.length*GH + 1
+      scene.addObject(marker)
+      fieldObj.marker = marker
     }
     
-    if (field.quader && !fieldObj.quader) {
+    if (field.block && !fieldObj.block) {
       var cube = new three.Mesh(new Cube(GW, GW, 2*GH, 1, 1), new three.MeshLambertMaterial({ color: ENVIRONMENT_COLORS.quader.hex, shading: three.FlatShading }))
       cube.position.x = GW/2 + x0 + x*GW
       cube.position.y = -GW/2 + y0 - y*GW
       cube.position.z = GH
       scene.addObject(cube)
-      fieldObj.quader = cube
+      fieldObj.block = cube
     }
     
-    if (!field.quader && fieldObj.quader) {
-      scene.removeObject(fieldObj.quader)
-      delete fieldObj.quader
+    if (!field.block && fieldObj.block) {
+      scene.removeObject(fieldObj.block)
+      delete fieldObj.block
     }
   },
 

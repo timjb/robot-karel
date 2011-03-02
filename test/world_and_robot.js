@@ -23,12 +23,12 @@ function newRobot(opts) {
 
 exports.testFieldClone = function() {
   var field = new Field()
-  field.ziegel = 3
-  field.marke  = true
+  field.bricks = 3
+  field.marker = true
   var clone = field.clone()
   assert.ok(field != clone)
-  assert.equal(field.ziegel, clone.ziegel)
-  assert.equal(field.marke,  clone.marke)
+  assert.equal(field.bricks, clone.bricks)
+  assert.equal(field.marker, clone.marker)
 }
 
 exports.testStartPosition = function() {
@@ -92,9 +92,9 @@ exports.testWidth = function() {
 
 exports.testPutMarker = function() {
   var robot = newRobot()
-  assert.ok(!robot.get('world').getField(robot.get('position')).marke)
+  assert.ok(!robot.get('world').getField(robot.get('position')).marker)
   robot.putMarker()
-  assert.ok(robot.get('world').getField(robot.get('position')).marke)
+  assert.ok(robot.get('world').getField(robot.get('position')).marker)
 }
 
 exports.testIsMarker = function() {
@@ -128,11 +128,11 @@ exports.testPutBrick = function() {
   var robot = newRobot()
   ,   world = robot.get('world')
   ,   field = world.getField(new Position(0,1))
-  assert.equal(0, field.ziegel)
+  assert.equal(0, field.bricks)
   robot.putBrick()
-  assert.equal(1, field.ziegel)
+  assert.equal(1, field.bricks)
   robot.putBrick()
-  assert.equal(2, field.ziegel)
+  assert.equal(2, field.bricks)
 }
 
 exports.testRemoveBrick = function() {
@@ -142,9 +142,9 @@ exports.testRemoveBrick = function() {
   robot.putBrick()
   robot.putBrick()
   robot.removeBrick()
-  assert.equal(1, field.ziegel)
+  assert.equal(1, field.bricks)
   robot.removeBrick()
-  assert.equal(0, field.ziegel)
+  assert.equal(0, field.bricks)
   assert.throws(function() { robot.removeBrick() })
 }
 
@@ -175,7 +175,7 @@ exports.testPutBlock = function() {
   ,   world = robot.get('world')
   ,   field = world.getField(new Position(0,1))
   robot.putBlock()
-  assert.ok(field.quader)
+  assert.ok(field.block)
 }
 
 exports.testRemoveBlock = function() {
@@ -184,7 +184,7 @@ exports.testRemoveBlock = function() {
   ,   field = world.getField(new Position(0,1))
   robot.putBlock()
   robot.removeBlock()
-  assert.ok(!field.quader)
+  assert.ok(!field.block)
 }
 
 exports.testCantMoveIfBlock = function() {
@@ -241,9 +241,9 @@ exports.testImport = function() {
   
   var f = function(z, m, q) {
     var field = new Field()
-    field.ziegel = z || 0
-    field.marke  = !!m
-    field.quader = !!q
+    field.bricks = z || 0
+    field.marker = !!m
+    field.block  = !!q
     return field
   }
   

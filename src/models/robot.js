@@ -72,14 +72,14 @@ var Robot = require('backbone').Model.extend({
 
   isBrick: function(n) {
     if (this.istWand()) return false
-    var ziegel = this.getField(this.forward()).ziegel
-    return n ? (ziegel == n) : !!ziegel
+    var bricks = this.getField(this.forward()).bricks
+    return n ? (bricks == n) : !!bricks
   },
 
   putBrick: function() {
     if (this.istWand()) error("karel kann keinen Ziegel hinlegen. Er steht vor einer Wand.")
     var nextPosition = this.forward()
-    this.getField(nextPosition).ziegel += 1
+    this.getField(nextPosition).bricks += 1
     this.$world.triggerChangeField(nextPosition)
     return this
   },
@@ -88,37 +88,37 @@ var Robot = require('backbone').Model.extend({
     if (this.istWand()) error("karel kann keinen Ziegel aufheben. Er steht vor einer Wand.")
     var nextPosition = this.forward()
     var field = this.getField(nextPosition)
-    if (!field.ziegel) error("karel kann keinen Ziegel aufheben, da kein Ziegel vor ihm liegt.")
-    field.ziegel--
+    if (!field.bricks) error("karel kann keinen Ziegel aufheben, da kein Ziegel vor ihm liegt.")
+    field.bricks--
     this.$world.triggerChangeField(nextPosition)
     return this
   },
 
   putMarker: function() {
-    this.$currentField.marke = true
+    this.$currentField.marker = true
     this.$world.triggerChangeField(this.$position)
     return this
   },
 
   removeMarker: function() {
-    this.$currentField.marke = false
+    this.$currentField.marker = false
     this.$world.triggerChangeField(this.$position)
     return this
   },
 
   toggleMarker: function() {
-    this.$currentField.marke = !this.$currentField.marke
+    this.$currentField.marker = !this.$currentField.marker
     this.$world.triggerChangeField(this.$position)
     return this
   },
 
   isMarker: function() {
-    return this.$currentField.marke
+    return this.$currentField.marker
   },
 
   isWall: function() {
     var next = this.forward()
-    return !this.isValid(next) || this.getField(next).quader
+    return !this.isValid(next) || this.getField(next).block
   },
 
   turnLeft: function() {
@@ -134,7 +134,7 @@ var Robot = require('backbone').Model.extend({
   move: function() {
     if (this.istWand()) error("karel kann keinen Schritt machen, er steht vor einer Wand.")
     var newPosition = this.forward()
-    if (Math.abs(this.$currentField.ziegel - this.getField(newPosition).ziegel) > 1) {
+    if (Math.abs(this.$currentField.bricks - this.getField(newPosition).bricks) > 1) {
       error("karel kann nur einen Ziegel pro Schritt nach oben oder unten springen.")
     }
     this.set({ position: newPosition })
@@ -144,8 +144,8 @@ var Robot = require('backbone').Model.extend({
   moveBackwards: function() {
     var newPosition = this.$position.plus(this.$direction.turnLeft().turnLeft())
     var field = this.getField(newPosition)
-    if (!this.isValid(newPosition) || field.quader) error("karel kann keinen Schritt rueckwaerts machen, hinter ihm ist eine Wand.")
-    if (Math.abs(this.$currentField.ziegel - field.ziegel) > 1) {
+    if (!this.isValid(newPosition) || field.block) error("karel kann keinen Schritt rueckwaerts machen, hinter ihm ist eine Wand.")
+    if (Math.abs(this.$currentField.bricks - field.bricks) > 1) {
       error("karel kann nur einen Ziegel pro Schritt nach oben oder unten springen.")
     }
     this.set({ position: newPosition })
@@ -156,9 +156,9 @@ var Robot = require('backbone').Model.extend({
     var position = this.forward()
     if (!this.isValid(position)) error("karel kann keinen Quader hinlegen. Er steht vor einer Wand.")
     var field = this.getField(position)
-    if (field.quader) error("karel kann keinen Quader hinlegen, da schon einer liegt.")
-    if (field.ziegel) error("karel kann keinen Quader hinlegen, da auf dem Feld schon Ziegel liegen.")
-    field.quader = true
+    if (field.block) error("karel kann keinen Quader hinlegen, da schon einer liegt.")
+    if (field.bricks) error("karel kann keinen Quader hinlegen, da auf dem Feld schon Ziegel liegen.")
+    field.block = true
     this.$world.triggerChangeField(position)
     return this
   },
@@ -167,8 +167,8 @@ var Robot = require('backbone').Model.extend({
     var position = this.forward()
     if (!this.isValid(position)) error("karel kann keinen Quader entfernen. Er steht vor einer Wand.")
     var field = this.getField(position)
-    if (!field.quader) error("karel kann keinen Quader entfernen, da auf dem Feld kein Quader liegt.")
-    field.quader = false
+    if (!field.block) error("karel kann keinen Quader entfernen, da auf dem Feld kein Quader liegt.")
+    field.block = false
     this.$world.triggerChangeField(position)
     return this
   },

@@ -61,7 +61,7 @@ module.exports = require('views/world_base').extend({
       this.model.get('robot').set({ position: position })
     } else {
       var field = this.model.getField(position)
-      field.marke = !field.marke
+      field.marker = !field.marker
       this.model.triggerChangeField(position)
     }
   },
@@ -77,10 +77,10 @@ module.exports = require('views/world_base').extend({
     
     model.eachField(function(x, y, field) {
       var td = fields[y][x]
-      td[field.marke  ? 'addClass' : 'removeClass']('marke')
-      td[field.quader ? 'addClass' : 'removeClass']('quader')
-      td[field.ziegel ? 'addClass' : 'removeClass']('ziegel')
-      td.text(field.ziegel ? field.ziegel : '')
+      td[field.marker ? 'addClass' : 'removeClass']('marker')
+      td[field.block  ? 'addClass' : 'removeClass']('block')
+      td[field.bricks ? 'addClass' : 'removeClass']('brick')
+      td.text(field.bricks ? field.bricks : '')
     })
     
     ;(function() {
