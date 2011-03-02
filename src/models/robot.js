@@ -6,8 +6,8 @@ var _         = require('underscore')
 ,   Direction = require('models/position_and_direction').Direction
 
 
-function error(msg) {
-  throw new Error(msg)
+function error(key) {
+  throw new Error(settings.ERRORS[key])
 }
 
 function errorFunction(msg) {
@@ -78,7 +78,7 @@ var Robot = require('backbone').Model.extend({
   },
 
   putBrick: function() {
-    if (this.istWand()) error("karel kann keinen Ziegel hinlegen. Er steht vor einer Wand.")
+    if (this.istWand()) error('put_brick_wall')
     var nextPosition = this.forward()
     this.getField(nextPosition).bricks += 1
     this.$world.triggerChangeField(nextPosition)
@@ -86,10 +86,10 @@ var Robot = require('backbone').Model.extend({
   },
 
   removeBrick: function() {
-    if (this.istWand()) error("karel kann keinen Ziegel aufheben. Er steht vor einer Wand.")
+    if (this.istWand()) error('remove_brick_wall')
     var nextPosition = this.forward()
     var field = this.getField(nextPosition)
-    if (!field.bricks) error("karel kann keinen Ziegel aufheben, da kein Ziegel vor ihm liegt.")
+    if (!field.bricks) error('remove_brick_no_brick')
     field.bricks--
     this.$world.triggerChangeField(nextPosition)
     return this
@@ -133,10 +133,10 @@ var Robot = require('backbone').Model.extend({
   },
 
   move: function() {
-    if (this.istWand()) error("karel kann keinen Schritt machen, er steht vor einer Wand.")
+    if (this.istWand()) error('move_wall')
     var newPosition = this.forward()
     if (Math.abs(this.$currentField.bricks - this.getField(newPosition).bricks) > settings.MAX_JUMP_HEIGHT) {
-      error("karel kann nur einen Ziegel pro Schritt nach oben oder unten springen.")
+      error('move_too_high')
     }
     this.set({ position: newPosition })
     return this
@@ -145,9 +145,9 @@ var Robot = require('backbone').Model.extend({
   moveBackwards: function() {
     var newPosition = this.$position.plus(this.$direction.turnLeft().turnLeft())
     var field = this.getField(newPosition)
-    if (!this.isValid(newPosition) || field.block) error("karel kann keinen Schritt rueckwaerts machen, hinter ihm ist eine Wand.")
+    if (!this.isValid(newPosition) || field.block) error('move_wall')
     if (Math.abs(this.$currentField.bricks - field.bricks) > settings.MAX_JUMP_HEIGHT) {
-      error("karel kann nur einen Ziegel pro Schritt nach oben oder unten springen.")
+      error('move_too_high')
     }
     this.set({ position: newPosition })
     return this
@@ -155,10 +155,10 @@ var Robot = require('backbone').Model.extend({
 
   putBlock: function() {
     var position = this.forward()
-    if (!this.isValid(position)) error("karel kann keinen Quader hinlegen. Er steht vor einer Wand.")
+    if (!this.isValid(position)) error('put_block_wall')
     var field = this.getField(position)
-    if (field.block) error("karel kann keinen Quader hinlegen, da schon einer liegt.")
-    if (field.bricks) error("karel kann keinen Quader hinlegen, da auf dem Feld schon Ziegel liegen.")
+    if (field.block) error('put_block_already_is_block')
+    if (field.bricks) error('put_block_is_brick')
     field.block = true
     this.$world.triggerChangeField(position)
     return this
@@ -166,9 +166,9 @@ var Robot = require('backbone').Model.extend({
 
   removeBlock: function() {
     var position = this.forward()
-    if (!this.isValid(position)) error("karel kann keinen Quader entfernen. Er steht vor einer Wand.")
+    if (!this.isValid(position)) error('remove_block_wall')
     var field = this.getField(position)
-    if (!field.block) error("karel kann keinen Quader entfernen, da auf dem Feld kein Quader liegt.")
+    if (!field.block) error('remove_block_no_block')
     field.block = false
     this.$world.triggerChangeField(position)
     return this
