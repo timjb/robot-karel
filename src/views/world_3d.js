@@ -1,7 +1,8 @@
 (function() {
-var _      = require('underscore')
-,   matrix = require('helpers/matrix')
-,   three  = require('three')
+var _        = require('underscore')
+,   settings = require('settings')
+,   matrix   = require('helpers/matrix')
+,   three    = require('three')
 
 module.exports = require('views/world_base').extend({
 
@@ -164,7 +165,7 @@ module.exports = require('views/world_base').extend({
     while (field.bricks > fieldObj.bricks.length) {
       var z = fieldObj.bricks.length
       var cube = new three.Mesh(
-        new Cube(GW, GW, GH, 1, 1, new three.MeshLambertMaterial({ color: ENVIRONMENT_COLORS.ziegel.hex, shading: three.FlatShading })),
+        new Cube(GW, GW, GH, 1, 1, new three.MeshLambertMaterial({ color: settings.COLORS.BRICK, shading: three.FlatShading })),
         new three.MeshFaceMaterial()
       )
       cube.position.x = GW/2 + x0 + x*GW
@@ -185,7 +186,7 @@ module.exports = require('views/world_base').extend({
     if (field.marker && !fieldObj.marker) {
       var marker = new three.Mesh(
         new Plane(GW, GW, 1, 1),
-        new three.MeshBasicMaterial({ color: ENVIRONMENT_COLORS.marke.hex })
+        new three.MeshBasicMaterial({ color: settings.COLORS.MARKER })
       )
       marker.position.x = GW/2 + x0 + x*GW
       marker.position.y = -GW/2 + y0 - y*GW
@@ -195,7 +196,7 @@ module.exports = require('views/world_base').extend({
     }
     
     if (field.block && !fieldObj.block) {
-      var cube = new three.Mesh(new Cube(GW, GW, 2*GH, 1, 1), new three.MeshLambertMaterial({ color: ENVIRONMENT_COLORS.quader.hex, shading: three.FlatShading }))
+      var cube = new three.Mesh(new Cube(GW, GW, 2*GH, 1, 1), new three.MeshLambertMaterial({ color: settings.COLORS.BLOCK, shading: three.FlatShading }))
       cube.position.x = GW/2 + x0 + x*GW
       cube.position.y = -GW/2 + y0 - y*GW
       cube.position.z = GH

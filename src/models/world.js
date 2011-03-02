@@ -3,6 +3,7 @@ var _             = require('underscore')
 ,   clone         = require('helpers/clone')
 ,   getLineNumber = require('helpers/get_line_number')
 ,   matrix        = require('helpers/matrix')
+,   settings      = require('settings')
 ,   sandbox       = require('helpers/sandbox')
 ,   Position      = require('models/position_and_direction').Position
 ,   Robot         = require('models/robot')
@@ -133,7 +134,7 @@ module.exports = require('backbone').Model.extend({
       karel[name] = function(n) {
         n = n || 1
         
-        if (HIGHLIGHT_LINE) {
+        if (settings.HIGHLIGHT_LINE) {
           try {
             throw new Error()
           } catch (exc) {

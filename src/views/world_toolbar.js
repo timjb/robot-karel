@@ -22,13 +22,13 @@ module.exports = require('backbone').View.extend({
       right: 'rechtsDrehen',
       up:    'schritt',
       down:  'schrittRueckwaerts',
-      space:     'marke',
+      space:     'markeUmschalten',
       enter:     'hinlegen',
       backspace: 'aufheben',
       'delete':  'entfernen',
       h: 'hinlegen',
       a: 'aufheben',
-      m: 'marke',
+      m: 'markeUmschalten',
       q: 'quader',
       e: 'entfernen'
     }

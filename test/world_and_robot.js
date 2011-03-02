@@ -3,11 +3,12 @@ require('./test_helper')
 var assert = require('assert')
 ,   fs     = require('fs')
 
-var World = require('models/world')
-,   Field = World.Field
-,   Robot = require('models/robot')
+var settings  = require('settings')
+,   World     = require('models/world')
+,   Field     = World.Field
+,   Robot     = require('models/robot')
 ,   positionAndDirection = require('models/position_and_direction')
-,   Position = positionAndDirection.Position
+,   Position  = positionAndDirection.Position
 ,   Direction = positionAndDirection.Direction
 
 function newWorld(opts) {
@@ -158,10 +159,9 @@ exports.testIsBrick = function() {
   assert.ok(!robot.isBrick(1))
 }
 
-exports.testCantMoveMoreThanOneDownOrUp = function() {
+exports.testCantMoveMoreThanSpecifiedDownOrUp = function() {
   var robot = newRobot()
-  robot.putBrick()
-  robot.putBrick()
+  while (!robot.isBrick(settings.MAX_JUMP_HEIGHT + 1)) robot.putBrick()
   assert.throws(function() { robot.move() })
   robot.removeBrick()
   assert.doesNotThrow(function() { robot.move() })
@@ -280,7 +280,7 @@ exports.testGermanAPI = function() {
   var p = Robot.prototype
   
   assert.equal(p.schritt, p.move)
-  assert.equal(p.rueckwaerts, p.moveBackwards)
+  assert.equal(p.schrittRueckwaerts, p.moveBackwards)
   assert.equal(p.linksDrehen, p.turnLeft)
   assert.equal(p.rechtsDrehen, p.turnRight)
   

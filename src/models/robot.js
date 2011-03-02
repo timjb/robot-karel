@@ -1,5 +1,6 @@
 (function() {
 var _         = require('underscore')
+,   settings  = require('settings')
 ,   beep      = require('helpers/beep')
 ,   Position  = require('models/position_and_direction').Position
 ,   Direction = require('models/position_and_direction').Direction
@@ -134,7 +135,7 @@ var Robot = require('backbone').Model.extend({
   move: function() {
     if (this.istWand()) error("karel kann keinen Schritt machen, er steht vor einer Wand.")
     var newPosition = this.forward()
-    if (Math.abs(this.$currentField.bricks - this.getField(newPosition).bricks) > 1) {
+    if (Math.abs(this.$currentField.bricks - this.getField(newPosition).bricks) > settings.MAX_JUMP_HEIGHT) {
       error("karel kann nur einen Ziegel pro Schritt nach oben oder unten springen.")
     }
     this.set({ position: newPosition })
@@ -145,7 +146,7 @@ var Robot = require('backbone').Model.extend({
     var newPosition = this.$position.plus(this.$direction.turnLeft().turnLeft())
     var field = this.getField(newPosition)
     if (!this.isValid(newPosition) || field.block) error("karel kann keinen Schritt rueckwaerts machen, hinter ihm ist eine Wand.")
-    if (Math.abs(this.$currentField.bricks - field.bricks) > 1) {
+    if (Math.abs(this.$currentField.bricks - field.bricks) > settings.MAX_JUMP_HEIGHT) {
       error("karel kann nur einen Ziegel pro Schritt nach oben oder unten springen.")
     }
     this.set({ position: newPosition })
@@ -211,7 +212,7 @@ var translate = function(dict) {
 translate({
   attempt:       'probiere',
   move:          'schritt',
-  moveBackwards: 'rueckwaerts',
+  moveBackwards: 'schrittRueckwaerts',
   turnLeft:      'linksDrehen',
   turnRight:     'rechtsDrehen',
   beep:          'tonErzeugen',
