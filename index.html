@@ -14,8 +14,8 @@
     <input type=button class=left id=run-button value=Run>
     <input type=button class=left id=replay-button value=Replay>
     <input type=button class=left id=reset-button value=Reset>
-    <label class="left radio"><input type=radio name=view-select value=3D checked> <span>3D<span></label>
-    <label class="left radio"><input type=radio name=view-select value=2D> <span>2D<span></label>
+    <label class="left radio"><input type=radio name=view-select id=view-select-3d value=3D checked="checked"> <span>3D<span></label>
+    <label class="left radio"><input type=radio name=view-select id=view-select-2d value=2D> <span>2D<span></label>
     <input type=button class=right id=new-button value="New World">
     <div id=new-pane>
       <label><span>Width</span> <input id=width type=number value=11></label>
@@ -27,17 +27,17 @@
 </div>
 <div id="split-view" class="split-view"></div>
 <div class=toolbar id=world-toolbar>
-  <input type=button data-method=linksDrehen  value="&larr;" title="Links drehen">
-  <input type=button data-method=schritt      value="&uarr;" title="Schritt">
-  <input type=button data-method=rechtsDrehen value="&rarr;" title="Rechts drehen">
-  <input type=button data-method=hinlegen     value="H"      title="Hinlegen">
-  <input type=button data-method=aufheben     value="A"      title="Aufheben">
-  <input type=button data-method=marke        value="M"      title="Marke setzen bzw. löschen">
-  <input type=button data-method=quader       value="Q"      title="Quader hinstellen">
-  <input type=button data-method=entfernen    value="E"      title="Quader entfernen">
+  <input type=button data-method=turnLeft     value="&larr;" title="Links drehen">
+  <input type=button data-method=move         value="&uarr;" title="Schritt">
+  <input type=button data-method=turnRight    value="&rarr;" title="Rechts drehen">
+  <input type=button data-method=putBrick     value="H"      title="Hinlegen">
+  <input type=button data-method=removeBrick  value="A"      title="Aufheben">
+  <input type=button data-method=toggleMarker value="M"      title="Marke setzen bzw. löschen">
+  <input type=button data-method=putBlock     value="Q"      title="Quader hinstellen">
+  <input type=button data-method=removeBlock  value="E"      title="Quader entfernen">
 </div>
 
-<script src=deps/ace/build/src/ace.js></script>
+<script src=deps/ace/build/src/ace-uncompressed.js></script>
 <script src=deps/ace/build/src/mode-javascript.js></script>
 
 <script src=deps/three.js/build/Three.js></script>

@@ -10,9 +10,9 @@ module.exports = require('backbone').View.extend({
   },
 
   initButtons: function() {
-    var model = this.model
+    var robot = this.model.get('robot')
     this.$('input[type=button]').live('click', function() {
-      model[$(this).attr('data-method')]()
+      robot[$(this).attr('data-method')]()
     })
   },
 
