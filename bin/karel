@@ -47,6 +47,7 @@ cli.main(function(args, opts) {
       console.log(worldToAscii(world))
       throw exc
     }
+    console.log(worldToAscii(world))
   } else {
     (function() {
       var oldWriter = repl.writer
@@ -59,8 +60,6 @@ cli.main(function(args, opts) {
       global.karel = robot
       repl.start()
     })()
-  } else {
-    console.log(world.toString())
   }
 })
 
