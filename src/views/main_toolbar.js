@@ -4,6 +4,7 @@ module.exports = require('backbone').View.extend({
     'click #run-button': 'run',
     'click #replay-button': 'replay',
     'click #reset-button': 'reset',
+    'click input[name=view-select]': 'clickChangeView',
     'change input[name=view-select]': 'changeView',
     
     'click #new-button, #new-cancel-button': 'toggleNewPane',
@@ -20,6 +21,13 @@ module.exports = require('backbone').View.extend({
 
   reset: function() {
     this.model.reset()
+  },
+
+  // mainly for testing with zombie.js
+  clickChangeView: function(evt) {
+    $('input[name=view-select]').attr('checked', false)
+    $(evt.target).attr('checked', true)
+    this.changeView()
   },
 
   changeView: function() {

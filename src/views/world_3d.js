@@ -4,7 +4,7 @@ var _        = require('underscore')
 ,   matrix   = require('helpers/matrix')
 ,   three    = require('three')
 
-module.exports = require('views/world_base').extend({
+module.exports = require('views/world_base').extend(typeof document.createElement('canvas').getContext != 'function' ? {} : {
 
   initialize: function() {
     _(this).bindAll(

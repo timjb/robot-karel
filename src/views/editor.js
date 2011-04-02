@@ -11,6 +11,8 @@ module.exports = require('backbone').View.extend({
       .css({ position: 'absolute', left: 0, right: 0, top: 0, bottom: 0 })
       .appendTo(this.el)
     
+    try {
+    
     var e = this.editor  = ace.edit(el.get(0))
     var s = this.session = e.getSession()
     
@@ -32,6 +34,10 @@ module.exports = require('backbone').View.extend({
     $(this.el).keydown(function(evt) {
       if (focused) evt.stopPropagation()
     })
+    
+    } catch(exc) {
+      // this happens when testing with zombie.js
+    }
   },
 
   resize: function() {
