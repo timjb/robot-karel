@@ -47,7 +47,7 @@ Programm
   Ursprung
   wiederhole solange NichtIstWand
     EineReihe
-    wenn IstSüden dann
+    wenn IstSÃ¼den dann
       NachLinks
     sonst
       NachRechts

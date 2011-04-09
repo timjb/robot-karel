@@ -1,5 +1,5 @@
 { Karol zeichnet ein Schachbrettmuster.
-  Die Länge der Welt muss geradzahlig sein.
+  Die LÃ¤nge der Welt muss geradzahlig sein.
   Er soll Links-Hinten starten mit Blick
   nach Vorne. }
 
@@ -30,7 +30,7 @@ Anweisung NachRechts
 Programm
   wiederhole solange NichtIstWand
     MarkiereZeile
-    wenn IstSüden dann
+    wenn IstSÃ¼den dann
       NachLinks
     sonst
       nachrechts

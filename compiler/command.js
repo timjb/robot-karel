@@ -1,7 +1,7 @@
 var fs = require('fs')
-,   robotKarol = require('./robot-karol')
+,   karol = require('./karol')
 
 fs.readFile(process.ARGV[2], 'utf-8', function (err, contents) {
   if (err) throw err
-  robotKarol.compile(contents)
+  console.log(karol.compile(contents))
 })

@@ -172,24 +172,37 @@ Bool.prototype.compile = function () {
 }
 
 
-var Condition = exports.Condition = function (name, inverted) {
-  this.name = name
-  this.inverted = inverted
+var Inversion = exports.Inversion = function (wrapped) {
+  this.wrapped = wrapped
 }
 
-Condition.prototype.compile = function () {
-  return (this.inverted ? '!' : '') + this.name.compile() + '()'
+Inversion.prototype.compile = function () {
+  return '!' + this.wrapped.compile()
 }
 
-// asdfasdfsdfasdfasdfsdfasdfadsf
+
+var Import = exports.Import = function (identifier) {
+  this.identifier = identifier
+}
+
+Import.prototype.compile = function () {
+  return 'require(\'' + this.identifier.compile() + '\');'
+}
+
 
 var FunctionInvocation = exports.FunctionInvocation = function (id, argumentList) {
   this.identifier = id
   this.argumentList = argumentList
 }
 
+FunctionInvocation.prototype.setInline = function () {
+  this.inline = true
+  return this
+}
+
 FunctionInvocation.prototype.compile = function () {
-  return this.identifier.compile() + this.argumentList.compile() + ';'
+  return this.identifier.compile() + this.argumentList.compile()
+       + (this.inline ? '' : ';')
 }
 
 var ArgumentList = exports.ArgumentList = function (argument) {

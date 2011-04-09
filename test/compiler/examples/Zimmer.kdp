@@ -1,10 +1,10 @@
 { Karol ist in einem Zimmer mit
   nur einem Ausgang; egal wo Karol
-  steht er muss durch die Türe
+  steht er muss durch die TÃ¼re
   finden und auf dem Teppich vor dem
   Zimmer stehen bleiben }
 
-{ Prüft ob rechts von Karol Ziegel sind }
+{ PrÃ¼ft ob rechts von Karol Ziegel sind }
 Bedingung IstZiegelRechts
   Schnell
   falsch
@@ -14,7 +14,7 @@ Bedingung IstZiegelRechts
   Langsam
 *Bedingung
 
-{ Karol läuft bis zur nächsten Wand }
+{ Karol lÃ¤uft bis zur nÃ¤chsten Wand }
 Anweisung BisZurWand
   solange NichtIstZiegel tue
     Schritt
@@ -24,7 +24,7 @@ Anweisung BisZurWand
   *solange
 *Anweisung
 
-{ Karol läuft an der Wand entlang }
+{ Karol lÃ¤uft an der Wand entlang }
 Anweisung AnDerWandEntlang
   solange IstZiegelRechts tue
     wenn IstZiegel dann

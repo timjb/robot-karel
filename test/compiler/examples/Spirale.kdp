@@ -1,7 +1,7 @@
 { Karol legt den ganzen Boden
-  spiralenförmig mit Ziegel aus }
+  spiralenfÃ¶rmig mit Ziegel aus }
 
-{ Prüft ob vor Karol weder Ziegel
+{ PrÃ¼ft ob vor Karol weder Ziegel
   noch Wand ist }
 Bedingung IstFrei
   wahr

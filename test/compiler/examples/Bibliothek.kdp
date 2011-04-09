@@ -1,7 +1,7 @@
 { Eine Bibliothek von Anweisungen und
   Bedingungen.
-  Kann über EINFÜGEN jedem Karol-Programm
-  hinzugefügt werden. }
+  Kann Ã¼ber EINFÃœGEN jedem Karol-Programm
+  hinzugefÃ¼gt werden. }
 
 { Karol dreht sich auf der Stelle um }
 Anweisung Umdrehen
@@ -10,8 +10,8 @@ Anweisung Umdrehen
   LinksDrehen
 *Anweisung
 
-{ Karol geht einen Schritt rückwärts }
-Anweisung SchrittRückwärts
+{ Karol geht einen Schritt rÃ¼ckwÃ¤rts }
+Anweisung SchrittRÃ¼ckwÃ¤rts
   Schnell
   Umdrehen
   Schritt
@@ -44,14 +44,14 @@ Anweisung SchrittRechts
   Linksdrehen
 *Anweisung
 
-{ Karol schaut sicher nach Süden }
-Anweisung SchauNachSüden
-  solange nicht IstSüden tue
+{ Karol schaut sicher nach SÃ¼den }
+Anweisung SchauNachSÃ¼den
+  solange nicht IstSÃ¼den tue
     LinksDrehen
   *solange
 *Anweisung
 
-{ Prüft ob links von Karol Ziegel sind }
+{ PrÃ¼ft ob links von Karol Ziegel sind }
 Bedingung IstZiegelLinks
   schnell
   falsch
@@ -60,7 +60,7 @@ Bedingung IstZiegelLinks
   Rechtsdrehen
 *Bedingung
 
-{ Prüft ob rechts von Karol Ziegel sind }
+{ PrÃ¼ft ob rechts von Karol Ziegel sind }
 Bedingung IstZiegelRechts
   schnell
   falsch
@@ -69,7 +69,7 @@ Bedingung IstZiegelRechts
   Linksdrehen
 *Bedingung
 
-{ Prüft ob links von Karol eine Wand ist }
+{ PrÃ¼ft ob links von Karol eine Wand ist }
 Bedingung IstWandLinks
   schnell
   falsch
@@ -78,7 +78,7 @@ Bedingung IstWandLinks
   Rechtsdrehen
 *Bedingung
 
-{ Prüft ob rechts von Karol eine Wand ist }
+{ PrÃ¼ft ob rechts von Karol eine Wand ist }
 Bedingung IstWandRechts
   schnell
   falsch
@@ -87,14 +87,14 @@ Bedingung IstWandRechts
   Linksdrehen
 *Bedingung
 
-{ Prüft ob vor Karol weder Ziegel noch Wand ist }
+{ PrÃ¼ft ob vor Karol weder Ziegel noch Wand ist }
 Bedingung IstFrei
   wahr
   wenn IstWand dann falsch *wenn
   wenn IstZiegel dann falsch *wenn
 *Bedingung
 
-{ Prüft ob rundum Karol frei ist }
+{ PrÃ¼ft ob rundum Karol frei ist }
 Bedingung IstRundumFrei
   schnell
   wahr

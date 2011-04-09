@@ -1,6 +1,6 @@
-Einfügen
+EinfÃ¼gen
 Bibliothek
-*Einfügen
+*EinfÃ¼gen
 
 Anweisung Umsetzen
   Schnell
@@ -79,7 +79,7 @@ Anweisung Vergleichen
   *wiederhole
   Wiederherstellen
   Langsam
-  MarkeLöschen
+  MarkeLÃ¶schen
 *Anweisung
 
 Anweisung Tauschen
@@ -99,7 +99,7 @@ Programm
       wenn NichtIstMarke dann
         Tauschen
       sonst
-        MarkeLöschen
+        MarkeLÃ¶schen
       *wenn
       LinksDrehen
     *wiederhole

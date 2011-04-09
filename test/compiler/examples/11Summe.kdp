@@ -1,7 +1,7 @@
 { Programm Summe von zwei Zahlen
   Karol steht zu Beginn vor der ersten Ziffer und
   schaut zum zweiten Summanden
-  (eventuell vorher genügend oft LinksDrehen mittels
+  (eventuell vorher genÃ¼gend oft LinksDrehen mittels
    Bedingung IstOsten)
 
 Das Programm zeigt
@@ -9,8 +9,8 @@ Das Programm zeigt
   selbstdefinierte Bedingung
   Anweisungen langsam und schnell
   Parameter (zum Beispiel  wenn Ziegel(10) dann ...)
-  Bedingungen, die die Ausrichtung von Karol prüfen
-  (IstNorden, IstSüden, IstWesten, IstOsten)
+  Bedingungen, die die Ausrichtung von Karol prÃ¼fen
+  (IstNorden, IstSÃ¼den, IstWesten, IstOsten)
 
     a = 0026355439
     b = 0000470389
@@ -25,7 +25,7 @@ Anweisung Umdrehen;
 *Anweisung
 
 { Eine Marke ist 10 Ziegel wert }
-Anweisung PrüfeÜbertrag
+Anweisung PrÃ¼feÃœbertrag
   wenn IstZiegel(10) dann
     wiederhole 10 mal Aufheben *wiederhole;
     MarkeSetzen
@@ -33,14 +33,14 @@ Anweisung PrüfeÜbertrag
 *Anweisung
 
 { Einen Stapel auf den zweiten versetzen.
-  Wenn sich ein "Übertrag" ergibt, wird eine Marke gesetzt }
+  Wenn sich ein "Ãœbertrag" ergibt, wird eine Marke gesetzt }
 Anweisung Versetzen
   solange IstZiegel tue
     Aufheben
     Umdrehen
     Hinlegen
 
-    PrüfeÜbertrag
+    PrÃ¼feÃœbertrag
 
     Umdrehen
   *solange
@@ -66,12 +66,12 @@ Anweisung Rechnen
     RechtsDrehen
 
     wenn IstMarke dann
-      MarkeLöschen
+      MarkeLÃ¶schen
       Schritt
       RechtsDrehen
       Hinlegen
 
-      PrüfeÜbertrag
+      PrÃ¼feÃœbertrag
 
       Umdrehen
     sonst

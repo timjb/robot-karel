@@ -8,8 +8,8 @@ root
   ;
 
 block
-  : statement { $$ = (new yy.Block()).addStatement($1); }
-  | block statement { $$ = $1.addStatement($2); }
+  : statement optSemicolon { $$ = (new yy.Block()).addStatement($1); }
+  | block statement optSemicolon { $$ = $1.addStatement($2); }
   ;
 
 identifier
@@ -18,6 +18,7 @@ identifier
 
 statement
   : while
+  | import
   | whileTrue
   | doWhile
   | for
@@ -27,6 +28,10 @@ statement
   | conditionDefinition
   | program
   | bool
+  ;
+
+import
+  : EINFUEGEN identifier STAR EINFUEGEN { $$ = new yy.Import($2); }
   ;
 
 number
@@ -54,11 +59,11 @@ optKarolPrefix
   ;
 
 functionInvocation
-  : optKarolPrefix identifier optArgumentList optSemicolon { $$ = new yy.FunctionInvocation($2, $3); }
+  : optKarolPrefix identifier optArgumentList { $$ = new yy.FunctionInvocation($2, $3); }
   ;
 
 functionDefinition
-  : ANWEISUNG identifier block STAR ANWEISUNG { $$ = new yy.FunctionDefinition($2, $3); }
+  : ANWEISUNG identifier optSemicolon block STAR ANWEISUNG { $$ = new yy.FunctionDefinition($2, $4); }
   ;
 
 conditionDefinition
@@ -66,8 +71,8 @@ conditionDefinition
   ;
 
 condition
-  : identifier { $$ = new yy.Condition($1, false); }
-  | NICHT identifier { $$ = new yy.Condition($2, true); }
+  : functionInvocation { $$ = $1.setInline(); }
+  | NICHT functionInvocation { $$ = new yy.Inversion($2.setInline()); }
   ;
 
 program
@@ -75,7 +80,7 @@ program
   ;
 
 argumentList
-  : ( OptNumber ) { $$ = new yy.ArgumentList($2); }
+  : LPAREN optNumber RPAREN { $$ = new yy.ArgumentList($2); }
   ;
 
 optArgumentList

@@ -51,29 +51,29 @@ Programm
   *wiederhole
   // jetzt geht es los bis zur Marke
   wiederhole solange NichtIstMarke
-    // eine Öffnung links suchen
+    // eine Ã–ffnung links suchen
     wiederhole solange IstLinksZiegelundFrei
       Schritt
     *wiederhole
     wenn IstLinksZiegel dann
-      // keine Öffnung links sondern Reihenende
+      // keine Ã–ffnung links sondern Reihenende
       Umdrehen
-      // eine Öffnung rechts suchen
+      // eine Ã–ffnung rechts suchen
       wiederhole solange IstRechtsZiegelundFrei
         Schritt
       *wiederhole
       wenn IstRechtsZiegel dann
-        // keine Öffnung rechts sondern Reihenende
+        // keine Ã–ffnung rechts sondern Reihenende
         // dann Fehler im Labyrint
         Ton
         Beenden
       sonst
-        // Öffnung rechts
+        // Ã–ffnung rechts
         RechtsDrehen
         ReiheHoch
       *wenn
     sonst
-      // Öffnung links
+      // Ã–ffnung links
       LinksDrehen
       ReiheHoch
     *wenn

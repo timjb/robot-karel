@@ -8,8 +8,8 @@
 "*"            { return 'STAR'; }
 ";"            { return 'SEMICOLON'; }
 "."            { return 'DOT'; }
-"("            { return '('; }
-")"            { return ')'; }
+"("            { return 'LPAREN'; }
+")"            { return 'RPAREN'; }
 
 "solange"\b    { return 'SOLANGE'; }
 "wenn"\b       { return 'WENN'; }
@@ -17,6 +17,7 @@
 "anweisung"\b  { return 'ANWEISUNG'; }
 "bedingung"\b  { return 'BEDINGUNG'; }
 "programm"\b   { return 'PROGRAMM'; }
+"einfuegen"\b  { return 'EINFUEGEN'; }
 "karol"\b      { return 'KAROL'; }
 "tue"\b        { return 'TUE'; }
 "dann"\b       { return 'DANN'; }

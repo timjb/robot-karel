@@ -1,6 +1,6 @@
 { Karol stapelt alle Ziegel am rechten Rand.
   Die erste Spalte muss leer sein.
-  Die Überwachung des Rucksachs muss
+  Die Ãœberwachung des Rucksachs muss
   eingeschalten sein }
 Anweisung Umdrehen
   Schnell
@@ -8,7 +8,7 @@ Anweisung Umdrehen
   LinksDrehen
 *Anweisung
 
-Anweisung SchrittZurück
+Anweisung SchrittZurÃ¼ck
   Schnell
   Umdrehen
   Schritt
@@ -25,11 +25,11 @@ Anweisung ReiheStapeln
     Schritt
   *wiederhole
   // Stapel ablegen
-  SchrittZurück
+  SchrittZurÃ¼ck
   wiederhole solange NichtIstLeer
     Hinlegen
   *wiederhole
-  // Zurücklaufen
+  // ZurÃ¼cklaufen
   Umdrehen
   wiederhole solange NichtIstWand
     Schritt

@@ -1,6 +1,6 @@
 { Aufgabe:
 Definiere eine neue Bedingung, welche Karol
-erkennen l‰sst, ob zwei Ziegel vor ihm liegen. }
+erkennen l√§sst, ob zwei Ziegel vor ihm liegen. }
 
 Bedingung ZweiZiegel
   falsch

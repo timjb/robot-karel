@@ -1,12 +1,12 @@
 { Karol zeichnet Pascalsche Dreiecke,
-  nach einer Idee von R.Reichert, ETH Zürich }
+  nach einer Idee von R.Reichert, ETH ZÃ¼rich }
 Anweisung Umdrehen
   Schnell
   LinksDrehen
   LinksDrehen
 *Anweisung
 
-Anweisung Schnellzurück
+Anweisung SchnellzurÃ¼ck
   Schnell
   wiederhole solange NichtIstWand
     Schritt
@@ -58,7 +58,7 @@ Programm
       wenn setzen dann MarkeSetzen *wenn
     *wiederhole
     Umdrehen
-    SchnellZurück
+    SchnellZurÃ¼ck
     LinksDrehen
   *wiederhole
 *Programm

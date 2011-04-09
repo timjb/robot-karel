@@ -1,9 +1,9 @@
-{ Das Programm führt Karol durch ein Labyrinth
+{ Das Programm fÃ¼hrt Karol durch ein Labyrinth
  und Karol steht still, wenn er das Ziel
  erreicht hat.
  Das Ziel ist ein Stapel mit genau 1 Ziegel.
 
-Beispiel für:
+Beispiel fÃ¼r:
   selbstdefinierte Anweisungen
   selbstdefinierte Bedingungen (auch lokale)
   Bedingung IstZiegel mit Parameter (siehe IstZiegel(4))
@@ -20,20 +20,20 @@ Anweisung Umdrehen
   LinksDrehen
 *Anweisung
 
-{ Karol geht einen Schritt Rückwärts }
-Anweisung SchrittRückwärts
+{ Karol geht einen Schritt RÃ¼ckwÃ¤rts }
+Anweisung SchrittRÃ¼ckwÃ¤rts
   Umdrehen
   Schritt
   Umdrehen
 *Anweisung
 
 {*************************************************
-** Bedingung gibt wahr zurück, wenn vor Karol
+** Bedingung gibt wahr zurÃ¼ck, wenn vor Karol
 ** keine Wand, keine Marke, keine Mauer
 ** (=2 Ziegel) und nicht das Ziel ist. ***********
 **************************************************}
 Bedingung IstGehenErlaubt
-  { Lokale Bedingung, gibt wahr zurück wenn
+  { Lokale Bedingung, gibt wahr zurÃ¼ck wenn
     einen Schritt vor Karol eine Marke ist }
   Bedingung IstMarkeVorne
     Schritt
@@ -42,7 +42,7 @@ Bedingung IstGehenErlaubt
     sonst
       falsch
     *wenn
-    SchrittRückwärts
+    SchrittRÃ¼ckwÃ¤rts
   *Bedingung
 
   // Hauptteil der Bedingung
@@ -59,7 +59,7 @@ Bedingung IstGehenErlaubt
 *Bedingung
 
 {**************************************************
-**   Gibt wahr zurück, wenn Karol das Ziel sieht
+**   Gibt wahr zurÃ¼ck, wenn Karol das Ziel sieht
 **   = 1 Ziegel
 ***************************************************}
 Bedingung IstZiel
@@ -76,10 +76,10 @@ Bedingung IstZiel
 
 {**************************************************
 ** Anweisung, welche sich rekursiv aufruft und
-** damit alle Gänge durchläuft                              **
+** damit alle GÃ¤nge durchlÃ¤uft                              **
 ***************************************************}
 Anweisung ZweigGehen
-  //  alle möglichen Wege durchsuchen ...
+  //  alle mÃ¶glichen Wege durchsuchen ...
   MarkeSetzen
   wiederhole 4 mal
     wenn IstGehenErlaubt dann
@@ -87,7 +87,7 @@ Anweisung ZweigGehen
       schnell
       ZweigGehen
       { feststellen, ob Karol am Ziel ist,
-          sonst zurückgehen  }
+          sonst zurÃ¼ckgehen  }
       wenn IstZiel dann
         { jetzt wartet Karol 2,5 Sekunden,
             gibt einen Ton, dreht sich zum Ziel,
@@ -99,9 +99,9 @@ Anweisung ZweigGehen
         langsam
         Beenden // vordefinierte Anweisung, beendet das Programm
       sonst
-        // zurückkehren
+        // zurÃ¼ckkehren
         schnell
-        SchrittRückwärts
+        SchrittRÃ¼ckwÃ¤rts
       *wenn
     *wenn
     LinksDrehen

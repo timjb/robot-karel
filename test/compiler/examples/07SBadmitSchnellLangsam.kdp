@@ -1,8 +1,8 @@
 { Programm: Ein Schwimmbecken bauen
   Karol soll in der linken, hinteren Ecke stehen
-  mit Blick nach Vorne = Süden }
+  mit Blick nach Vorne = SÃ¼den }
 
-{ wie Beispiel 06 jedoch zusätzlich mit den
+{ wie Beispiel 06 jedoch zusÃ¤tzlich mit den
   Anweisungen schnell und langsam }
 
 // Anweisung Becken bauen
@@ -40,7 +40,7 @@ Anweisung Schwimmen
     LinksDrehen
   *Anweisung
 
-  // Schwimmkörper bauen
+  // SchwimmkÃ¶rper bauen
   wiederhole 3 mal Hinlegen *wiederhole
   Schritt
   solange NichtIstZiegel tue
@@ -75,7 +75,7 @@ Anweisung Hauptteil
 
   AbbauenBecken
 
-  { zurück zur Ausgangsposition }
+  { zurÃ¼ck zur Ausgangsposition }
   solange NichtIstWand tue Schritt *solange
   LinksDrehen LinksDrehen
 *Anweisung
