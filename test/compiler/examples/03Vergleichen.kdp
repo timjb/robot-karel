@@ -1,0 +1,16 @@
+{ Aufgabe: Karol steht zwischen Ziegelstapel.
+Schreibe ein Programm, das alle Ziegel abbaut
+und am Schluss Karol zum niedrigsten Stapel dreht. }
+
+solange IstZiegel tue
+  Aufheben
+  LinksDrehen
+*solange
+
+wiederhole 3 mal
+  LinksDrehen
+  solange IstZiegel tue
+    Aufheben
+  *solange
+*wiederhole
+LinksDrehen

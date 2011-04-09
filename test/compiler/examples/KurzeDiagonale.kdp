@@ -1,0 +1,9 @@
+{ Karol baut eine Diagonale }
+wiederhole 3 mal
+  Hinlegen
+  Schritt
+  RechtsDrehen
+  Schritt
+  LinksDrehen
+*wiederhole
+

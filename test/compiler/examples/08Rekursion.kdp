@@ -1,0 +1,21 @@
+{ Aufgabe: Karol steht vor einem Stapel Ziegel.
+  Schreibe ein Programm, welches Karol beibringt
+  den ganzen Stapel von vorne nach hinten
+  umzusetzen }
+
+Anweisung PfeilerSetzen
+  wenn IstZiegel dann
+    Aufheben
+    PfeilerSetzen
+  sonst
+    LinksDrehen
+    LinksDrehen
+  *wenn
+  Hinlegen
+*Anweisung
+
+Programm
+  PfeilerSetzen
+  Aufheben
+*Programm
+

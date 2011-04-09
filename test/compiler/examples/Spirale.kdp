@@ -1,0 +1,20 @@
+{ Karol legt den ganzen Boden
+  spiralenförmig mit Ziegel aus }
+
+{ Prüft ob vor Karol weder Ziegel
+  noch Wand ist }
+Bedingung IstFrei
+  wahr
+  wenn IstWand dann falsch *wenn
+  wenn IstZiegel dann falsch *wenn
+*Bedingung
+
+Programm
+  wiederhole solange IstFrei
+    wiederhole solange IstFrei
+      Hinlegen
+      Schritt
+    *wiederhole
+    LinksDrehen
+  *wiederhole
+*Programm

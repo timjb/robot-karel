@@ -1,0 +1,82 @@
+{ Karol durchwandert ein "zeilenorientiertes"
+  Labyrint bis zur Markierung. }
+
+Anweisung Umdrehen
+  Schnell
+  LinksDrehen
+  LinksDrehen
+*Anweisung
+
+Anweisung ReiheHoch
+  Schritt
+  Schritt
+  RechtsDrehen
+*Anweisung
+
+Bedingung IstLinksZiegel
+  Schnell
+  falsch
+  LinksDrehen
+  wenn IstZiegel dann wahr *wenn
+  RechtsDrehen
+*Bedingung
+
+Bedingung IstRechtsZiegel
+  Schnell
+  falsch
+  RechtsDrehen
+  wenn IstZiegel dann wahr *wenn
+  LinksDrehen
+*Bedingung
+
+Bedingung IstLinksZiegelundFrei
+  falsch
+  wenn IstLinksZiegel dann
+    wenn NichtIstZiegel dann wahr *wenn
+  *wenn
+*Bedingung
+
+Bedingung IstRechtsZiegelundFrei
+  falsch
+  wenn IstRechtsZiegel dann
+    wenn NichtIstZiegel dann wahr *wenn
+  *wenn
+*Bedingung
+
+
+Programm
+  // Karol muss nach rechts schauen
+  wiederhole solange nicht IstOsten
+    LinksDrehen
+  *wiederhole
+  // jetzt geht es los bis zur Marke
+  wiederhole solange NichtIstMarke
+    // eine Öffnung links suchen
+    wiederhole solange IstLinksZiegelundFrei
+      Schritt
+    *wiederhole
+    wenn IstLinksZiegel dann
+      // keine Öffnung links sondern Reihenende
+      Umdrehen
+      // eine Öffnung rechts suchen
+      wiederhole solange IstRechtsZiegelundFrei
+        Schritt
+      *wiederhole
+      wenn IstRechtsZiegel dann
+        // keine Öffnung rechts sondern Reihenende
+        // dann Fehler im Labyrint
+        Ton
+        Beenden
+      sonst
+        // Öffnung rechts
+        RechtsDrehen
+        ReiheHoch
+      *wenn
+    sonst
+      // Öffnung links
+      LinksDrehen
+      ReiheHoch
+    *wenn
+  *wiederhole
+  LinksDrehen
+*Programm

@@ -1,0 +1,15 @@
+{ Karol baut einen Ziegelstapel, der
+  vor ihm steht ab und baut ihn rechts
+  davon wieder auf
+  - Ziegel für Ziegel ! - }
+solange IstZiegel tue
+  Aufheben
+  RechtsDrehen
+  Schritt
+  LinksDrehen
+  Hinlegen
+  LinksDrehen
+  Schritt
+  RechtsDrehen
+*solange
+

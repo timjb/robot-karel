@@ -1,0 +1,126 @@
+{ Das Programm führt Karol durch ein Labyrinth
+ und Karol steht still, wenn er das Ziel
+ erreicht hat.
+ Das Ziel ist ein Stapel mit genau 1 Ziegel.
+
+Beispiel für:
+  selbstdefinierte Anweisungen
+  selbstdefinierte Bedingungen (auch lokale)
+  Bedingung IstZiegel mit Parameter (siehe IstZiegel(4))
+  Rekursion
+  schnell / langsam
+  Anweisung Beenden
+  Warten
+  Ton
+}
+
+{ Karol dreht sich um 180 Grad }
+Anweisung Umdrehen
+  LinksDrehen
+  LinksDrehen
+*Anweisung
+
+{ Karol geht einen Schritt Rückwärts }
+Anweisung SchrittRückwärts
+  Umdrehen
+  Schritt
+  Umdrehen
+*Anweisung
+
+{*************************************************
+** Bedingung gibt wahr zurück, wenn vor Karol
+** keine Wand, keine Marke, keine Mauer
+** (=2 Ziegel) und nicht das Ziel ist. ***********
+**************************************************}
+Bedingung IstGehenErlaubt
+  { Lokale Bedingung, gibt wahr zurück wenn
+    einen Schritt vor Karol eine Marke ist }
+  Bedingung IstMarkeVorne
+    Schritt
+    wenn IstMarke dann
+      wahr
+    sonst
+      falsch
+    *wenn
+    SchrittRückwärts
+  *Bedingung
+
+  // Hauptteil der Bedingung
+  schnell
+  falsch
+  wenn NichtIstWand dann
+    wenn NichtIstziegel dann
+      wenn nicht IstMarkeVorne dann
+        wahr
+      *wenn
+    *wenn
+  *wenn
+  langsam
+*Bedingung
+
+{**************************************************
+**   Gibt wahr zurück, wenn Karol das Ziel sieht
+**   = 1 Ziegel
+***************************************************}
+Bedingung IstZiel
+  schnell
+  falsch
+  wiederhole 4 mal
+    wenn IstZiegel(1) dann
+      wahr
+    *wenn
+    LinksDrehen
+  *wiederhole
+  langsam
+*Bedingung
+
+{**************************************************
+** Anweisung, welche sich rekursiv aufruft und
+** damit alle Gänge durchläuft                              **
+***************************************************}
+Anweisung ZweigGehen
+  //  alle möglichen Wege durchsuchen ...
+  MarkeSetzen
+  wiederhole 4 mal
+    wenn IstGehenErlaubt dann
+      Schritt
+      schnell
+      ZweigGehen
+      { feststellen, ob Karol am Ziel ist,
+          sonst zurückgehen  }
+      wenn IstZiel dann
+        { jetzt wartet Karol 2,5 Sekunden,
+            gibt einen Ton, dreht sich zum Ziel,
+            und beendet dann das Programm }
+        Warten(2500);
+        Ton;
+        solange NichtIstZiegel(1) tue LinksDrehen *solange
+        Schritt
+        langsam
+        Beenden // vordefinierte Anweisung, beendet das Programm
+      sonst
+        // zurückkehren
+        schnell
+        SchrittRückwärts
+      *wenn
+    *wenn
+    LinksDrehen
+    schnell
+  *wiederhole
+*Anweisung
+
+
+{*******************************************************
+***************** Hauptprogramm ************************
+********************************************************}
+Programm
+  schnell
+  ZweigGehen
+  { hierher kommt das Programm nur, wenn es Karol nicht
+  gelungen ist das Ziel zu erreichen }
+  wiederhole 2 mal
+    Ton
+    Warten(2000)
+  *wiederhole
+*Programm
+

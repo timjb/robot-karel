@@ -1,0 +1,111 @@
+{ Eine Bibliothek von Anweisungen und
+  Bedingungen.
+  Kann über EINFÜGEN jedem Karol-Programm
+  hinzugefügt werden. }
+
+{ Karol dreht sich auf der Stelle um }
+Anweisung Umdrehen
+  Schnell
+  LinksDrehen
+  LinksDrehen
+*Anweisung
+
+{ Karol geht einen Schritt rückwärts }
+Anweisung SchrittRückwärts
+  Schnell
+  Umdrehen
+  Schritt
+  Umdrehen
+*Anweisung
+
+{ Karol legt hinter sich einen Ziegel ab }
+Anweisung HintenHinlegen
+  Schnell
+  Umdrehen
+  Hinlegen
+  Umdrehen
+*Anweisung
+
+{ Karol macht einen seitlichen Schritt
+  nach links }
+Anweisung SchrittLinks
+  Schnell
+  Linksdrehen
+  Schritt
+  Rechtsdrehen
+*Anweisung
+
+{ Karol macht einen seitlichen Schritt
+  nach rechts }
+Anweisung SchrittRechts
+  Schnell
+  Rechtsdrehen
+  Schritt
+  Linksdrehen
+*Anweisung
+
+{ Karol schaut sicher nach Süden }
+Anweisung SchauNachSüden
+  solange nicht IstSüden tue
+    LinksDrehen
+  *solange
+*Anweisung
+
+{ Prüft ob links von Karol Ziegel sind }
+Bedingung IstZiegelLinks
+  schnell
+  falsch
+  Linksdrehen
+  wenn IstZiegel dann wahr *wenn
+  Rechtsdrehen
+*Bedingung
+
+{ Prüft ob rechts von Karol Ziegel sind }
+Bedingung IstZiegelRechts
+  schnell
+  falsch
+  Rechtsdrehen
+  wenn IstZiegel dann wahr *wenn
+  Linksdrehen
+*Bedingung
+
+{ Prüft ob links von Karol eine Wand ist }
+Bedingung IstWandLinks
+  schnell
+  falsch
+  Linksdrehen
+  wenn IstWand dann wahr *wenn
+  Rechtsdrehen
+*Bedingung
+
+{ Prüft ob rechts von Karol eine Wand ist }
+Bedingung IstWandRechts
+  schnell
+  falsch
+  Rechtsdrehen
+  wenn IstWand dann wahr *wenn
+  Linksdrehen
+*Bedingung
+
+{ Prüft ob vor Karol weder Ziegel noch Wand ist }
+Bedingung IstFrei
+  wahr
+  wenn IstWand dann falsch *wenn
+  wenn IstZiegel dann falsch *wenn
+*Bedingung
+
+{ Prüft ob rundum Karol frei ist }
+Bedingung IstRundumFrei
+  schnell
+  wahr
+  wenn nicht IstFrei dann falsch *wenn
+  LinksDrehen
+  wenn nicht IstFrei dann falsch *wenn
+  LinksDrehen
+  wenn nicht IstFrei dann falsch *wenn
+  LinksDrehen
+  wenn nicht IstFrei dann falsch *wenn
+  LinksDrehen
+*Bedingung
+
+

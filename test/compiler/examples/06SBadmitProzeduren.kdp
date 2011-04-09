@@ -1,0 +1,88 @@
+{ Programm: Ein Schwimmbecken bauen
+  Karol soll in der linken, hinteren Ecke stehen
+  mit Blick nach Vorne = Süden }
+
+{ in diesem Beispiel wird das Problem in
+  einzelne, selbstdefinierte Anweisungen
+  gegliedert }
+
+// Anweisung Becken bauen
+Anweisung BaueBecken
+  wiederhole 12 mal
+    solange NichtIstWand tue
+      Hinlegen
+      Schritt
+    *solange
+    LinksDrehen
+  *wiederhole
+*Anweisung
+
+// Anweisung Becken abreissen
+Anweisung AbbauenBecken
+  wiederhole 12 mal
+    solange NichtIstWand tue
+      Aufheben
+      Schritt
+    *solange
+    RechtsDrehen
+  *wiederhole
+*Anweisung
+
+// Anweisung Becken durchschwimmen
+Anweisung Schwimmen
+
+  // lokale Anweisung
+  Anweisung Umdrehen
+    LinksDrehen
+    LinksDrehen
+  *Anweisung
+
+  // Schwimmkörper bauen
+  wiederhole 3 mal Hinlegen *wiederhole
+  Schritt
+  solange NichtIstZiegel tue
+    wiederhole 3 mal Hinlegen *wiederhole
+    Schritt
+    Umdrehen
+    wiederhole 3 mal Aufheben *wiederhole
+    Umdrehen
+  *solange
+  Schritt
+  Umdrehen
+  wiederhole 3 mal Aufheben *wiederhole
+  Umdrehen
+*Anweisung
+
+// Definition der Hauptteil
+Anweisung Hauptteil
+
+  BaueBecken
+
+  { zur Mitte bewegen }
+  LinksDrehen
+  wiederhole 2 mal Schritt *wiederhole
+  RechtsDrehen
+
+  Schwimmen
+
+  { zur Ecke bewegen }
+  RechtsDrehen
+  wiederhole 2 mal Schritt *wiederhole
+  RechtsDrehen
+
+  AbbauenBecken
+
+  { zurück zur Ausgangsposition }
+  solange NichtIstWand tue Schritt *solange
+  LinksDrehen LinksDrehen
+*Anweisung
+
+{ ********************************************* }
+{ *************** Programmanfang  ************* }
+{ ********************************************* }
+Programm
+  wiederhole 4 mal
+    Hauptteil
+  *wiederhole
+*Programm
+{ *********** Programmende *********** }

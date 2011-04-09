@@ -1,0 +1,37 @@
+{ Karol baut eine ganze Treppe auf.
+  Er achtet auf die maximale Sprunghöhe von 1 }
+Anweisung Umdrehen
+  LinksDrehen
+  LinksDrehen
+*Anweisung
+
+Anweisung ZweiSchritt
+  Schritt
+  Schritt
+*Anweisung
+
+Anweisung EineSchichtLegen
+  wiederhole solange NichtIstMarke
+    Hinlegen
+    Schritt
+  *wiederhole
+*Anweisung
+
+Anweisung HinabSteigen
+  wiederhole solange IstZiegel
+    Schritt
+  *wiederhole
+*Anweisung
+
+Programm
+  MarkeSetzen
+  wiederhole 7 mal
+    ZweiSchritt
+    Umdrehen
+    EineSchichtLegen
+    Umdrehen
+    HinabSteigen
+  *wiederhole
+  Schritt
+  Umdrehen
+*Programm

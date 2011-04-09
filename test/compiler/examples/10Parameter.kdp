@@ -1,0 +1,5 @@
+{ Verwendung von Parametern }
+
+solange IstZiegel(3) tue
+  Schritt(2);
+*solange

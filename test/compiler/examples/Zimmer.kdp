@@ -1,0 +1,46 @@
+{ Karol ist in einem Zimmer mit
+  nur einem Ausgang; egal wo Karol
+  steht er muss durch die Türe
+  finden und auf dem Teppich vor dem
+  Zimmer stehen bleiben }
+
+{ Prüft ob rechts von Karol Ziegel sind }
+Bedingung IstZiegelRechts
+  Schnell
+  falsch
+  RechtsDrehen
+  wenn IstZiegel dann wahr *wenn
+  LinksDrehen
+  Langsam
+*Bedingung
+
+{ Karol läuft bis zur nächsten Wand }
+Anweisung BisZurWand
+  solange NichtIstZiegel tue
+    Schritt
+    wenn IstMarke dann
+      Beenden
+    *wenn
+  *solange
+*Anweisung
+
+{ Karol läuft an der Wand entlang }
+Anweisung AnDerWandEntlang
+  solange IstZiegelRechts tue
+    wenn IstZiegel dann
+      LinksDrehen
+    *wenn
+    Schritt
+  *solange
+*Anweisung
+
+{ Hauptprogramm }
+Programm
+  BisZurWand
+  LinksDrehen
+  AnDerWandEntlang
+  RechtsDrehen
+  solange NichtIstMarke tue
+    Schritt
+  *solange
+*Programm

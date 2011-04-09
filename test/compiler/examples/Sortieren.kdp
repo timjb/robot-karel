@@ -1,0 +1,114 @@
+Einfügen
+Bibliothek
+*Einfügen
+
+Anweisung Umsetzen
+  Schnell
+  wiederhole solange IstZiegel
+    Aufheben
+    HintenHinlegen
+  *wiederhole
+  Langsam
+*Anweisung
+
+Anweisung Verschieben
+  Schnell
+  wiederhole solange IstZiegel
+    Aufheben
+    SchrittLinks
+    Hinlegen
+    SchrittRechts
+  *wiederhole
+  Langsam
+*Anweisung
+
+Anweisung UmsetzenDiagonal
+  Umdrehen
+  Schnell
+  wiederhole solange IstZiegel
+    Aufheben
+    LinksDrehen
+    Schritt
+    LinksDrehen
+    Hinlegen
+    LinksDrehen
+    Schritt
+    LinksDrehen
+  *wiederhole
+  Langsam
+  Umdrehen
+*Anweisung
+
+{ Vergleicht zwei Stapel, setzt vor den kleineren eine
+  Marke }
+Anweisung Vergleichen
+
+  Anweisung Wiederherstellen
+    Umdrehen
+    wiederhole solange IstZiegel
+      Aufheben
+      Umdrehen
+      Hinlegen
+      SchrittLinks
+      Hinlegen
+      RechtsDrehen
+      Schritt
+      RechtsDrehen
+    *wiederhole
+    Umdrehen
+  *Anweisung
+
+  Schnell
+  wiederhole solange NichtIstMarke
+    wenn NichtIstZiegel dann
+      MarkeSetzen
+    *wenn
+    wenn NichtIstMarke dann
+      SchrittLinks
+      wenn NichtIstZiegel dann
+        MarkeSetzen
+        SchrittRechts
+        MarkeSetzen
+      sonst
+        Aufheben
+        SchrittRechts
+        Aufheben
+        HintenHinlegen
+      *wenn
+    *wenn
+  *wiederhole
+  Wiederherstellen
+  Langsam
+  MarkeLöschen
+*Anweisung
+
+Anweisung Tauschen
+  Umsetzen
+  SchrittRechts
+  Verschieben
+  SchrittLinks
+  UmsetzenDiagonal
+*Anweisung
+
+Programm
+  wiederhole 8 mal
+    wiederhole solange NichtIstWand
+      RechtsDrehen
+      Vergleichen
+      SchrittLinks
+      wenn NichtIstMarke dann
+        Tauschen
+      sonst
+        MarkeLöschen
+      *wenn
+      LinksDrehen
+    *wiederhole
+    Schnell
+    umdrehen
+    wiederhole solange NichtIstWand Schritt *wiederhole
+    umdrehen
+    Langsam
+  *wiederhole
+*Programm
+
+

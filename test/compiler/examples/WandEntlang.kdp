@@ -1,0 +1,8 @@
+{ Karol läuft "immer" an der Wand entlang }
+wiederhole 100 mal
+  wenn IstWand dann
+    LinksDrehen
+  *wenn
+  Schritt
+*wiederhole
+

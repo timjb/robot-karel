@@ -1,0 +1,11 @@
+{Karol legt links neben sich eine Reihe Ziegel}
+wiederhole 9 {20} mal
+  Schritt
+  LinksDrehen
+  Hinlegen
+  RechtsDrehen
+  wenn IstWand dann
+    LinksDrehen
+    LinksDrehen
+  *wenn
+*wiederhole

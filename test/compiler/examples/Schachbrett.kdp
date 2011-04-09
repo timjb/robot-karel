@@ -1,0 +1,39 @@
+{ Karol zeichnet ein Schachbrettmuster.
+  Die Länge der Welt muss geradzahlig sein.
+  Er soll Links-Hinten starten mit Blick
+  nach Vorne. }
+
+Anweisung MarkiereZeile
+  wiederhole solange NichtIstWand
+    MarkeSetzen
+    wenn NichtIstWand dann Schritt *wenn
+    wenn NichtIstWand dann Schritt *wenn
+  *wiederhole
+*Anweisung
+
+Anweisung NachLinks
+  LinksDrehen
+  wenn NichtIstWand dann
+    Schritt
+    LinksDrehen
+  *wenn
+*Anweisung
+
+Anweisung NachRechts
+  RechtsDrehen
+  wenn NichtIstWand dann
+    Schritt
+    RechtsDrehen
+  *wenn
+*Anweisung
+
+Programm
+  wiederhole solange NichtIstWand
+    MarkiereZeile
+    wenn IstSüden dann
+      NachLinks
+    sonst
+      nachrechts
+    *wenn
+  *wiederhole
+*Programm

@@ -1,0 +1,10 @@
+{ Karol invertiert eine Ziegelreihe }
+solange NichtIstWand tue
+  wenn IstZiegel dann
+    Aufheben
+  sonst
+    Hinlegen
+  *wenn
+  Schritt
+*solange
+

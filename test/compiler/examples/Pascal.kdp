@@ -1,0 +1,64 @@
+{ Karol zeichnet Pascalsche Dreiecke,
+  nach einer Idee von R.Reichert, ETH Zürich }
+Anweisung Umdrehen
+  Schnell
+  LinksDrehen
+  LinksDrehen
+*Anweisung
+
+Anweisung Schnellzurück
+  Schnell
+  wiederhole solange NichtIstWand
+    Schritt
+  *wiederhole
+*Anweisung
+
+Bedingung IstLinksMarke
+  Schnell
+  falsch
+  LinksDrehen
+  Schritt
+  wenn IstMarke dann wahr *wenn
+  Umdrehen
+  Schritt
+  LinksDrehen
+*Bedingung
+
+Bedingung IstHintenMarke
+  Schnell
+  falsch
+  Umdrehen
+  Schritt
+  wenn IstMarke dann wahr *wenn
+  Umdrehen
+  Schritt
+*Bedingung
+
+Bedingung Setzen
+  Schnell
+  falsch
+  wenn IstHintenMarke dann
+    wenn nicht IstLinksMarke dann
+      wahr
+    *wenn
+  *wenn
+  wenn nicht IstHintenMarke dann
+    wenn IstLinksMarke dann
+      wahr
+    *wenn
+  *wenn
+*Bedingung
+
+Programm
+  wiederhole solange NichtIstWand
+    Schritt
+    LinksDrehen
+    wiederhole solange NichtIstWand
+      Schritt
+      wenn setzen dann MarkeSetzen *wenn
+    *wiederhole
+    Umdrehen
+    SchnellZurück
+    LinksDrehen
+  *wiederhole
+*Programm
