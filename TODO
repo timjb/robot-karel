@@ -5,9 +5,10 @@
 
 * Commands:
   * "schnell" and "langsam"
+  * "require" other scripts
 * Show a little, cute robot
 * Buttons for running step by step or fast
-* Translate API
+* Translate error messages
 * README
 * Docs
 * Examples
