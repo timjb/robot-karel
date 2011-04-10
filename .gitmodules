@@ -1,12 +1,6 @@
 [submodule "deps/ace"]
 	path = deps/ace
 	url = https://github.com/ajaxorg/ace.git
-[submodule "deps/backbone"]
-	path = deps/backbone
-	url = https://github.com/documentcloud/backbone.git
-[submodule "deps/underscore"]
-	path = deps/underscore
-	url = https://github.com/documentcloud/underscore.git
 [submodule "deps/three.js"]
 	path = deps/three.js
 	url = https://github.com/mrdoob/three.js.git
