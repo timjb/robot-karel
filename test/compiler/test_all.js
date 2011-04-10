@@ -1,7 +1,7 @@
 var path = require('path')
 ,   fs   = require('fs')
 ,   assert = require('assert')
-,   compiler = require('../../compiler/karol')
+,   compiler = require('../../lib/compiler/karol')
 
 var EXAMPLES_DIR = __dirname + '/examples'
 

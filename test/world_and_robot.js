@@ -1,13 +1,11 @@
-require('./test_helper')
-
 var assert = require('assert')
 ,   fs     = require('fs')
 
-var settings  = require('settings')
-,   World     = require('models/world')
+var settings  = require('../lib/settings')
+,   World     = require('../lib/models/world')
 ,   Field     = World.Field
-,   Robot     = require('models/robot')
-,   positionAndDirection = require('models/position_and_direction')
+,   Robot     = require('../lib/models/robot')
+,   positionAndDirection = require('../lib/models/position_and_direction')
 ,   Position  = positionAndDirection.Position
 ,   Direction = positionAndDirection.Direction
 

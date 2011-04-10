@@ -8,7 +8,7 @@ var app = express.createServer()
 app.configure(function() {
   app.use(express.static(__dirname))
   app.use(browserify({
-    base:  __dirname + '/src',
+    base:  __dirname + '/lib',
     mount: '/browserify.js',
     require: ['underscore', 'backbone']
   }))

@@ -1,8 +1,6 @@
-require('./test_helper')
-
 var assert = require('assert')
 
-var position_and_direction = require('models/position_and_direction')
+var position_and_direction = require('../lib/models/position_and_direction')
 ,   Position  = position_and_direction.Position
 ,   Direction = position_and_direction.Direction
 

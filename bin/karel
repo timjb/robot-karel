@@ -7,13 +7,9 @@ var colors = require('colors')
 ,   cli    = require('cli')
 ,   repl   = require('repl')
 
-var path = require('path')
-require.paths.unshift(path.normalize(__dirname+'/../deps/'))
-require.paths.unshift(path.normalize(__dirname+'/../src/'))
-
-var World    = require('models/world')
-,   Position = require('models/position_and_direction').Position
-,   sandbox  = require('helpers/sandbox')
+var World    = require('../lib/models/world')
+,   Position = require('../lib/models/position_and_direction').Position
+,   sandbox  = require('../lib/helpers/sandbox')
 
 
 cli.enable('version')
