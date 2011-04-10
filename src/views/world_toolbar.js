@@ -1,8 +1,8 @@
-(function() {
-var _      = require('underscore')
-,   getKey = require('helpers/get_key')
+var _        = require('underscore')
+,   Backbone = require('backbone')
+,   getKey   = require('../helpers/get_key')
 
-module.exports = require('backbone').View.extend({
+module.exports = Backbone.View.extend({
 
   initialize: function() {
     this.initButtons()
@@ -42,8 +42,4 @@ module.exports = require('backbone').View.extend({
     }).bind(this))
   }
 
-}, {
-  path: 'views/world_toolbar'
 })
-
-})()

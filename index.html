@@ -40,39 +40,41 @@
 <script src=deps/ace/build/src/ace-uncompressed.js></script>
 <script src=deps/ace/build/src/mode-javascript.js></script>
 
+<script>
+// Save the require function that ACE includes
+var requireJSRequire = window.require
+</script>
+<script src=browserify.js></script>
+<script>
+// Hack: Browserify stores it's modules in the `module` property of it's global
+// `require` function. But ACE also needs to have it's `require` function
+// global. Thus I store the modules in ACE's function and make it global.
+requireJSRequire.modules = _browserifyRequire.modules
+window.require = requireJSRequire
+</script>
+
 <script src=deps/three.js/build/Three.js></script>
 <script src=deps/three.js/src/extras/primitives/Cube.js></script>
 <script src=deps/three.js/src/extras/primitives/Plane.js></script>
 
 <script src=deps/jquery.js></script>
-<script src=deps/underscore/underscore.js></script>
-<script src=deps/backbone/backbone.js></script>
 
-<script src=src/fake_commonjs.js></script>
-
-<script src=src/settings.js></script>
-
-<script src=src/helpers/beep.js></script>
-<script src=src/helpers/clone.js></script>
-<script src=src/helpers/get_key.js></script>
-<script src=src/helpers/get_line_number.js></script>
-<script src=src/helpers/matrix.js></script>
-<script src=src/helpers/sandbox.js></script>
-
-<script src=src/models/position_and_direction.js></script>
-<script src=src/models/robot.js></script>
-<script src=src/models/world.js></script>
-
-<script src=src/extend_backbone.js></script>
-<script src=src/views/world_base.js></script>
-<script src=src/views/world_3d.js></script>
-<script src=src/views/world_2d.js></script>
-<script src=src/views/main_toolbar.js></script>
-<script src=src/views/world_toolbar.js></script>
-<script src=src/views/editor.js></script>
-<script src=src/views/split.js></script>
-<script src=src/views/toggle.js></script>
-
-<script src=src/controllers/application.js></script>
-
-<script src=src/main.js></script>
+<script>
+(function() {
+  var require = _browserifyRequire;
+  
+  var Backbone = require('backbone')
+  ,   ApplicationController = require('./controllers/application')
+  
+  require('./extend_backbone')
+  
+  $(window).load(function() {
+    new ApplicationController()
+    
+    Backbone.history.start()
+    if (location.hash == '') {
+      location.hash = 'examples/conways_game_of_life'
+    }
+  })
+})()
+</script>

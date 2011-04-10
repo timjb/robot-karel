@@ -1,4 +1,6 @@
-module.exports = require('backbone').View.extend({
+var Backbone = require('backbone')
+
+module.exports = Backbone.View.extend({
 
   events: {
     'click #run-button': 'run',
@@ -50,6 +52,4 @@ module.exports = require('backbone').View.extend({
     }
   }
 
-}, {
-  path: 'views/main_toolbar'
 })

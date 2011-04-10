@@ -1,6 +1,9 @@
 // Freedom-patch Backbone
 
-require('underscore').extend(require('backbone').View.prototype, {
+var _        = require('underscore')
+,   Backbone = require('backbone')
+
+_.extend(Backbone.View.prototype, {
 
   // handy in events hash
   preventDefault: function(evt) {
@@ -15,6 +18,12 @@ require('underscore').extend(require('backbone').View.prototype, {
 
   remove: function() {
     $(this.el).remove()
+    this.trigger('dom:remove')
+    return this
+  },
+
+  detach: function() {
+    $(this.el).detach()
     this.trigger('dom:remove')
     return this
   }

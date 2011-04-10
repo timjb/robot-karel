@@ -1,7 +1,7 @@
-(function() {
 var _ = require('underscore')
+,   Backbone = require('backbone')
 
-module.exports = require('backbone').View.extend({
+module.exports = Backbone.View.extend({
 
   onDrop: function(evt) {
     evt.preventDefault()
@@ -24,8 +24,4 @@ module.exports = require('backbone').View.extend({
     }
   }
 
-}, {
-  path: 'views/world_base'
 })
-
-})()

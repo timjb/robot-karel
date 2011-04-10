@@ -1,5 +1,3 @@
-(function() {
-
 function getLineNumber(stack, n) {
   var fn
   if ($.browser.webkit)  fn = getLineNumber.webkit
@@ -33,7 +31,4 @@ getLineNumber.possible = function() {
   return $.browser.webkit || $.browser.mozilla
 }
 
-getLineNumber.path = 'helpers/get_line_number'
 module.exports = getLineNumber
-
-})()

@@ -1,5 +1,3 @@
-(function() {
-
 function getKey(evt) {
   var key = getKey.table[evt.keyCode]
   if (!key) {
@@ -25,7 +23,4 @@ getKey.table = {
   16: 'shift'
 }
 
-getKey.path = 'helpers/get_key'
 module.exports = getKey
-
-})()

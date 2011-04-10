@@ -1,4 +1,7 @@
-module.exports = require('backbone').View.extend({
+var _        = require('underscore')
+,   Backbone = require('backbone')
+
+module.exports = Backbone.View.extend({
 
   className: 'toggle-view',
 
@@ -9,7 +12,7 @@ module.exports = require('backbone').View.extend({
 
   show: function(n) {
     _.each(this.subviews, function(v) {
-      v.remove()
+      v.detach()
     })
     
     this.subviews[n].appendTo(this.el).render()
@@ -21,6 +24,4 @@ module.exports = require('backbone').View.extend({
     })
   }
 
-}, {
-  path: 'views/toggle'
 })

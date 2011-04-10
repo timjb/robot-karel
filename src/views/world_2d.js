@@ -1,17 +1,15 @@
-(function() {
-var _        = require('underscore')
-,   Position = require('models/position_and_direction').Position
+var _         = require('underscore')
+,   Position  = require('../models/position_and_direction').Position
+,   WorldBase = require('../views/world_base')
 
-module.exports = require('views/world_base').extend({
+module.exports = WorldBase.extend({
 
   initialize: function() {
-    _(this).bindAll('render', 'delayRender', 'delegateEvents')
+    _(this).bindAll('render', 'delayRender')
     
     this.model.bind('change', this.delayRender)
     
-    this
-      .bind('dom:insert', this.delegateEvents)
-      .bind('dom:insert', this.render)
+    this.bind('dom:insert', this.render)
     
     this.createTable()
   },
@@ -99,10 +97,8 @@ module.exports = require('views/world_base').extend({
     })()
     
     el.css('display', '')
+    
+    return this
   }
 
-}, {
-  path: 'views/world_2d'
 })
-
-})()

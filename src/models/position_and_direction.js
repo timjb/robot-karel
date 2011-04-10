@@ -1,5 +1,3 @@
-(function() {
-
 function Position(x, y) {
   this.x = x
   this.y = y
@@ -55,9 +53,6 @@ Position.prototype.equals = Direction.prototype.equals = function(another) {
 }
 
 module.exports = {
-  path: 'models/position_and_direction',
   Position:  Position,
   Direction: Direction
 }
-
-})()

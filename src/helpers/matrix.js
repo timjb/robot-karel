@@ -1,5 +1,3 @@
-(function() {
-
 function matrix(x, y, fn) {
   var result = []
   for (var i = 0; i < x; i++) {
@@ -12,7 +10,4 @@ function matrix(x, y, fn) {
   return result
 }
 
-matrix.path = 'helpers/matrix'
 module.exports = matrix
-
-})()

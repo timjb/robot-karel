@@ -1,5 +1,3 @@
-(function() {
-
 //this.initBeepSound() // Because Chrome can't replay
 if (this.window && window.Audio) {
   var sound = new Audio()
@@ -13,7 +11,4 @@ if (this.window && window.Audio) {
   var beep = function() {}
 }
 
-beep.path = 'helpers/beep'
 module.exports = beep
-
-})()

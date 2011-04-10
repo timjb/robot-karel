@@ -1,12 +1,12 @@
-(function() {
 var _             = require('underscore')
-,   clone         = require('helpers/clone')
-,   getLineNumber = require('helpers/get_line_number')
-,   matrix        = require('helpers/matrix')
-,   settings      = require('settings')
-,   sandbox       = require('helpers/sandbox')
-,   Position      = require('models/position_and_direction').Position
-,   Robot         = require('models/robot')
+,   Backbone      = require('backbone')
+,   clone         = require('../helpers/clone')
+,   getLineNumber = require('../helpers/get_line_number')
+,   matrix        = require('../helpers/matrix')
+,   settings      = require('../settings')
+,   sandbox       = require('../helpers/sandbox')
+,   Position      = require('../models/position_and_direction').Position
+,   Robot         = require('../models/robot')
 
 
 function Field() {
@@ -24,7 +24,7 @@ Field.prototype.clone = function() {
 }
 
 
-module.exports = require('backbone').Model.extend({
+module.exports = Backbone.Model.extend({
 
   initialize: function(opts) {
     if (!this.get('fields')) {
@@ -293,7 +293,6 @@ module.exports = require('backbone').Model.extend({
   fromString: function(str) {
     // Parse .kdw files
     
-    console.log('a')
     var tokens = str.split(/\s/)
     var shift = _(tokens.shift).bind(tokens)
     var _int = function() { return parseInt(shift(), 10) }
@@ -332,5 +331,3 @@ module.exports = require('backbone').Model.extend({
   }
 
 })
-
-})()

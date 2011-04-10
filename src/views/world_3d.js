@@ -1,14 +1,13 @@
-(function() {
-var _        = require('underscore')
-,   settings = require('settings')
-,   matrix   = require('helpers/matrix')
-,   three    = require('three')
+var _         = require('underscore')
+,   settings  = require('../settings')
+,   matrix    = require('../helpers/matrix')
+,   WorldBase = require('../views/world_base')
 
-module.exports = require('views/world_base').extend(typeof document.createElement('canvas').getContext != 'function' ? {} : {
+module.exports = WorldBase.extend(typeof document.createElement('canvas').getContext != 'function' ? {} : {
 
   initialize: function() {
     _(this).bindAll(
-      'updateRobot', 'updateField', 'updateAllFields', 'delegateEvents',
+      'updateRobot', 'updateField', 'updateAllFields',
       'resize', 'render', 'delayRender'
     )
     
@@ -19,14 +18,12 @@ module.exports = require('views/world_base').extend(typeof document.createElemen
       .bind('change:all', this.updateRobot)
       .bind('change', this.delayRender)
     
-    this
-      .bind('dom:insert', this.resize)
-      .bind('dom:insert', this.delegateEvents)
+    this.bind('dom:insert', this.resize)
     
     this.createFields()
-    this.renderer = new three.CanvasRenderer()
+    this.renderer = new THREE.CanvasRenderer()
     this.el = $(this.renderer.domElement)
-    this.scene = new three.Scene()
+    this.scene = new THREE.Scene()
     this.degrees = 45
     this.cameraZ = 120
     this.radius = 400
@@ -100,17 +97,17 @@ module.exports = require('views/world_base').extend(typeof document.createElemen
     ,   d = model.get('depth')
     ,   h = this.WALL_HEIGHT
     
-    var material = new three.MeshBasicMaterial({ color: 0x5555cc, wireframe: true })
+    var material = new THREE.MeshBasicMaterial({ color: 0x5555cc, wireframe: true })
     var GW = this.GW
     ,   GH = this.GH
     
     // Ground
-    var plane = new three.Mesh(new Plane(w*GW, d*GW, w, d), material)
+    var plane = new THREE.Mesh(new Plane(w*GW, d*GW, w, d), material)
     plane.doubleSided = true
     this.scene.addObject(plane)
     
     // Back
-    var plane = new three.Mesh(new Plane(w*GW, h*GH, w, h), material)
+    var plane = new THREE.Mesh(new Plane(w*GW, h*GH, w, h), material)
     plane.position.y = (d/2)*GW
     plane.position.z = (h/2)*GH
     plane.rotation.x = Math.PI/2
@@ -118,7 +115,7 @@ module.exports = require('views/world_base').extend(typeof document.createElemen
     this.scene.addObject(plane)
     
     // Left Side
-    var plane = new three.Mesh(new Plane(h*GH, d*GW, h, d), material)
+    var plane = new THREE.Mesh(new Plane(h*GH, d*GW, h, d), material)
     plane.position.x = -(w/2)*GW
     plane.position.z = (h/2)*GH
     plane.rotation.y = Math.PI/2
@@ -127,10 +124,10 @@ module.exports = require('views/world_base').extend(typeof document.createElemen
   },
 
   createLights: function() {
-    var l = new three.AmbientLight(0x888888)
+    var l = new THREE.AmbientLight(0x888888)
     this.scene.addLight(l)
     
-    var l = this.light = new three.DirectionalLight(0xaaaaaa)
+    var l = this.light = new THREE.DirectionalLight(0xaaaaaa)
     this.scene.addLight(l)
   },
 
@@ -164,9 +161,9 @@ module.exports = require('views/world_base').extend(typeof document.createElemen
     
     while (field.bricks > fieldObj.bricks.length) {
       var z = fieldObj.bricks.length
-      var cube = new three.Mesh(
-        new Cube(GW, GW, GH, 1, 1, new three.MeshLambertMaterial({ color: settings.COLORS.BRICK, shading: three.FlatShading })),
-        new three.MeshFaceMaterial()
+      var cube = new THREE.Mesh(
+        new Cube(GW, GW, GH, 1, 1, new THREE.MeshLambertMaterial({ color: settings.COLORS.BRICK, shading: THREE.FlatShading })),
+        new THREE.MeshFaceMaterial()
       )
       cube.position.x = GW/2 + x0 + x*GW
       cube.position.y = -GW/2 + y0 - y*GW
@@ -184,9 +181,9 @@ module.exports = require('views/world_base').extend(typeof document.createElemen
     }
     
     if (field.marker && !fieldObj.marker) {
-      var marker = new three.Mesh(
+      var marker = new THREE.Mesh(
         new Plane(GW, GW, 1, 1),
-        new three.MeshBasicMaterial({ color: settings.COLORS.MARKER })
+        new THREE.MeshBasicMaterial({ color: settings.COLORS.MARKER })
       )
       marker.position.x = GW/2 + x0 + x*GW
       marker.position.y = -GW/2 + y0 - y*GW
@@ -196,7 +193,7 @@ module.exports = require('views/world_base').extend(typeof document.createElemen
     }
     
     if (field.block && !fieldObj.block) {
-      var cube = new three.Mesh(new Cube(GW, GW, 2*GH, 1, 1), new three.MeshLambertMaterial({ color: settings.COLORS.BLOCK, shading: three.FlatShading }))
+      var cube = new THREE.Mesh(new Cube(GW, GW, 2*GH, 1, 1), new THREE.MeshLambertMaterial({ color: settings.COLORS.BLOCK, shading: THREE.FlatShading }))
       cube.position.x = GW/2 + x0 + x*GW
       cube.position.y = -GW/2 + y0 - y*GW
       cube.position.z = GH
@@ -228,11 +225,12 @@ module.exports = require('views/world_base').extend(typeof document.createElemen
   render: function() {
     console.log('Render 3D')
     this.renderer.render(this.scene, this.camera)
+    return this
   },
 
   createCamera: function(width, height) {
-    this.camera = new three.Camera(75, width/height, 1, 1e5)
-    this.camera.up = new three.Vector3(0, 0, 1)
+    this.camera = new THREE.Camera(75, width/height, 1, 1e5)
+    this.camera.up = new THREE.Vector3(0, 0, 1)
     this.updateCameraPosition()
   },
 
@@ -249,8 +247,4 @@ module.exports = require('views/world_base').extend(typeof document.createElemen
     p2.normalize()
   }
 
-}, {
-  path: 'views/world_3d'
 })
-
-})()

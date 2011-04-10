@@ -1,4 +1,7 @@
-module.exports = require('backbone').View.extend({
+var _        = require('underscore')
+,   Backbone = require('backbone')
+
+module.exports = Backbone.View.extend({
 
   className: 'split-view',
 
@@ -66,8 +69,8 @@ module.exports = require('backbone').View.extend({
     
     this.left.render()
     this.right.render()
+    
+    return this
   }
 
-}, {
-  path: 'views/split'
 })

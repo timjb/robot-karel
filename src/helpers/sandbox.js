@@ -1,5 +1,3 @@
-(function() {
-
 var _ = require('underscore')
 
 var run
@@ -17,9 +15,4 @@ if (typeof document == 'object') { // assume we're in the browser
   run = require('vm').runInNewContext
 }
 
-module.exports = {
-  run: run,
-  path: 'helpers/sandbox'
-}
-
-})()
+exports.run = run

@@ -1,9 +1,9 @@
-(function() {
 var _         = require('underscore')
-,   settings  = require('settings')
-,   beep      = require('helpers/beep')
-,   Position  = require('models/position_and_direction').Position
-,   Direction = require('models/position_and_direction').Direction
+,   Backbone  = require('backbone')
+,   settings  = require('../settings')
+,   beep      = require('../helpers/beep')
+,   Position  = require('../models/position_and_direction').Position
+,   Direction = require('../models/position_and_direction').Direction
 
 
 function error(key) {
@@ -15,7 +15,7 @@ function errorFunction(msg) {
 }
 
 
-var Robot = require('backbone').Model.extend({
+var Robot = Backbone.Model.extend({
 
   /*
    * Internals
@@ -196,8 +196,6 @@ var Robot = require('backbone').Model.extend({
     return this
   },
 
-}, {
-  path: 'models/robot'
 })
 
 var translate = function(dict) {
@@ -206,10 +204,11 @@ var translate = function(dict) {
       Robot.prototype[dict[word]] = Robot.prototype[word]
     }
   }
+  return dict
 }
 
 // German
-translate({
+var GERMAN_TRANSLATION = translate({
   attempt:       'probiere',
   move:          'schritt',
   moveBackwards: 'schrittRueckwaerts',
@@ -232,6 +231,11 @@ translate({
   removeBlock:   'quaderEntfernen'
 })
 
-module.exports = Robot
+// Export German commands for compiling .kdp files
+Robot.BUILT_IN_CMDS = Object.keys(GERMAN_TRANSLATION)
+  .map(function(key) {
+    return GERMAN_TRANSLATION[key]
+  })
+  .concat(['schnell', 'langsam', 'istLeer', 'istVoll']) // TODO: implement these commands
 
-})()
+module.exports = Robot

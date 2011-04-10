@@ -1,5 +1,4 @@
 module.exports = {
-  path: 'settings',
   HIGHLIGHT_LINE: false,
   MAX_JUMP_HEIGHT: 1,
   COLORS: {

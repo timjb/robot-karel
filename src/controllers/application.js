@@ -1,22 +1,33 @@
-(function() {
-var _ = require('underscore')
+var _        = require('underscore')
+,   Backbone = require('backbone')
 
-module.exports = require('backbone').Controller.extend({
+var MainToolbar  = require('../views/main_toolbar')
+,   WorldToolbar = require('../views/world_toolbar')
+,   Editor       = require('../views/editor')
+,   World2D      = require('../views/world_2d')
+,   World3D      = require('../views/world_3d')
+,   Toggle       = require('../views/toggle')
+,   Split        = require('../views/split')
+
+var World = require('../models/world')
+
+
+module.exports = Backbone.Controller.extend({
 
   initialize: function() {
-    this.mainToolbar = new (require('views/main_toolbar'))({ el: $('#main-toolbar') })
+    this.mainToolbar = new MainToolbar({ el: $('#main-toolbar') })
     this.mainToolbar.bind('change:view', _.bind(function(x) {
       this.toggle.show(['2D', '3D'].indexOf(x))
     }, this))
     this.mainToolbar.bind('run', _.bind(this.run, this))
     
-    this.editor = new (require('views/editor'))()
-    this.world  = new (require('models/world'))(this.mainToolbar.getNewDimensions())
+    this.editor = new Editor()
+    this.world  = new World(this.mainToolbar.getNewDimensions())
     
     this.initWorld()
     
     this.mainToolbar.model = this.world
-    this.worldToolbar = new (require('views/world_toolbar'))({
+    this.worldToolbar = new WorldToolbar({
       el: $('#world-toolbar'),
       model: this.world
     })
@@ -26,11 +37,11 @@ module.exports = require('backbone').Controller.extend({
     this.world.bind('line', _.bind(this.editor.gotoLine, this.editor))
     
     $('#world').html('') // clear
-    this.world2D = new (require('views/world_2d'))({ model: this.world })
-    this.world3D = new (require('views/world_3d'))({ model: this.world })
+    this.world2D = new World2D({ model: this.world })
+    this.world3D = new World3D({ model: this.world })
     
     var onDropWorld = _.bind(function(textData) {
-      this.world = require('models/world').fromString(textData)
+      this.world = World.fromString(textData)
       this.initWorld()
       this.world.trigger('change:all')
       this.world.trigger('change', 'all')
@@ -39,11 +50,11 @@ module.exports = require('backbone').Controller.extend({
     this.world2D.bind('drop-world', onDropWorld)
     this.world3D.bind('drop-world', onDropWorld)
     
-    this.toggle = new (require('views/toggle'))({
+    this.toggle = new Toggle({
       subviews: [this.world2D, this.world3D]
     })
     if (this.split) this.split.el.html('')
-    this.split = new (require('views/split'))({
+    this.split = new Split({
       el: $('#split-view'),
       left: this.editor,
       right: this.toggle,
@@ -89,8 +100,4 @@ module.exports = require('backbone').Controller.extend({
     this.world.run(this.editor.getValue())
   }
 
-}, {
-  path: 'controllers/application'
 })
-
-})()

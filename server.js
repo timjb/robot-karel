@@ -1,11 +1,17 @@
 #!/usr/bin/env node
 
-var express = require('express')
+var express    = require('express')
+,   browserify = require('browserify')
 
 var app = express.createServer()
 
 app.configure(function() {
   app.use(express.static(__dirname))
+  app.use(browserify({
+    base:  __dirname + '/src',
+    mount: '/browserify.js',
+    require: ['underscore', 'backbone']
+  }))
 })
 
 app.configure('production', function() {
@@ -13,3 +19,5 @@ app.configure('production', function() {
 })
 
 app.listen(8000)
+
+console.log("Started Server on http://localhost:8000/")

@@ -1,22 +1,22 @@
-(function() {
 var _ = require('underscore')
+,   Backbone = require('backbone')
 
-module.exports = require('backbone').View.extend({
+module.exports = Backbone.View.extend({
 
   className: 'editor',
 
-  render: function() {
+  initialize: function() {
     $(this.el).css({ position: 'relative' })
     var el = $('<div />')
       .css({ position: 'absolute', left: 0, right: 0, top: 0, bottom: 0 })
       .appendTo(this.el)
     
-    try {
+    //try {
     
     var e = this.editor  = ace.edit(el.get(0))
     var s = this.session = e.getSession()
     
-    s.setMode(new (require('ace/mode/javascript').Mode))
+    //s.setMode(new (require('ace/mode/javascript').Mode))
     s.setTabSize(2)
     s.setUseSoftTabs(true)
     e.setShowPrintMargin(false)
@@ -35,9 +35,9 @@ module.exports = require('backbone').View.extend({
       if (focused) evt.stopPropagation()
     })
     
-    } catch(exc) {
-      // this happens when testing with zombie.js
-    }
+    //} catch(exc) {
+    //  // this happens when testing with zombie.js
+    //}
   },
 
   resize: function() {
@@ -55,8 +55,4 @@ module.exports = require('backbone').View.extend({
   gotoLine: function(n) {
     this.editor.gotoLine(n)
   }
-}, {
-  path: 'views/editor'
 })
-
-})()

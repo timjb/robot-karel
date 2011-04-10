@@ -10,11 +10,13 @@
     "underscore": ">=1.1.4",
     "backbone":   ">=0.3.3",
     "cli":        ">=0.2.7",
+    "browserify": ">=0.3.1",
     "colors":     ">=0.3.0"
   },
   "devDependencies": {
     "zombie": ">=0.9.4",
-    "canvas": ">=0.4.3"
+    "canvas": ">=0.4.3",
+    "jison":  ">=0.2.1"
   },
   "scripts": {
     "start": "node server.js",
