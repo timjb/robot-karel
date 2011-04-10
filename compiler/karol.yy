@@ -8,8 +8,13 @@ root
   ;
 
 block
-  : statement optSemicolon { $$ = (new yy.Block()).addStatement($1); }
+  : { $$ = new yy.Block(); }
   | block statement optSemicolon { $$ = $1.addStatement($2); }
+  ;
+
+forceBlock
+  : statement optSemicolon { $$ = (new yy.Block()).addStatement($1); }
+  | forceBlock statement optSemicolon { $$ = $1.addStatement($2); }
   ;
 
 identifier
@@ -107,5 +112,5 @@ whileTrue
   ;
 
 doWhile
-  : WIEDERHOLE block STAR WIEDERHOLE SOLANGE condition { $$ = new yy.DoWhile($6, $2); }
+  : WIEDERHOLE forceBlock STAR WIEDERHOLE SOLANGE condition { $$ = new yy.DoWhile($6, $2); }
   ;
