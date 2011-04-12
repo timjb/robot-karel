@@ -1,0 +1,21 @@
+<script src=deps/jquery.js></script>
+
+<script src=deps/ace/build/src/ace-uncompressed.js></script>
+<script src=deps/ace/build/src/mode-javascript.js></script>
+
+<script>
+// Save the require function that ACE includes
+var requireJSRequire = window.require
+</script>
+<script src=browserify.js></script>
+<script>
+// Hack: Browserify stores it's modules in the `module` property of it's global
+// `require` function. But ACE also needs to have it's `require` function
+// global. Thus I store the modules in ACE's function and make it global.
+requireJSRequire.modules = _browserifyRequire.modules
+window.require = requireJSRequire
+</script>
+
+<script src=deps/three.js/build/Three.js></script>
+<script src=deps/three.js/src/extras/geometries/Cube.js></script>
+<script src=deps/three.js/src/extras/geometries/Plane.js></script>

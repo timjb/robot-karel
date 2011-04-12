@@ -1,13 +1,3 @@
-<!DOCTYPE html>
-<html>
-
-<head>
-<meta charset=utf-8>
-<title>Karel.js</title>
-<meta name=author content="Tim Baumann">
-<link rel=stylesheet href=assets/style.css>
-
-<body>
 <div class=toolbar id=main-toolbar>
   <h1>Karel.js</h1>
   <div id=tools>
@@ -36,28 +26,6 @@
   <input type=button data-method=putBlock     value="Q"      title="Quader hinstellen">
   <input type=button data-method=removeBlock  value="E"      title="Quader entfernen">
 </div>
-
-<script src=deps/ace/build/src/ace-uncompressed.js></script>
-<script src=deps/ace/build/src/mode-javascript.js></script>
-
-<script>
-// Save the require function that ACE includes
-var requireJSRequire = window.require
-</script>
-<script src=browserify.js></script>
-<script>
-// Hack: Browserify stores it's modules in the `module` property of it's global
-// `require` function. But ACE also needs to have it's `require` function
-// global. Thus I store the modules in ACE's function and make it global.
-requireJSRequire.modules = _browserifyRequire.modules
-window.require = requireJSRequire
-</script>
-
-<script src=deps/three.js/build/Three.js></script>
-<script src=deps/three.js/src/extras/geometries/Cube.js></script>
-<script src=deps/three.js/src/extras/geometries/Plane.js></script>
-
-<script src=deps/jquery.js></script>
 
 <script>
 (function() {
