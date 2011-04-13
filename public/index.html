@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset=utf-8>
+<title>Karel.js</title>
+<meta name=author content="Tim Baumann">
+<link rel=stylesheet href=style.css>
+
+<body>
+<div class=toolbar id=main-toolbar>
+  <h1>Karel.js</h1>
+  <div id=tools>
+    <input type=button class=left id=run-button value=Run>
+    <input type=button class=left id=replay-button value=Replay>
+    <input type=button class=left id=reset-button value=Reset>
+    <label class="left radio"><input type=radio name=view-select id=view-select-3d value=3D checked="checked"> <span>3D<span></label>
+    <label class="left radio"><input type=radio name=view-select id=view-select-2d value=2D> <span>2D<span></label>
+    <input type=button class=right id=new-button value="New World">
+    <div id=new-pane>
+      <label><span>Width</span> <input id=width type=number value=11></label>
+      <label><span>Depth</span> <input id=depth type=number value=9></label>
+      <input type=button id=new-cancel-button value=Cancel>
+      <input type=button id=new-apply-button value=Apply>
+    </div>
+  </div>
+</div>
+<div id="split-view" class="split-view"></div>
+<div class=toolbar id=world-toolbar>
+  <input type=button data-method=turnLeft     value="&larr;" title="Links drehen">
+  <input type=button data-method=move         value="&uarr;" title="Schritt">
+  <input type=button data-method=turnRight    value="&rarr;" title="Rechts drehen">
+  <input type=button data-method=putBrick     value="H"      title="Hinlegen">
+  <input type=button data-method=removeBrick  value="A"      title="Aufheben">
+  <input type=button data-method=toggleMarker value="M"      title="Marke setzen bzw. löschen">
+  <input type=button data-method=putBlock     value="Q"      title="Quader hinstellen">
+  <input type=button data-method=removeBlock  value="E"      title="Quader entfernen">
+</div>
+
+<script src=vendor/jquery.js></script>
+
+<script src=vendor/ace.js></script>
+<script src=vendor/mode-javascript.js></script>
+
+<script>
+// Save the require function that ACE includes
+var requireJSRequire = window.require
+</script>
+<script src=bundle.js></script>
+<script>
+// Hack: Browserify stores it's modules in the `module` property of it's global
+// `require` function. But ACE also needs to have it's `require` function
+// global. Thus I store the modules in ACE's function and make it global.
+requireJSRequire.modules = _browserifyRequire.modules
+window.require = requireJSRequire
+</script>
+
+<script src=vendor/ThreeCanvas.js></script>
+<script src=vendor/ThreeExtras.js></script><!-- Cube and Plane -->
+
+<script>
+(function() {
+  var require = _browserifyRequire;
+  
+  var Backbone = require('backbone')
+  ,   ApplicationController = require('./controllers/application')
+  
+  require('./extend_backbone')
+  
+  $(window).load(function() {
+    new ApplicationController()
+    
+    Backbone.history.start()
+    if (location.hash == '') {
+      location.hash = 'examples/conways_game_of_life'
+    }
+  })
+})()
+</script>
