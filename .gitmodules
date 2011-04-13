@@ -1,6 +1,0 @@
-[submodule "deps/ace"]
-	path = deps/ace
-	url = https://github.com/ajaxorg/ace.git
-[submodule "deps/three.js"]
-	path = deps/three.js
-	url = https://github.com/mrdoob/three.js.git
