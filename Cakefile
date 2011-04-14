@@ -30,11 +30,11 @@ task 'server', ->
 COUCHAPP_URL = 'http://localhost:5984/karel'
 
 task 'push', 'Push the couchapp to the server', ->
-  couchapp = spawn 'couchapp', ['push', 'couchapp.js', COUCHAPP_URL]
+  couchapp = spawn 'couchapp', ['push', 'couchapp/app.js', COUCHAPP_URL]
   connectStd couchapp
 
 task 'sync', 'Push and watch local files for changes', ->
-  couchapp = spawn 'couchapp', ['sync', 'couchapp.js', COUCHAPP_URL]
+  couchapp = spawn 'couchapp', ['sync', 'couchapp/app.js', COUCHAPP_URL]
   connectStd couchapp
 
 

@@ -1,139 +1,21 @@
-/* Author: Tim Baumann
-   Project: karel.js */
-
-/* Reset */
 * { margin: 0; padding: 0; }
 
-.left { float: left; }
-.right { float: right; }
-
-html, body { height: 100%; }
-
 body {
-  font: 15px Helvetica, Arial, sans-serif;
+  font: 14px Ubuntu, Helvetica, Arial, sans-serif;
+  background: #eee;
 }
 
-.toolbar {
-  position: absolute;
-  line-height: 40px;
-  background: #d55b00; color: #fff;
-}
-#main-toolbar {
-  left: 0; top: 0; right: 0;
-}
-h1 {
-  font-size: 22px;
-  padding: 0 10px;
-  text-shadow: 0 1px 0 #000; -moz-text-shadow: 0 1px 0 #000; -webkit-text-shadow: 0 1px 0 #000;
-}
-#tools {
-  position: absolute;
-  right: 0; top: 0; bottom: 0;
-  box-sizing: border-box; -webkit-box-sizing: border-box; -moz-box-sizing: border-box;
-  padding: 0 5px;
-  width: 55%;
-}
-label input[type=radio] + span {
-  display: inline-block;
-  cursor: pointer;
-}
-input[type=button], label input[type=radio] + span {
-  background: #d55b00; color: #fff; border: none;
-  text-shadow: 0 1px 0 #000; -moz-text-shadow: 0 1px 0 #000; -webkit-text-shadow: 0 1px 0 #000;
-  -webkit-box-shadow: 0 0 5px #a24500; -moz-box-shadow: 0 0 5px #a24500; box-shadow: 0 0 5px #a24500;
-  font-size: 12px; line-height: 24px; font-weight: bold;
-  padding: 0 10px;
-  margin: 8px 5px;
-}
-input[type=button]:hover {
-  -webkit-box-shadow: 0 0 5px #8d3c00; -moz-box-shadow: 0 0 5px #8d3c00; box-shadow: 0 0 5px #8d3c00;
-  cursor: pointer;
-}
-input[type=button]:active, label input[type=radio]:checked + span {
-  background: #a24500;
-}
-input[type=number] {
-  width: 50px;
-}
-label input[type=radio] { display: none; }
-#new-pane {
-  display: none;
-  position: absolute; top: 40px; right: 0;
-  width: 140px;
-  padding: 10px;
-  z-index: 1338;
-  background: #ccc; color: #333;
-  box-shadow: 0 0 5px #aaa;
-  -webkit-box-shadow: 0 0 10px #333;
-}
-#new-pane label {
-  display: block;
-  font-size: 11px; font-weight: bold;
-  line-height: 32px;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-}
-#new-pane label span {
-  display: inline-block;
-  text-align: right;
-  width: 70px;
-}
-#new-pane.visible {
-  display: block;
-}
-#world-toolbar {
-  left: 45%; bottom: 0; right: 0;
-  height: 40px;
-  text-align: center;
-}
-
-#split-view {
-  position: absolute;
-  left: 0; top: 40px; bottom: 40px; right: 0;
-}
-.split-view {
-  display: -webkit-box; display: -moz-box; display: box;
-  box-orient: horizontal; -webkit-box-orient: horizontal; -moz-box-orient: horizontal;
-}
-.split-view > * {
-  display: block;
-  height: 100%;
-}
-.split-view .separator {
-  width: 2px;
-  cursor: col-resize;
-  /*background: -webkit-gradient(linear, left top, right top, color-stop(0, #f7f7f7), color-stop(1, #e0e0e0));*/
-  background: #d55b00;
-}
-
-#editor {
-}
-#world {
-  /*
-  display: -webkit-box; display: -moz-box; display: box;
-  -webkit-box-pack: center; -moz-box-pack: center; box-pack: center;
-  -webkit-box-align: center; -moz-box-align: center; box-align: center;
-  */
-}
-
-.world-2d {
-  border-spacing: 0;
-  border-collapse: collapse;
-}
-.world-2d td {
-  border: 1px solid #000;
-  width: 40px; height: 40px; line-height: 40px;
-  font-size: 24px;
-  text-align: center;
-}
-.world-2d td.marker, .world-2d td.marker.ziegel  { background: #cc5; color: #000; }
-.world-2d td.block { background: #666; color: #fff; }
-.world-2d td.brick { background: #f00; color: #fff; }
-
-.export {
+#wrapper {
   background: #fff;
-  z-index: 9999;
-  position: absolute; left: 0; right: 0; top: 0; bottom: 0;
+  width: 800px;
+  margin: 20px auto;
   padding: 20px;
-  font: 16px monospace;
+          box-shadow: 0 0 20px #ddd;
+     -moz-box-shadow: 0 0 20px #ddd;
+  -webkit-box-shadow: 0 0 20px #ddd;
+}
+
+h1 {
+  font-size: 36px;
+  margin: 0 0 20px;
 }
