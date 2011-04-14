@@ -12,7 +12,7 @@ task 'build:parser', ->
 task 'build', ->
   bundled = bundle
     base:    __dirname + '/lib',
-    require: ['underscore', 'backbone']
+    require: ['underscore']
   fs.writeFileSync 'public/bundle.js', bundled, 'utf-8'
 
 

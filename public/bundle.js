@@ -3455,7 +3455,8 @@ var MainToolbar  = require('../views/main_toolbar')
 ,   Toggle       = require('../views/toggle')
 ,   Split        = require('../views/split')
 
-var World = require('../models/world')
+var World   = require('../models/world')
+,   Project = require('../models/project')
 
 
 module.exports = Backbone.Controller.extend({
@@ -3465,7 +3466,8 @@ module.exports = Backbone.Controller.extend({
     this.mainToolbar.bind('change:view', _.bind(function(x) {
       this.toggle.show(['2D', '3D'].indexOf(x))
     }, this))
-    this.mainToolbar.bind('run', _.bind(this.run, this))
+    this.mainToolbar.bind('run',  _.bind(this.run, this))
+    this.mainToolbar.bind('save', _.bind(this.save, this))
     
     this.editor = new Editor()
     this.world  = new World(this.mainToolbar.getNewDimensions())
@@ -3544,6 +3546,15 @@ module.exports = Backbone.Controller.extend({
 
   run: function() {
     this.world.run(this.editor.getValue())
+  },
+
+  save: function() {
+    var project = new Project()
+    project.set({
+      world: this.world.toString(),
+      code:  this.editor.getValue()
+    })
+    project.save()
   }
 
 })
@@ -3886,6 +3897,30 @@ module.exports = Robot
     }).call(module.exports);
     
     _browserifyRequire.modules["./models/robot"]._cached = module.exports;
+    return module.exports;
+};
+
+_browserifyRequire.modules["./models/project"] = function () {
+    var module = { exports : {} };
+    var exports = module.exports;
+    var __dirname = ".";
+    var __filename = "./project.js";
+    
+    var require = function (path) {
+        return _browserifyRequire.fromFile("./models/project", path);
+    };
+    
+    (function () {
+        var _         = require('underscore')
+,   Backbone  = require('backbone')
+
+module.exports = Backbone.Model.extend({
+  url: '/projects'
+})
+;
+    }).call(module.exports);
+    
+    _browserifyRequire.modules["./models/project"]._cached = module.exports;
     return module.exports;
 };
 
@@ -4603,9 +4638,10 @@ _browserifyRequire.modules["./views/main_toolbar"] = function () {
 module.exports = Backbone.View.extend({
 
   events: {
-    'click #run-button': 'run',
+    'click #run-button':    'run',
     'click #replay-button': 'replay',
-    'click #reset-button': 'reset',
+    'click #reset-button':  'reset',
+    'click #save-button':   'save',
     'click input[name=view-select]': 'clickChangeView',
     'change input[name=view-select]': 'changeView',
     
@@ -4623,6 +4659,10 @@ module.exports = Backbone.View.extend({
 
   reset: function() {
     this.model.reset()
+  },
+
+  save: function() {
+    this.trigger('save')
   },
 
   // mainly for testing with zombie.js
