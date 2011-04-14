@@ -3,6 +3,8 @@
 !!!!!!!!!!!
 
 
+* Directory for projects
+* Move away from module loading in the browser since it creates too much hassle
 * Commands:
   * "schnell" and "langsam"
   * "require" other scripts
