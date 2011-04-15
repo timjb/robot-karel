@@ -94,23 +94,55 @@ ddoc.shows.static = function(doc) {
 }
 
 
+// User View
+// ---------
+
+route(':user', '_list/user/projectsByAuthorAndTitle', { startkey: [':user'] })
+
+ddoc.lists.user = function() {
+  var mustache = require('mustache')
+  
+  var self = this
+  provides('html', function() {
+    
+    var rows = []
+    ,   row  = null
+    while (row = getRow()) rows.push(row.value)
+    
+    if (!rows.length) {
+      return mustache.to_html(self.templates.layout, self['404'])
+    }
+    
+    var userName = rows[0].author
+    
+    return mustache.to_html(self.templates.layout, {
+      title: userName,
+      body: mustache.to_html(self.templates.user, {
+        userName: userName,
+        projects: rows
+      })
+    })
+  })
+}
+
+
 // Project View
 // ------------
 
-ddoc.rewrites.push({
-  from:  ':author/:title',
-  to:    '_list/project/projectsByAuthorAndTitle',
-  query: { key: [':author', ':title'] }
-})
+route(
+  ':author/:title',
+  '_list/project/projectsByAuthorAndTitle',
+  { key: [':author', ':title'] }
+)
 
 ddoc.lists.project = function(doc) {
-  var self = this;
+  var mustache = require('mustache')
+  var self = this
   provides('html', function() {
     var row = getRow()
-    if (!row) return
+    if (!row) return mustache.to_html(self.templates.layout, self['404'])
     var doc = row.value
     
-    var mustache = require('mustache')
     return mustache.to_html(self.templates.layout, {
       title: doc.author+"/"+doc.title,
       body:  mustache.to_html(self.templates.project, doc)
@@ -122,4 +154,17 @@ ddoc.lists.project = function(doc) {
 // 404
 // ---
 
-// TODO
+route('*', '_show/404')
+
+ddoc.shows['404'] = function() {
+  var self = this
+  provides('html', function() {
+    var mustache = require('mustache')
+    return mustache.to_html(self.templates.layout, self['404'])
+  })
+}
+
+ddoc['404'] = {
+  title: "404",
+  body:  "Not found :-("
+}

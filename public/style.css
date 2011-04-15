@@ -19,3 +19,6 @@ h1 {
   font-size: 36px;
   margin: 0 0 20px;
 }
+
+a { text-decoration: underline; }
+a:hover { text-decoration: none; }
