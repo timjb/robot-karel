@@ -2,15 +2,33 @@ var fs       = require('fs')
 ,   path     = require('path')
 ,   couchapp = require('couchapp')
 
+
+// Design Document Skeleton
+// ------------------------
+
 var ddoc = module.exports = {
   _id: '_design/app',
   views: {},
   lists: {},
   shows: {},
+  rewrites: [],
   templates: {}
 }
 
+// A short DSL for creating rewrite rules
+function route(from, to, query) {
+  ddoc.rewrites.push({ from: from, to: to, query: query })
+}
 
+// Pretend that this is a CouchDB without vhosts settings and URL rewriting.
+// This is important for accessing documents with janmonschke/backbone-couchdb.
+route('karel/*', '../../*')
+
+
+// Views
+// -----
+
+// This view is required by janmonschke/backbone-couchdb
 ddoc.views.byCollection = {
   map: function (doc) {
     if (doc.collection) emit(doc.collection, doc)
@@ -26,25 +44,45 @@ ddoc.views.projectsByAuthorAndTitle = {
 }
 
 
-ddoc.rewrites = [
-  { from: '/',          to: '_show/static/home' },
-  { from: 'ide',        to: 'ide.html' },
-//  { from: 'examples/*', to: 'examples/*' },
-  { from: 'vendor/*',   to: 'vendor/*' },
-  { from: 'karel/*',    to: '../../*' }
-]
+// Templates and CommonJS
+// ----------------------
+
+function addDirectorySync(dirpath, obj) {
+  fs.readdirSync(dirpath).forEach(function (filename) {
+    var filepath = dirpath + '/' + filename
+    ,   fileext  = path.extname(filepath)
+    ,   filebasename = path.basename(filepath, fileext)
+    obj[filebasename] = fs.readFileSync(filepath, 'utf-8')
+  })
+}
+
+addDirectorySync(__dirname + '/commonjs',  ddoc)
+addDirectorySync(__dirname + '/templates', ddoc.templates)
+
+
+// Attachments
+// -----------
+
+route('vendor/*', 'vendor/*')
 
 fs.readdirSync(path.join(__dirname, '../public')).forEach(function (filename) {
-  ddoc.rewrites.push({ from: filename, to: filename })
+  route(filename, filename)
 })
 
-ddoc.rewrites.push({ from: ':page', to: '_show/static/:page' })
-ddoc.rewrites.push({
-  from:  ':author/:title',
-  to:    '_list/project/projectsByAuthorAndTitle',
-  query: { key: [':author', ':title'] }
-})
+couchapp.loadAttachments(ddoc, path.join(__dirname, '../public'))
 
+
+// IDE
+// ---
+
+route('ide', 'ide.html')
+
+
+// Static Pages
+// ------------
+
+route('/',       '_show/static/home') // Home page
+route('p/:page', '_show/static/:page')
 
 ddoc.shows.static = function(doc) {
   var mustache = require('mustache')
@@ -54,6 +92,16 @@ ddoc.shows.static = function(doc) {
     body:  mustache.to_html(this.templates.static, doc)
   })
 }
+
+
+// Project View
+// ------------
+
+ddoc.rewrites.push({
+  from:  ':author/:title',
+  to:    '_list/project/projectsByAuthorAndTitle',
+  query: { key: [':author', ':title'] }
+})
 
 ddoc.lists.project = function(doc) {
   var self = this;
@@ -71,17 +119,7 @@ ddoc.lists.project = function(doc) {
 }
 
 
-function addDirectorySync(dirpath, obj) {
-  fs.readdirSync(dirpath).forEach(function (filename) {
-    var filepath = dirpath + '/' + filename
-    ,   fileext  = path.extname(filepath)
-    ,   filebasename = path.basename(filepath, fileext)
-    obj[filebasename] = fs.readFileSync(filepath, 'utf-8')
-  })
-}
+// 404
+// ---
 
-addDirectorySync(__dirname + '/commonjs',  ddoc)
-addDirectorySync(__dirname + '/templates', ddoc.templates)
-
-
-couchapp.loadAttachments(ddoc, path.join(__dirname, '../public'))
+// TODO
