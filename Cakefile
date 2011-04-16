@@ -27,7 +27,7 @@ task 'server', ->
 #COUCHAPP_URL = fs.readFileSync('COUCHDB_URL', 'utf-8')
 
 # Note to myself: Start CouchDB with `sudo /etc/init.d/couchdb start`
-COUCHAPP_URL = 'http://localhost:5984/karel'
+COUCHAPP_URL = 'http://t:t@localhost:5984/karel'
 
 task 'push', 'Push the couchapp to the server', ->
   couchapp = spawn 'couchapp', ['push', 'couchapp/app.js', COUCHAPP_URL]

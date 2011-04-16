@@ -10,6 +10,7 @@ body {
   width: 800px;
   margin: 20px auto;
   padding: 20px;
+  /*position: relative;*/
           box-shadow: 0 0 20px #ddd;
      -moz-box-shadow: 0 0 20px #ddd;
   -webkit-box-shadow: 0 0 20px #ddd;
@@ -18,6 +19,15 @@ body {
 h1 {
   font-size: 36px;
   margin: 0 0 20px;
+}
+
+.session {
+  text-align: right;
+  float: right;
+  width: 360px;
+}
+.session .username, .session .password {
+  width: 120px;
 }
 
 a { text-decoration: underline; }
