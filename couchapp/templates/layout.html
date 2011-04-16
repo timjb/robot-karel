@@ -30,9 +30,9 @@
   <script src="/f/helpers/matrix.js"></script>
   <script src="/f/helpers/sandbox.js"></script>
   <script src="/f/models/position_and_direction.js"></script>
-  <script src="/f/models/project.js"></script>
   <script src="/f/models/robot.js"></script>
   <script src="/f/models/world.js"></script>
+  <script src="/f/models/project.js"></script>
   <script src="/f/views/editor.js"></script>
   <script src="/f/views/main_toolbar.js"></script>
   <script src="/f/views/split.js"></script>
@@ -49,15 +49,15 @@
 </head>
 
 <body class="{{className}}">
-  {{^nowrapper}}
+  {{^noWrapper}}
   <div id="wrapper">
     <h1>Karel.js</h1>
     {{{body}}}
   </div>
-  {{/nowrapper}}
-  {{#nowrapper}}
+  {{/noWrapper}}
+  {{#noWrapper}}
     {{{body}}}
-  {{/nowrapper}}
+  {{/noWrapper}}
 </body>
 
 </html>

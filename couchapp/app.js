@@ -72,9 +72,13 @@ couchapp.loadAttachments(ddoc, path.join(__dirname, '../lib'))
 // IDE
 // ---
 
-route('ide', '_show/ide')
+route(
+  ':author/:title/edit',
+  '_list/ide/projectsByAuthorAndTitle',
+  { key: [':author', ':title'] }
+)
 
-ddoc.shows.ide = function(doc) {
+/*ddoc.lists.ide = function(doc) {
   var mustache = require('mustache')
   
   return mustache.to_html(this.templates.layout, {
@@ -82,6 +86,26 @@ ddoc.shows.ide = function(doc) {
     className: 'ide',
     nowrapper: true,
     body: this.templates.ide
+  })
+}*/
+
+ddoc.lists.ide = function() {
+  var mustache = require('mustache')
+  
+  var self = this
+  provides('html', function() {
+    var row = getRow()
+    if (!row) return mustache.to_html(self.templates.layout, self['404'])
+    var doc = row.value
+    
+    return mustache.to_html(self.templates.layout, {
+      title: "Editing " + doc.author+"/"+doc.title,
+      className: 'ide',
+      noWrapper: true,
+      body: mustache.to_html(self.templates.ide, {
+        json: JSON.stringify(doc)
+      })
+    })
   })
 }
 
@@ -143,7 +167,7 @@ route(
   { key: [':author', ':title'] }
 )
 
-ddoc.lists.project = function(doc) {
+ddoc.lists.project = function() {
   var mustache = require('mustache')
   var self = this
   provides('html', function() {

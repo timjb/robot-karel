@@ -30,11 +30,11 @@
 
 <script>
   $(window).load(function() {
-    new Karel.Controllers.Application()
+    var project = new Karel.Models.Project()
+    project.set(project.parse({{{json}}}), { silent: true })
     
-    Backbone.history.start()
-    if (location.hash == '') {
-      location.hash = 'examples/conways_game_of_life'
-    }
+    var application = new Karel.Controllers.Application({ project: project })
+    
+    //Backbone.history.start()
   })
 </script>
