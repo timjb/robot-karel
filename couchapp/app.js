@@ -78,17 +78,6 @@ route(
   { key: [':author', ':title'] }
 )
 
-/*ddoc.lists.ide = function(doc) {
-  var mustache = require('mustache')
-  
-  return mustache.to_html(this.templates.layout, {
-    title: 'IDE',
-    className: 'ide',
-    nowrapper: true,
-    body: this.templates.ide
-  })
-}*/
-
 ddoc.lists.ide = function() {
   var mustache = require('mustache')
   
@@ -106,6 +95,61 @@ ddoc.lists.ide = function() {
         json: JSON.stringify(doc)
       })
     })
+  })
+}
+
+
+// Export
+// ------
+
+route(
+  ':author/:title/welt.kdw',
+  '_list/exportWorld/projectsByAuthorAndTitle',
+  { key: [':author', ':title'] }
+)
+
+ddoc.lists.exportWorld = function() {
+  var self = this
+  registerType('kdw', 'text/kdw')
+  provides('kdw', function() {
+    var row = getRow()
+    if (!row) return "Not found."
+    var doc = row.value
+    return doc.world
+  })
+}
+
+route(
+  ':author/:title/programm.kdp',
+  '_list/exportKDPProgram/projectsByAuthorAndTitle',
+  { key: [':author', ':title'] }
+)
+
+ddoc.lists.exportKDPProgram = function() {
+  var self = this
+  registerType('kdp', 'text/kdp')
+  provides('kdp', function() {
+    var row = getRow()
+    if (!row) return "Not found."
+    var doc = row.value
+    return doc.code
+  })
+}
+
+route(
+  ':author/:title/program.js',
+  '_list/exportJSProgram/projectsByAuthorAndTitle',
+  { key: [':author', ':title'] }
+)
+
+ddoc.lists.exportJSProgram = function() {
+  var self = this
+  registerType('js', 'text/javascript')
+  provides('js', function() {
+    var row = getRow()
+    if (!row) return "Not found."
+    var doc = row.value
+    return doc.code
   })
 }
 
