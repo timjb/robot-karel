@@ -9,13 +9,6 @@ task 'build:parser', ->
   jison.on 'exit', ->
     fs.rename 'karol.js', 'lib/compiler/parser.js'
 
-task 'build', ->
-  bundled = bundle
-    base:    __dirname + '/lib',
-    require: ['underscore']
-  fs.writeFileSync 'public/bundle.js', bundled, 'utf-8'
-
-
 task 'server', ->
   connect = require 'connect'
   server = connect.createServer(connect.static(__dirname+'/public'))

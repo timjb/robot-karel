@@ -7,7 +7,7 @@ var colors = require('colors')
 ,   cli    = require('cli')
 ,   repl   = require('repl')
 
-var World    = require('../lib/models/world')
+var World    = require('../lib/models/world').World
 ,   Position = require('../lib/models/position_and_direction').Position
 ,   sandbox  = require('../lib/helpers/sandbox')
 
@@ -90,14 +90,14 @@ function worldToAscii(world) {
         else if (robotDirection.isWest())  char = '\u25c4'
         else    /* east */                 char = '\u25ba'
         char = char.red
-      } else if (field.quader) {
+      } else if (field.block) {
         char = 'B'
-      } else if (field.ziegel) {
-        char = field.ziegel.toString(16)
+      } else if (field.bricks) {
+        char = field.bricks.toString(16)
       } else {
         char = ' '
       }
-      if (field.marke) char = char.inverse
+      if (field.marker) char = char.inverse
       s += char
     }
     s += '\u2503' + '\n'

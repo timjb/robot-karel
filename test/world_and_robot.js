@@ -1,10 +1,10 @@
 var assert = require('assert')
 ,   fs     = require('fs')
 
-var settings  = require('../lib/settings')
-,   World     = require('../lib/models/world')
+var settings  = require('../lib/settings').settings
+,   World     = require('../lib/models/world').World
 ,   Field     = World.Field
-,   Robot     = require('../lib/models/robot')
+,   Robot     = require('../lib/models/robot').Robot
 ,   positionAndDirection = require('../lib/models/position_and_direction')
 ,   Position  = positionAndDirection.Position
 ,   Direction = positionAndDirection.Direction

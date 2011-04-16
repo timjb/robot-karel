@@ -63,19 +63,27 @@ addDirectorySync(__dirname + '/templates', ddoc.templates)
 // Attachments
 // -----------
 
-route('vendor/*', 'vendor/*')
-
-fs.readdirSync(path.join(__dirname, '../public')).forEach(function (filename) {
-  route(filename, filename)
-})
+route('f/*', '*')
 
 couchapp.loadAttachments(ddoc, path.join(__dirname, '../public'))
+couchapp.loadAttachments(ddoc, path.join(__dirname, '../lib'))
 
 
 // IDE
 // ---
 
-route('ide', 'ide.html')
+route('ide', '_show/ide')
+
+ddoc.shows.ide = function(doc) {
+  var mustache = require('mustache')
+  
+  return mustache.to_html(this.templates.layout, {
+    title: 'IDE',
+    className: 'ide',
+    nowrapper: true,
+    body: this.templates.ide
+  })
+}
 
 
 // Static Pages

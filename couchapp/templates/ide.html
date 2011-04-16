@@ -1,14 +1,3 @@
-<!DOCTYPE html>
-<html>
-
-<head>
-<meta charset=utf-8>
-<title>Karel.js</title>
-<meta name=author content="Tim Baumann">
-<link rel=stylesheet href=ide.css>
-<link rel=stylesheet href=http://fonts.googleapis.com/css?family=Ubuntu />
-
-<body>
 <div class=toolbar id=main-toolbar>
   <h1>Karel.js</h1>
   <div id=tools>
@@ -39,62 +28,13 @@
   <input type=button data-method=removeBlock  value="E"      title="Quader entfernen">
 </div>
 
-<script src=vendor/jquery.js></script>
-<script src=vendor/jquery.couch.js></script>
-
-<script src=vendor/ace.js></script>
-<script src=vendor/mode-javascript.js></script>
-
 <script>
-// Save the require function that ACE includes
-var requireJSRequire = window.require
-</script>
-<script src=bundle.js></script>
-<script src=vendor/backbone.js></script>
-<script>
-window._ = _browserifyRequire('underscore')
-_browserifyRequire.modules.backbone = function() {
-  _browserifyRequire.modules.backbone._cached = Backbone
-  return Backbone
-}
-</script>
-<script src=vendor/backbone-couchdb.js></script>
-
-<script>
-// Hack: Browserify stores it's modules in the `module` property of it's global
-// `require` function. But ACE also needs to have it's `require` function
-// global. Thus I store the modules in ACE's function and make it global.
-requireJSRequire.modules = _browserifyRequire.modules
-window.require = requireJSRequire
-</script>
-
-
-<script>
-Backbone.couchConnector.databaseName  = 'karel'
-Backbone.couchConnector.ddocName      = 'app'
-Backbone.couchConnector.viewName      = 'byCollection'
-Backbone.couchConnector.enableChanges = false
-</script>
-
-<script src=vendor/ThreeCanvas.js></script>
-<script src=vendor/ThreeExtras.js></script><!-- Cube and Plane -->
-
-<script>
-(function() {
-  var require = _browserifyRequire;
-  
-  var Backbone = require('backbone')
-  ,   ApplicationController = require('./controllers/application')
-  
-  require('./extend_backbone')
-  
   $(window).load(function() {
-    new ApplicationController()
+    new Karel.Controllers.Application()
     
     Backbone.history.start()
     if (location.hash == '') {
       location.hash = 'examples/conways_game_of_life'
     }
   })
-})()
 </script>

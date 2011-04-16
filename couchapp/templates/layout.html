@@ -4,21 +4,60 @@
 <head>
   <meta charset="utf-8" />
   <title>{{title}} &middot; Karel.js</title>
-  <link rel="stylesheet" href="/style.css" />
   <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Ubuntu" />
-  <script src="/vendor/jquery.js"></script>
-  <script src="/vendor/underscore.js"></script>
-  <script src="/vendor/backbone.js"></script>
-  <script src="/vendor/sha1.js"></script>
-  <script src="/vendor/jquery.couch.js"></script>
-  <script src="/authentication.js"></script>
+  <link rel="stylesheet" href="/f/style.css" />
+  <link rel="stylesheet" href="/f/ide.css" />
+  <script src="/f/vendor/jquery.js"></script>
+  <script src="/f/vendor/underscore.js"></script>
+  <script src="/f/vendor/backbone.js"></script>
+  <script src="/f/vendor/backbone-couchdb.js"></script>
+  <script>
+    Backbone.couchConnector.databaseName  = 'karel'
+    Backbone.couchConnector.ddocName      = 'app'
+    Backbone.couchConnector.viewName      = 'byCollection'
+    Backbone.couchConnector.enableChanges = false
+  </script>
+  <script src="/f/vendor/sha1.js"></script>
+  <script src="/f/vendor/jquery.couch.js"></script>
+  <script src="/f/authentication.js"></script>
+  <script src="/f/base.js"></script>
+  <script src="/f/settings.js"></script>
+  <script src="/f/extend_backbone_view.js"></script>
+  <script src="/f/helpers/beep.js"></script>
+  <script src="/f/helpers/clone.js"></script>
+  <script src="/f/helpers/get_key.js"></script>
+  <script src="/f/helpers/get_line_number.js"></script>
+  <script src="/f/helpers/matrix.js"></script>
+  <script src="/f/helpers/sandbox.js"></script>
+  <script src="/f/models/position_and_direction.js"></script>
+  <script src="/f/models/project.js"></script>
+  <script src="/f/models/robot.js"></script>
+  <script src="/f/models/world.js"></script>
+  <script src="/f/views/editor.js"></script>
+  <script src="/f/views/main_toolbar.js"></script>
+  <script src="/f/views/split.js"></script>
+  <script src="/f/views/toggle.js"></script>
+  <script src="/f/views/world_base.js"></script>
+  <script src="/f/views/world_2d.js"></script>
+  <script src="/f/views/world_3d.js"></script>
+  <script src="/f/views/world_toolbar.js"></script>
+  <script src="/f/controllers/application.js"></script>
+  <script src="/f/vendor/ThreeCanvas.js"></script>
+  <script src="/f/vendor/ThreeExtras.js"></script><!-- Cube and Plane -->
+  <script src="/f/vendor/ace.js"></script>
+  <script src="/f/vendor/mode-javascript.js"></script>
 </head>
 
-<body>
+<body class="{{className}}">
+  {{^nowrapper}}
   <div id="wrapper">
     <h1>Karel.js</h1>
     {{{body}}}
   </div>
+  {{/nowrapper}}
+  {{#nowrapper}}
+    {{{body}}}
+  {{/nowrapper}}
 </body>
 
 </html>

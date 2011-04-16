@@ -1,16 +1,10 @@
-/* Author: Tim Baumann
-   Project: karel.js */
-
-/* Reset */
-* { margin: 0; padding: 0; }
-
 .left { float: left; }
 .right { float: right; }
 
 html, body { height: 100%; }
 
-body {
-  font: 15px Ubuntu, Helvetica, Arial, sans-serif;
+body.ide {
+  background: #fff;
 }
 
 .toolbar {
@@ -21,9 +15,10 @@ body {
 #main-toolbar {
   left: 0; top: 0; right: 0;
 }
-h1 {
+.ide h1 {
   font-size: 22px;
   padding: 0 10px;
+  margin: 0;
 }
 #tools {
   position: absolute;
@@ -36,7 +31,7 @@ label input[type=radio] + span {
   display: inline-block;
   cursor: pointer;
 }
-input[type=button], label input[type=radio] + span {
+.ide input[type=button], .ide label input[type=radio] + span {
   background: #d55b00; color: #fff; border: none;
   -webkit-box-shadow: 0 0 5px #a24500; -moz-box-shadow: 0 0 5px #a24500; box-shadow: 0 0 5px #a24500;
   font-size: 12px; line-height: 24px; font-weight: bold;
