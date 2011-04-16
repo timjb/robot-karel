@@ -15,6 +15,7 @@ var CouchDBSession = Backbone.Model.extend({
         if (options.error) options.error(status, error, reason)
       }
     }))
+    return this
   },
 
   logout: function(options) {
@@ -29,6 +30,7 @@ var CouchDBSession = Backbone.Model.extend({
         if (options.error) options.error(status, error, reason)
       }
     })
+    return this
   },
 
   signup: function(options) {
@@ -45,6 +47,7 @@ var CouchDBSession = Backbone.Model.extend({
         if (options.error) options.error(status, error, reason)
       }
     })
+    return this
   },
 
   parse: function(obj) {
@@ -69,6 +72,7 @@ var CouchDBSession = Backbone.Model.extend({
 
 
 var CouchDBSessionView = Backbone.View.extend({
+  tagName: 'form',
   className: 'session',
 
   initialize: function() {
@@ -88,13 +92,14 @@ var CouchDBSessionView = Backbone.View.extend({
 
   render: function() {
     if (this.model.loggedIn()) {
-      $(this.el).html("Welcome " + this.model.escape('name') + ' '
-                    + '<a href="#" class="logout">Logout</a>')
+      $(this.el).html("Welcome " + this.model.escape('name') + "!"
+                    + '<input type="button" class="logout" value="Logout" />')
     } else {
-      $(this.el).html('<input type="text" class="username" value="" /> '
-                    + '<input type="password" class="password" value="" /> '
-                    + '<a href="#" class="login">Login</a> '
-                    + '<a href="#" class="signup">Signup</a>')
+      $(this.el).html(
+        '<input type="text" class="username" value="" placeholder="username" /> '
+      + '<input type="password" class="password" value="" placeholder="password" /> '
+      + '<input type="submit" class="login" value="Login" /> '
+      + '<input type="button" class="signup" value="Signup" />')
     }
     return this
   },

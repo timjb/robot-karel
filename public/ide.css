@@ -10,7 +10,7 @@
 html, body { height: 100%; }
 
 body {
-  font: 15px Helvetica, Arial, sans-serif;
+  font: 15px Ubuntu, Helvetica, Arial, sans-serif;
 }
 
 .toolbar {
@@ -24,7 +24,6 @@ body {
 h1 {
   font-size: 22px;
   padding: 0 10px;
-  text-shadow: 0 1px 0 #000; -moz-text-shadow: 0 1px 0 #000; -webkit-text-shadow: 0 1px 0 #000;
 }
 #tools {
   position: absolute;
@@ -39,7 +38,6 @@ label input[type=radio] + span {
 }
 input[type=button], label input[type=radio] + span {
   background: #d55b00; color: #fff; border: none;
-  text-shadow: 0 1px 0 #000; -moz-text-shadow: 0 1px 0 #000; -webkit-text-shadow: 0 1px 0 #000;
   -webkit-box-shadow: 0 0 5px #a24500; -moz-box-shadow: 0 0 5px #a24500; box-shadow: 0 0 5px #a24500;
   font-size: 12px; line-height: 24px; font-weight: bold;
   padding: 0 10px;
