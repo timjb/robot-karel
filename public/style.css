@@ -20,12 +20,8 @@ h1 { font-size: 24px; margin: 0 0 20px; }
 h2 { font-size: 36px; margin: 0 0 20px; }
 h3 { font-size: 24px; margin: 0 0 10px; }
 
-.projects {
-  list-style: none;
-}
-.projects li {
-  padding: 8px;
-}
+.projects { list-style: none; }
+.projects li { padding: 8px; }
 .projects li:nth-child(even) { background: #eee; }
 .projects li:nth-child(odd)  { background: #ddd; }
 

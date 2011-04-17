@@ -67,6 +67,8 @@ route('f/*', '*')
 
 couchapp.loadAttachments(ddoc, path.join(__dirname, '../public'))
 couchapp.loadAttachments(ddoc, path.join(__dirname, '../lib'))
+couchapp.loadAttachments(ddoc, path.join(__dirname, '../skin/lib'), 'skin/lib')
+couchapp.loadAttachments(ddoc, path.join(__dirname, '../skin/css'), 'skin/css')
 
 
 // IDE

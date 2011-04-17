@@ -7,26 +7,9 @@ body.ide {
   background: #fff;
 }
 
-.toolbar {
-  position: absolute;
-  line-height: 40px;
-  background: #d55b00; color: #fff;
-}
-#main-toolbar {
-  left: 0; top: 0; right: 0;
-}
-.ide h1 {
-  font-size: 22px;
-  padding: 0 10px;
-  margin: 0;
-}
-#tools {
-  position: absolute;
-  right: 0; top: 0; bottom: 0;
-  box-sizing: border-box; -webkit-box-sizing: border-box; -moz-box-sizing: border-box;
-  padding: 0 5px;
-  width: 55%;
-}
+.ide h1 { font-size: 16px; margin-bottom: 0; }
+
+/*
 label input[type=radio] + span {
   display: inline-block;
   cursor: pointer;
@@ -74,21 +57,7 @@ label input[type=radio] { display: none; }
 #new-pane.visible {
   display: block;
 }
-#world-toolbar {
-  left: 45%; bottom: 0; right: 0;
-  height: 40px;
-  text-align: center;
-}
-
-#editor {
-}
-#world {
-  /*
-  display: -webkit-box; display: -moz-box; display: box;
-  -webkit-box-pack: center; -moz-box-pack: center; box-pack: center;
-  -webkit-box-align: center; -moz-box-align: center; box-align: center;
-  */
-}
+*/
 
 .world-2d {
   border-spacing: 0;
@@ -103,11 +72,3 @@ label input[type=radio] { display: none; }
 .world-2d td.marker, .world-2d td.marker.ziegel  { background: #cc5; color: #000; }
 .world-2d td.block { background: #666; color: #fff; }
 .world-2d td.brick { background: #f00; color: #fff; }
-
-.export {
-  background: #fff;
-  z-index: 9999;
-  position: absolute; left: 0; right: 0; top: 0; bottom: 0;
-  padding: 20px;
-  font: 16px monospace;
-}
