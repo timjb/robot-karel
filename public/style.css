@@ -47,7 +47,7 @@ a:hover { text-decoration: none; }
 
 .gh-ribbon {
   display: block; width: 149px; height: 149px;
-  position: absolute;  bottom: 0; right: 0;
+  position: absolute;  bottom: -2px; right: -2px;
 }
 .gh-ribbon img {
   display: block;

@@ -1,7 +1,7 @@
 .left { float: left; }
 .right { float: right; }
 
-html, body { height: 100%; }
+html, body.ide { height: 100%; }
 
 body.ide {
   background: #fff;
