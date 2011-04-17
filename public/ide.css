@@ -80,25 +80,6 @@ label input[type=radio] { display: none; }
   text-align: center;
 }
 
-#split-view {
-  position: absolute;
-  left: 0; top: 40px; bottom: 40px; right: 0;
-}
-.split-view {
-  display: -webkit-box; display: -moz-box; display: box;
-  box-orient: horizontal; -webkit-box-orient: horizontal; -moz-box-orient: horizontal;
-}
-.split-view > * {
-  display: block;
-  height: 100%;
-}
-.split-view .separator {
-  width: 2px;
-  cursor: col-resize;
-  /*background: -webkit-gradient(linear, left top, right top, color-stop(0, #f7f7f7), color-stop(1, #e0e0e0));*/
-  background: #d55b00;
-}
-
 #editor {
 }
 #world {
