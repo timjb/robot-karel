@@ -3,7 +3,8 @@
     var project = new Karel.Models.Project()
     project.set(project.parse({{{json}}}), { silent: true })
     
-    var application = new Karel.Controllers.Application({ project: project })
+    var application = new Karel.Views.Application({ model: project })
+      .appendTo(document.body)
     
     //Backbone.history.start()
   })
