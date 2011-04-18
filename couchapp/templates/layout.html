@@ -4,54 +4,61 @@
 <head>
   <meta charset="utf-8" />
   <title>{{title}} &middot; Karel.js</title>
+  {{#baseUrl}}<base href="{{baseUrl}}" />{{/baseUrl}}
   <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Ubuntu" />
-  <link rel="stylesheet" href="/f/style.css" />
-  <link rel="stylesheet" href="/f/ide.css" />
-  <link rel="stylesheet" href="/f/skin/css/base.css" />
-  <link rel="stylesheet" href="/f/skin/css/container.css" />
-  <link rel="stylesheet" href="/f/skin/css/split.css" />
-  <link rel="stylesheet" href="/f/skin/css/toolbar.css" />
-  <script src="/f/vendor/jquery.js"></script>
-  <script src="/f/vendor/underscore.js"></script>
-  <script src="/f/vendor/backbone.js"></script>
-  <script src="/f/vendor/backbone-couchdb.js"></script>
+  <link rel="stylesheet" href="f/style.css" />
+  <link rel="stylesheet" href="f/ide.css" />
+  <link rel="stylesheet" href="f/skin/css/base.css" />
+  <link rel="stylesheet" href="f/skin/css/container.css" />
+  <link rel="stylesheet" href="f/skin/css/split.css" />
+  <link rel="stylesheet" href="f/skin/css/toolbar.css" />
+  <script src="f/vendor/jquery.js"></script>
+  <script src="f/vendor/underscore.js"></script>
+  <script src="f/vendor/backbone.js"></script>
+  <script src="f/vendor/backbone-couchdb.js"></script>
   <script>
     Backbone.couchConnector.databaseName  = 'karel'
     Backbone.couchConnector.ddocName      = 'app'
     Backbone.couchConnector.viewName      = 'byCollection'
     Backbone.couchConnector.enableChanges = false
   </script>
-  <script src="/f/vendor/sha1.js"></script>
-  <script src="/f/vendor/jquery.couch.js"></script>
-  <script src="/f/authentication.js"></script>
-  <script src="/f/skin/lib/base.js"></script>
-  <script src="/f/skin/lib/views/container.js"></script>
-  <script src="/f/skin/lib/views/split.js"></script>
-  <script src="/f/skin/lib/views/toggle.js"></script>
-  <script src="/f/skin/lib/views/toolbar.js"></script>
-  <script src="/f/base.js"></script>
-  <script src="/f/settings.js"></script>
-  <script src="/f/helpers/beep.js"></script>
-  <script src="/f/helpers/clone.js"></script>
-  <script src="/f/helpers/get_key.js"></script>
-  <script src="/f/helpers/get_line_number.js"></script>
-  <script src="/f/helpers/matrix.js"></script>
-  <script src="/f/helpers/sandbox.js"></script>
-  <script src="/f/models/position_and_direction.js"></script>
-  <script src="/f/models/robot.js"></script>
-  <script src="/f/models/world.js"></script>
-  <script src="/f/models/project.js"></script>
-  <script src="/f/views/editor.js"></script>
-  <script src="/f/views/main_toolbar.js"></script>
-  <script src="/f/views/world_base.js"></script>
-  <script src="/f/views/world_2d.js"></script>
-  <script src="/f/views/world_3d.js"></script>
-  <script src="/f/views/world_toolbar.js"></script>
-  <script src="/f/views/application.js"></script>
-  <script src="/f/vendor/ThreeCanvas.js"></script>
-  <script src="/f/vendor/ThreeExtras.js"></script><!-- Cube and Plane -->
-  <script src="/f/vendor/ace.js"></script>
-  <script src="/f/vendor/mode-javascript.js"></script>
+  <!--
+    The problem with this is that old versions of the the scripts depend on an
+    old version of jQuery
+    <script src="/_utils/script/sha1.js"></script>
+    <script src="/_utils/script/jquery.couch.js"></script>
+  -->
+  <script src="f/vendor/sha1.js"></script>
+  <script src="f/vendor/jquery.couch.js"></script>
+  <script src="f/authentication.js"></script>
+  <script src="f/skin/lib/base.js"></script>
+  <script src="f/skin/lib/views/container.js"></script>
+  <script src="f/skin/lib/views/split.js"></script>
+  <script src="f/skin/lib/views/toggle.js"></script>
+  <script src="f/skin/lib/views/toolbar.js"></script>
+  <script src="f/base.js"></script>
+  <script src="f/settings.js"></script>
+  <script src="f/helpers/beep.js"></script>
+  <script src="f/helpers/clone.js"></script>
+  <script src="f/helpers/get_key.js"></script>
+  <script src="f/helpers/get_line_number.js"></script>
+  <script src="f/helpers/matrix.js"></script>
+  <script src="f/helpers/sandbox.js"></script>
+  <script src="f/models/position_and_direction.js"></script>
+  <script src="f/models/robot.js"></script>
+  <script src="f/models/world.js"></script>
+  <script src="f/models/project.js"></script>
+  <script src="f/views/editor.js"></script>
+  <script src="f/views/main_toolbar.js"></script>
+  <script src="f/views/world_base.js"></script>
+  <script src="f/views/world_2d.js"></script>
+  <script src="f/views/world_3d.js"></script>
+  <script src="f/views/world_toolbar.js"></script>
+  <script src="f/views/application.js"></script>
+  <script src="f/vendor/ThreeCanvas.js"></script>
+  <script src="f/vendor/ThreeExtras.js"></script><!-- Cube and Plane -->
+  <script src="f/vendor/ace.js"></script>
+  <script src="f/vendor/mode-javascript.js"></script>
 </head>
 
 <body class="{{className}}">

@@ -86,10 +86,11 @@ ddoc.lists.ide = function() {
   var self = this
   provides('html', function() {
     var row = getRow()
-    if (!row) return mustache.to_html(self.templates.layout, self['404'])
+    if (!row) return self.templates['404']
     var doc = row.value
     
     return mustache.to_html(self.templates.layout, {
+      baseUrl: '../..',
       title: "Editing " + doc.author+"/"+doc.title,
       className: 'ide',
       noWrapper: true,
@@ -159,13 +160,24 @@ ddoc.lists.exportJSProgram = function() {
 // Static Pages
 // ------------
 
-route('/',       '_show/static/home') // Home page
+route('/',       '_show/home/home') // Home page
 route('p/:page', '_show/static/:page')
 
+ddoc.shows.home = function(doc) {
+  var mustache = require('mustache')
+  
+  return mustache.to_html(this.templates.layout, {
+    title: doc.title,
+    body:  mustache.to_html(this.templates.static, doc)
+  })
+}
+
+// This differs only in that it sets `baseUrl`
 ddoc.shows.static = function(doc) {
   var mustache = require('mustache')
   
   return mustache.to_html(this.templates.layout, {
+    baseUrl: '..',
     title: doc.title,
     body:  mustache.to_html(this.templates.static, doc)
   })
@@ -187,9 +199,7 @@ ddoc.lists.user = function() {
     ,   row  = null
     while (row = getRow()) rows.push(row.value)
     
-    if (!rows.length) {
-      return mustache.to_html(self.templates.layout, self['404'])
-    }
+    if (!rows.length) return self.templates['404']
     
     var userName = rows[0].author
     
@@ -218,10 +228,11 @@ ddoc.lists.project = function() {
   var self = this
   provides('html', function() {
     var row = getRow()
-    if (!row) return mustache.to_html(self.templates.layout, self['404'])
+    if (!row) return self.templates['404']
     var doc = row.value
     
     return mustache.to_html(self.templates.layout, {
+      baseUrl: '..',
       title: doc.author+"/"+doc.title,
       body:  mustache.to_html(self.templates.project, doc)
     })
@@ -237,12 +248,6 @@ route('*', '_show/404')
 ddoc.shows['404'] = function() {
   var self = this
   provides('html', function() {
-    var mustache = require('mustache')
-    return mustache.to_html(self.templates.layout, self['404'])
+    return self.templates['404']
   })
-}
-
-ddoc['404'] = {
-  title: "404",
-  body:  "Not found :-("
 }
