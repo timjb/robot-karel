@@ -1,7 +1,12 @@
 .left { float: left; }
 .right { float: right; }
 
-html, body.ide, #application { height: 100%; }
+html,
+body.ide,
+#application,
+#application > .skin-split{
+  height: 100%;
+}
 
 body.ide {
   background: #fff;
