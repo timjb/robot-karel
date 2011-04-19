@@ -1,5 +1,5 @@
 var fs = require('fs')
-,   karol = require('./karol')
+,   karol = require('../lib/compiler/karol')
 
 fs.readFile(process.ARGV[2], 'utf-8', function (err, contents) {
   if (err) throw err
