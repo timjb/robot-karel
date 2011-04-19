@@ -74,6 +74,6 @@ label input[type=radio] { display: none; }
   font-size: 24px;
   text-align: center;
 }
-.world-2d td.marker, .world-2d td.marker.ziegel  { background: #cc5; color: #000; }
+.world-2d td.marker, .world-2d td.marker.brick  { background: #cc5; color: #000; }
 .world-2d td.block { background: #666; color: #fff; }
 .world-2d td.brick { background: #f00; color: #fff; }
