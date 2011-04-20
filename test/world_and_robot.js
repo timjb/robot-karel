@@ -236,6 +236,10 @@ exports.testBeep = function() {
 
 exports.testImport = function() {
   var world = World.fromString(fs.readFileSync(__dirname+'/test-import.kdw', 'utf-8'))
+  ,   robot = world.get('robot')
+  
+  assert.ok(robot.get('position').equals(new Position(3, 2)))
+  assert.ok(robot.get('direction').isEast())
   
   var f = function(z, m, q) {
     var field = new Field()
