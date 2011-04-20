@@ -4,6 +4,30 @@
 
 <ul class="projects">
   {{#projects}}
-    <li><a href="{{author}}/{{title}}">{{title}}</a></li>
+  <li data-id="{{_id}}">
+    <a href="{{author}}/{{title}}">{{title}}</a>
+    <a class="remove" href="#">Remove</a>
+  </li>
   {{/projects}}
 </ul>
+
+<script>
+  $(document).ready(function() {
+    $('.projects .remove').live('click', function(event) {
+      event.preventDefault()
+      var li = $(this).parent()
+      var _id = li.attr('data-id')
+      var db = $.couch.db('karel')
+      db.openDoc(_id, {
+        success: function(doc) {
+          db.removeDoc(doc, {
+            success: function() {
+              li.fadeOut()
+              console.log('Document removed', doc)
+            }
+          })
+        }
+      })
+    })
+  })
+</script>
