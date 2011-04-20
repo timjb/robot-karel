@@ -49,11 +49,13 @@ task 'compress', 'Bundle and compress all JavaScript files', ->
 ###
 
 
+DB_NAME = 'karel'
+
 # The URL is secret since it contains the admin password
-#COUCHAPP_URL = fs.readFileSync('COUCHDB_URL', 'utf-8')
+#COUCHAPP_URL = fs.readFileSync('COUCHDB_URL', 'utf-8') + DB_NAME
 
 # Note to myself: Start CouchDB with `sudo /etc/init.d/couchdb start`
-COUCHAPP_URL = 'http://t:t@localhost:5984/karel'
+COUCHAPP_URL = "http://t:t@localhost:5984/#{DB_NAME}"
 
 task 'push', 'Push the couchapp to the server', ->
   couchapp = spawn 'couchapp', ['push', 'couchapp/app.js', COUCHAPP_URL]
@@ -64,19 +66,17 @@ task 'sync', 'Push and watch local files for changes', ->
   connectStd couchapp
 
 
-EXAMPLES_DIR   = "#{__dirname}/test/compiler/examples"
-STANDARD_WORLD = "#{EXAMPLES_DIR}/01Programm.kdw"
+KAROL_EXAMPLES_DIR = "#{__dirname}/test/compiler/examples"
+STANDARD_WORLD = "#{KAROL_EXAMPLES_DIR}/01Programm.kdw"
 
-task 'upload:examples', "Upload Robot Karol's examples to your local CouchDB", ->
-  cradle = require 'cradle'
-  connection = new (cradle.Connection)
-  db = connection.database 'karel'
+task 'upload:karol-examples', "Upload Robot Karol's examples to your local CouchDB", ->
+  db = openDB()
   extKdp = /\.kdp$/
-  fs.readdirSync(EXAMPLES_DIR)
+  fs.readdirSync(KAROL_EXAMPLES_DIR)
     .filter((filename) -> filename.match(extKdp))
     .sort()
     .forEach (kdpFilename) ->
-      kdpPath = "#{EXAMPLES_DIR}/#{kdpFilename}"
+      kdpPath = "#{KAROL_EXAMPLES_DIR}/#{kdpFilename}"
       kdwPath = kdpPath.replace(extKdp, '.kdw')
       kdwPath = STANDARD_WORLD unless path.existsSync kdwPath
       db.save
@@ -86,6 +86,28 @@ task 'upload:examples', "Upload Robot Karol's examples to your local CouchDB", -
         code:     fs.readFileSync kdpPath, 'utf-8'
         language: 'karol'
         collection: 'projects'
+
+JS_EXAMPLES_DIR = "#{__dirname}/examples"
+
+task 'upload:javascript-examples', "Upload the new examples written in JavaScript", ->
+  db = openDB()
+  fs.readdirSync(JS_EXAMPLES_DIR)
+    .forEach (jsFilename) ->
+      jsPath = "#{JS_EXAMPLES_DIR}/#{jsFilename}"
+      kdwPath = jsPath.replace(/\.js$/, '.kdw')
+      kdwPath = STANDARD_WORLD unless path.existsSync kdwPath
+      db.save
+        author:   "examples"
+        title:    path.basename jsPath, '.js'
+        world:    fs.readFileSync kdwPath, 'utf-8'
+        code:     fs.readFileSync jsPath, 'utf-8'
+        language: 'javascript'
+        collection: 'projects'
+
+openDB = ->
+  cradle = require 'cradle'
+  connection = new (cradle.Connection)
+  connection.database DB_NAME
 
 
 connectStd = (process) ->
