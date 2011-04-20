@@ -13,6 +13,7 @@
   },
   "devDependencies": {
     "couchapp":  ">=0.7.1",
+    "cradle":    ">=0.5.5",
     "uglify-js": ">=1.0.1",
     "zombie":    ">=0.9.4",
     "canvas":    ">=0.4.3",

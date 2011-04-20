@@ -64,6 +64,30 @@ task 'sync', 'Push and watch local files for changes', ->
   connectStd couchapp
 
 
+EXAMPLES_DIR   = "#{__dirname}/test/compiler/examples"
+STANDARD_WORLD = "#{EXAMPLES_DIR}/01Programm.kdw"
+
+task 'upload:examples', "Upload Robot Karol's examples to your local CouchDB", ->
+  cradle = require 'cradle'
+  connection = new (cradle.Connection)
+  db = connection.database 'karel'
+  extKdp = /\.kdp$/
+  fs.readdirSync(EXAMPLES_DIR)
+    .filter((filename) -> filename.match(extKdp))
+    .sort()
+    .forEach (kdpFilename) ->
+      kdpPath = "#{EXAMPLES_DIR}/#{kdpFilename}"
+      kdwPath = kdpPath.replace(extKdp, '.kdw')
+      kdwPath = STANDARD_WORLD unless path.existsSync kdwPath
+      db.save
+        author:   "examples"
+        title:    path.basename kdpPath, '.kdp'
+        world:    fs.readFileSync kdwPath, 'utf-8'
+        code:     fs.readFileSync kdpPath, 'utf-8'
+        language: 'karol'
+        collection: 'projects'
+
+
 connectStd = (process) ->
   log = (data) -> console.log data.toString()
   process.stdout.on 'data', log
