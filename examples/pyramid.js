@@ -1,5 +1,6 @@
 // Basiert auf dem karel-Script von Norbert Handick
 
+// Führt eine Funktion n-mal aus
 Number.prototype.mal = function(fn) {
   for (var i = 0; i < this; i++) {
     fn();
@@ -7,133 +8,133 @@ Number.prototype.mal = function(fn) {
 };
 
 function umdrehen() {
-  karel.linksDrehen();
-  karel.linksDrehen();
+  linksDrehen();
+  linksDrehen();
 }
 
 function unterlegen() {
-  karel.schritt();
+  schritt();
   umdrehen();
-  karel.hinlegen();
+  hinlegen();
   umdrehen();
 }
 
 function diagonal_1() {
-  karel.schritt();
-  karel.linksDrehen();
-  karel.schritt();
-  karel.rechtsDrehen();
+  schritt();
+  linksDrehen();
+  schritt();
+  rechtsDrehen();
 }
 
 function kranz() {
-  4..mal(function() {
-    while (!karel.istWand()) {
-      karel.hinlegen();
-      karel.schritt();
-      karel.markeSetzen();
+  (4).mal(function() {
+    while (!istWand()) {
+      hinlegen();
+      schritt();
+      markeSetzen();
     }
-    karel.linksDrehen();
+    linksDrehen();
   });
   diagonal_1();
 }
 
-function kranz_fuellen() {
-  while (!karel.istMarke()) {
+function kranzFuellen() {
+  while (!istMarke()) {
     unterlegen();
-    if (karel.istMarke()) {
-      karel.linksDrehen();
-      karel.schritt();
-      karel.linksDrehen();
-      karel.schritt();
-      while (!karel.istMarke()) {
-        karel.schritt();
+    if (istMarke()) {
+      linksDrehen();
+      schritt();
+      linksDrehen();
+      schritt();
+      while (!istMarke()) {
+        schritt();
       }
       umdrehen();
-      karel.schritt();
+      schritt();
     }
   }
-  karel.rechtsDrehen();
-  karel.schritt();
-  karel.rechtsDrehen();
-  karel.schritt();
+  rechtsDrehen();
+  schritt();
+  rechtsDrehen();
+  schritt();
 }
 
 function pyramidenring() {
-  4..mal(function() {
-    while (!karel.istMarke()) {
-      karel.markeSetzen();
+  (4).mal(function() {
+    while (!istMarke()) {
+      markeSetzen();
       unterlegen();
     }
     umdrehen();
-    karel.schritt();
-    karel.rechtsDrehen();
-    karel.schritt();
+    schritt();
+    rechtsDrehen();
+    schritt();
   });
 }
 
 function ausgangsposition() {
-  2..mal(function() {
-    while (!karel.istWand()) {
-      karel.schritt();
+  (2).mal(function() {
+    while (!istWand()) {
+      schritt();
     }
-    karel.linksDrehen();
+    linksDrehen();
   });
 }
 
-function zum_start() {
-  karel.rechtsDrehen();
-  2..mal(function() {
-    while (!karel.istWand()) {
-      karel.schritt();
+function zumStart() {
+  rechtsDrehen();
+  (2).mal(function() {
+    while (!istWand()) {
+      schritt();
     }
-    karel.linksDrehen();
+    linksDrehen();
   });
 }
 
-function kranz_marke_weg() {
-  4..mal(function() {
-    while (!karel.istWand()) {
-      karel.schritt();
-      karel.markeLoeschen();
+function kranzMarkeWeg() {
+  (4).mal(function() {
+    while (!istWand()) {
+      schritt();
+      markeLoeschen();
     }
-    karel.linksDrehen();
+    linksDrehen();
   });
 }
 
-function ring_marke_weg() {
-  4..mal(function() {
-    while (karel.istMarke()) {
-      karel.markeLoeschen();
-      karel.schritt();
+function ringMarkeWeg() {
+  (4).mal(function() {
+    while (istMarke()) {
+      markeLoeschen();
+      schritt();
     }
     umdrehen();
-    karel.schritt();
-    karel.rechtsDrehen();
-    karel.schritt();
+    schritt();
+    rechtsDrehen();
+    schritt();
   });
-  karel.linksDrehen();
-  if (karel.istMarke()) {
-    karel.rechtsDrehen();
+  linksDrehen();
+  if (istMarke()) {
+    rechtsDrehen();
   } else {
     umdrehen();
-    karel.schritt();
+    schritt();
   }
 }
 
-function programm() {
+function hauptprogramm() {
   kranz();
-  kranz_fuellen();
-  while (!karel.istMarke()) {
+  kranzFuellen();
+  while (!istMarke()) {
     pyramidenring();
-    kranz_fuellen();
+    kranzFuellen();
   }
   ausgangsposition();
-  kranz_marke_weg();
+  kranzMarkeWeg();
   diagonal_1();
-  while (karel.istMarke()) {
-    ring_marke_weg();
+  while (istMarke()) {
+    ringMarkeWeg();
   }
-  zum_start();
+  zumStart();
 }
 
-programm();
+hauptprogramm();

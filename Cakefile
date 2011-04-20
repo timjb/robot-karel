@@ -91,10 +91,12 @@ JS_EXAMPLES_DIR = "#{__dirname}/examples"
 
 task 'upload:javascript-examples', "Upload the new examples written in JavaScript", ->
   db = openDB()
+  extJs = /\.js$/
   fs.readdirSync(JS_EXAMPLES_DIR)
+    .filter((filename) -> filename.match(extJs))
     .forEach (jsFilename) ->
       jsPath = "#{JS_EXAMPLES_DIR}/#{jsFilename}"
-      kdwPath = jsPath.replace(/\.js$/, '.kdw')
+      kdwPath = jsPath.replace(extJs, '.kdw')
       kdwPath = STANDARD_WORLD unless path.existsSync kdwPath
       db.save
         author:   "examples"

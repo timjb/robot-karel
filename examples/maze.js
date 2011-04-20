@@ -1,98 +1,100 @@
 // http://weblog.jamisbuck.org/2010/12/27/maze-generation-recursive-backtracking
 
-Number.prototype.times = function(fn) {
+// Führt eine Funktion n-mal aus
+Number.prototype.mal = function(fn) {
   for (var i = 0; i < this; i++) {
     fn(i);
   }
 }
 
-function rand(n) {
+// Erzeuge eine ganze Zufallszahl von einschließlich 0 bis ausschließlich n
+function erzeugeZufallszahl(n) {
   return Math.floor(Math.random() * n);
 }
 
 
 /*
- * Generic Helpers
+ * Hilfsfunktionen
  */
 
-function goto_corner() {
-  (2).times(function() {
-    while (!karel.istWand()) karel.schritt();
-    karel.linksDrehen();
+function geheInDieEcke() { // und schäme dich!
+  (2).mal(function() {
+    while (!istWand()) schritt();
+    linksDrehen();
   });
 }
 
-function turn_around() {
-  karel.linksDrehen();
-  karel.linksDrehen();
+function herumdrehen() {
+  linksDrehen();
+  linksDrehen();
 }
 
-function sidestep_left() {
-  karel.linksDrehen();
-  karel.schritt();
-  karel.rechtsDrehen();
+// Sidesteps, wie im Sportunterricht
+function sidestepLinks() {
+  linksDrehen();
+  schritt();
+  rechtsDrehen();
 }
 
-function backwards() {
-  turn_around();
-  karel.schritt();
-  turn_around();
-}
-
-function is_marke_ahead() {
-  karel.schritt();
-  var result = karel.istMarke();
-  backwards();
+function istVorneMarke() {
+  schritt();
+  var result = istMarke();
+  schrittRueckwaerts();
   return result;
 }
 
-function each_direction(fn) {
-  (4).times(function() {
-    karel.linksDrehen();
+// Dreht Karel vier Mal, und führe nach jeder Drehung eine Funktion fn aus
+function inJedeRichtung(fn) {
+  (4).mal(function() {
+    linksDrehen();
     fn();
   });
 }
 
-function remove_all_ziegels() {
-  while (karel.istZiegel()) {
-    karel.aufheben();
-  }
-}
-
 
 /*
- * Create Grid
+ * Gitter aus Ziegeln zeichnen. Schaut ungefähr so aus:
+ * 
+ *  # # # # 
+ * #########
+ *  # # # # 
+ * #########
+ *  # # # # 
+ * 
+ * wobei alle # Felder mit einem Ziegel sind
  */
 
-function stripe() {
-  while (!karel.istWand()) {
-    if (!karel.istZiegel()) karel.hinlegen();
-    karel.schritt();
+// Zeichnet einen Streifen (Linie von Ziegeln)
+function zeichneStreifen() {
+  while (!istWand()) {
+    if (!istZiegel()) hinlegen();
+    schritt();
   }
 }
 
-function create_stripes() {
-  outer_loop: while (true) {
-    stripe();
-    turn_around();
-    stripe();
-    karel.rechtsDrehen();
+// Zeichne viele parallele Streifen mit einem Abstand von 1
+function zeichneZebraStreifen() {
+  aeussere_schleife: while (true) {
+    zeichneStreifen();
+    herumdrehen();
+    zeichneStreifen();
+    rechtsDrehen();
     for (var i = 0; i < 2; i++) {
-      if (karel.istWand()) break outer_loop;
-      karel.schritt();
+      if (istWand()) break aeussere_schleife;
+      schritt();
     }
-    karel.rechtsDrehen();
+    rechtsDrehen();
   }
 }
 
-function create_grid() {
-  goto_corner(); // #1
-  (2).times(function() {
-    sidestep_left();
-    create_stripes();
-    turn_around();
+function zeichneGitter() {
+  geheInDieEcke(); // #1
+  (2).mal(function() {
+    sidestepLinks();
+    zeichneZebraStreifen();
+    herumdrehen();
   });
-  goto_corner(); // we should be in the same corner as in #1
+  geheInDieEcke(); // jetzt sind wir wieder in derselben Ecke wie bei #1
 }
 
 
@@ -101,90 +103,92 @@ function create_grid() {
  */
 
 
-function count_possibilities() {
+function zaehleMoeglichkeiten() {
   var result = 0;
-  each_direction(function() {
-    if (is_valid()) result++;
+  inJedeRichtung(function() {
+    if (istMoeglichkeit()) result++;
   });
   return result;
 }
 
-function is_valid() {
-  return karel.istZiegel(1);
+function istMoeglichkeit() {
+  return istZiegel(1);
 }
 
-function break_through() {
-  karel.aufheben();
-  each_direction(function() {
-    if (karel.istZiegel()) karel.hinlegen();
+function durchbrechen() {
+  aufheben();
+  inJedeRichtung(function() {
+    if (istZiegel()) hinlegen();
   });
-  (2).times(function() {
-    karel.schritt();
-    karel.markeSetzen();
+  (2).mal(function() {
+    schritt();
+    markeSetzen();
   });
 }
 
-function turn_back() {
+// Dreht Karel wieder in die Richtung, aus der er gekommen ist und gibt
+// true (= wahr) zurück. Gibt falsch zurück wenn Karel wieder am Startpunkt steht.
+function zurueckDrehen() {
   for (var i = 0; i < 4; i++) {
-    karel.linksDrehen();
-    if (!karel.istWand() && !karel.istZiegel() && is_marke_ahead()) {
+    linksDrehen();
+    if (!istWand() && !istZiegel() && istVorneMarke()) {
       return true;
     }
   }
   return false;
 }
 
-function build_3m_walls() {
-  each_direction(function() {
-    if (karel.istZiegel(1) || karel.istZiegel(2)) {
-      while (!karel.istZiegel(3)) {
-        karel.hinlegen();
+function baue3mMauer() {
+  inJedeRichtung(function() {
+    if (istZiegel(1) || istZiegel(2)) {
+      while (!istZiegel(3)) {
+        hinlegen();
       }
     }
   });
 }
 
-function go_back() {
-  each_direction(function() {
-    if (karel.istZiegel()) karel.hinlegen();
+function zurueckGehen() {
+  inJedeRichtung(function() {
+    if (istZiegel()) hinlegen();
   });
-  karel.markeLoeschen();
-  karel.schritt();
-  build_3m_walls();
-  karel.markeLoeschen();
-  karel.schritt();
-  each_direction(function() {
-    if (karel.istZiegel()) karel.aufheben();
+  markeLoeschen();
+  schritt();
+  baue3mMauer();
+  markeLoeschen();
+  schritt();
+  inJedeRichtung(function() {
+    if (istZiegel()) aufheben();
   });
 }
 
-function create_connections() {
-  karel.markeSetzen();
+function bauen() {
+  markeSetzen();
   while (true) {
-    var possibilities = count_possibilities();
-    if (possibilities) {
-      var turns = rand(possibilities) + 1;
-      while (turns) {
-        karel.linksDrehen();
-        if (is_valid()) turns--;
+    var anzahlMoeglichkeiten = zaehleMoeglichkeiten();
+    if (anzahlMoeglichkeiten) {
+      var drehungen = erzeugeZufallszahl(anzahlMoeglichkeiten) + 1;
+      while (drehungen) {
+        linksDrehen();
+        if (istMoeglichkeit()) drehungen--;
       }
-      break_through();
+      durchbrechen();
     } else {
-      if (!turn_back()) break;
-      go_back();
+      if (!zurueckDrehen()) break;
+      zurueckGehen();
     }
   }
 }
 
 
 /*
- * Main
+ * Hauptprogramm
  */
 
-function main() {
-  create_grid();
-  create_connections();
-  build_3m_walls();
+function hauptprogramm() {
+  zeichneGitter();
+  bauen();
+  baue3mMauer();
 }
 
-main();
+hauptprogramm();

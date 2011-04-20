@@ -11,110 +11,118 @@
  * 3. Remove all ziegels
  */
 
-function turn_around() {
-  karel.linksDrehen();
-  karel.linksDrehen();
+function herumdrehen() {
+  linksDrehen();
+  linksDrehen();
 }
 
-function each_until_wall(fn) {
+// Führt eine Funktion, nunja, für jedes Feld bis zur nächsten Wand aus
+function fuerJedesFeldBisZurWand(fn) {
   while (true) {
     fn();
-    if (karel.istWand()) break;
-    karel.schritt();
+    if (istWand()) break;
+    schritt();
   }
 }
 
-function goto_wall() {
-  while (!karel.istWand()) karel.schritt();
+function zurWandGehen() {
+  while (!istWand()) schritt();
 }
 
-function each_field(fn) {
+// Führt eine Funktion für jedes Feld in der Welt aus
+function fuerJedesFeld(fn) {
   while (true) {
-    karel.linksDrehen();
-    each_until_wall(fn);
-    turn_around();
-    goto_wall();
-    karel.linksDrehen();
-    if (karel.istWand()) break;
-    karel.schritt();
+    linksDrehen();
+    fuerJedesFeldBisZurWand(fn);
+    herumdrehen();
+    zurWandGehen();
+    linksDrehen();
+    if (istWand()) break;
+    schritt();
   }
-  turn_around();
-  goto_wall();
-  turn_around();
+  herumdrehen();
+  zurWandGehen();
+  herumdrehen();
 }
 
-function each_direction(fn) {
+// Führt eine Funktion für jede Himmelsrichtung ein Mal aus
+function inJedeRichtung(fn) {
   for (var i = 0; i < 4; i++) {
-    karel.linksDrehen();
+    linksDrehen();
     fn();
   }
 }
 
-function add_ziegel_here() {
-  karel.schritt();
-  turn_around();
-  karel.hinlegen();
-  karel.schritt();
+// Legt einen Ziegel dorthin, wo Karel momentan steht
+// Karel steht danach umgekehrt herum
+function hierZiegelLegen() {
+  schritt();
+  herumdrehen();
+  hinlegen();
+  schritt();
 }
 
-function add_ziegel_if_mark() {
-  if (karel.istMarke()) {
-    if (karel.istWand()) {
-      turn_around();
-      add_ziegel_here();
+// Legt einen Ziegel dorthin, wo Karel momentan steht
+// Kommt auch mit der Situation klar, wenn vor Karel eine Wand ist.
+function hierZiegelLegenSicher() {
+  if (istMarke()) {
+    if (istWand()) {
+      herumdrehen();
+      hierZiegelLegen();
     } else {
-      add_ziegel_here();
-      turn_around();
+      hierZiegelLegen();
+      herumdrehen();
     }
   }
 }
 
-function count_living_neighbors() {
+function zaehleLebendeNachbarn() {
   var result = 0;
-  each_direction(function() {
+  inJedeRichtung(function() {
     // count the horizontal or vertically neighbors:
-    if (karel.istZiegel()) result++;
+    if (istZiegel()) result++;
     // count the diagonal neighbors:
-    if (!karel.istWand()) {
-      karel.schritt();
-      karel.linksDrehen();
-      if (karel.istZiegel()) result++;
-      karel.linksDrehen();
-      karel.schritt();
-      turn_around();
+    if (!istWand()) {
+      schritt();
+      linksDrehen();
+      if (istZiegel()) result++;
+      linksDrehen();
+      schritt();
+      herumdrehen();
     }
   });
   return result;
 }
 
-function live_or_die() {
-  var n = count_living_neighbors();
-  if (karel.istMarke()) { // living
-    if (n < 2 || n > 3) karel.markeLoeschen(); // die
+function lebeOderSterbe() {
+  // Jetzt entscheidet's sich!
+  var n = zaehleLebendeNachbarn();
+  if (istMarke()) { // living
+    if (n < 2 || n > 3) markeLoeschen(); // die
   } else {
-    if (n == 3) karel.markeSetzen(); // new cell
+    if (n == 3) markeSetzen(); // new cell
   }
 }
 
-function remove_neighbor_ziegels() {
-  each_direction(function() {
-    if (karel.istZiegel()) karel.aufheben();
+function nachbarZiegelEntfernen() {
+  inJedeRichtung(function() {
+    if (istZiegel()) aufheben();
   });
 }
 
 function step() {
-  each_field(add_ziegel_if_mark);
-  each_field(live_or_die);
-  each_field(remove_neighbor_ziegels);
+  fuerJedesFeld(hierZiegelLegenSicher);
+  fuerJedesFeld(lebeOderSterbe);
+  fuerJedesFeld(nachbarZiegelEntfernen);
 }
 
-function main() {
+function hauptprogramm() {
   //var interval = setInterval(step, 500);
   for (var i = 0; i < 2; i++) {
-    goto_wall();
-    karel.linksDrehen();
+    zurWandGehen();
+    linksDrehen();
   }
   step();
 }
 
-main();
+hauptprogramm();
