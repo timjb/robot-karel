@@ -126,3 +126,14 @@ body.ide {
 .world-2d td.marker, .world-2d td.marker.brick  { background: #cc5; color: #000; }
 .world-2d td.block { background: #666; color: #fff; }
 .world-2d td.brick { background: #f00; color: #fff; }
+
+.error-bar {
+  background-color: #900; color: #fff;
+  font-size: 15px; line-height: 28px;
+  text-align: center;
+}
+.skin-container > .error-bar {
+  box-flex: 0; -moz-box-flex: 0; -webkit-box-flex: 0;
+}
+.error-bar a { color: inherit; text-decoration: underline; }
+.error-bar a:hover { text-decoration: none; }
