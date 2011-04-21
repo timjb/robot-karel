@@ -84,11 +84,12 @@ task 'upload:karol-examples', "Upload Robot Karol's examples to your local Couch
       kdwPath = kdpPath.replace(extKdp, '.kdw')
       kdwPath = STANDARD_WORLD unless path.existsSync kdwPath
       db.save
-        author:   "examples"
-        title:    path.basename kdpPath, '.kdp'
-        world:    fs.readFileSync kdwPath, 'utf-8'
-        code:     fs.readFileSync kdpPath, 'utf-8'
+        author: "examples"
+        title: path.basename kdpPath, '.kdp'
+        world: fs.readFileSync kdwPath, 'utf-8'
+        code: fs.readFileSync kdpPath, 'utf-8'
         language: 'karol'
+        description: "This is one of the examples that come bundled with Robot Karol."
         collection: 'projects'
 
 JS_EXAMPLES_DIR = "#{__dirname}/examples"
@@ -103,11 +104,12 @@ task 'upload:javascript-examples', "Upload the new examples written in JavaScrip
       kdwPath = jsPath.replace(extJs, '.kdw')
       kdwPath = STANDARD_WORLD unless path.existsSync kdwPath
       db.save
-        author:   "examples"
-        title:    path.basename jsPath, '.js'
-        world:    fs.readFileSync kdwPath, 'utf-8'
-        code:     fs.readFileSync jsPath, 'utf-8'
+        author: "examples"
+        title: path.basename jsPath, '.js'
+        world: fs.readFileSync kdwPath, 'utf-8'
+        code: fs.readFileSync jsPath, 'utf-8'
         language: 'javascript'
+        description: ""
         collection: 'projects'
 
 openDBWithExamples = ->

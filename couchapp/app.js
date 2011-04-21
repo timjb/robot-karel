@@ -253,9 +253,13 @@ ddoc.shows.static = function(doc) {
 // User View
 // ---------
 
-route(':user', '_list/user/projectsByAuthorAndTitle', { startkey: [':user'] })
+route(
+  ':user',
+  '_list/user/projectsByAuthorAndTitle',
+  { startkey: [':user'] }
+)
 
-ddoc.lists.user = function() {
+ddoc.lists.user = function(head, req) {
   var mustache = require('mustache')
   
   var self = this
@@ -263,7 +267,11 @@ ddoc.lists.user = function() {
     
     var rows = []
     ,   row  = null
-    while (row = getRow()) rows.push(row.value)
+    while (row = getRow()) {
+      var doc = row.value
+      doc.authorized = req.userCtx.name === doc.author
+      rows.push(doc)
+    }
     
     if (!rows.length) return self.templates['404']
     
@@ -290,13 +298,14 @@ route(
   { key: [':author', ':title'] }
 )
 
-ddoc.lists.project = function() {
+ddoc.lists.project = function(head, req) {
   var mustache = require('mustache')
   var self = this
   provides('html', function() {
     var row = getRow()
     if (!row) return self.templates['404']
     var doc = row.value
+    doc.authorized = req.userCtx.name === doc.author
     
     return mustache.to_html(self.templates.layout, {
       baseUrl: '..',
