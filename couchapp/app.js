@@ -64,11 +64,12 @@ ddoc.validate_doc_update = function(newDoc, oldDoc, userCtx) {
   }
   
   if (newDoc.collection === 'projects') {
-    required('author',   'string', true)
-    required('world',    'string')
-    required('code',     'string')
-    required('title',    'string', true)
-    required('language', 'string')
+    required('author',      'string', true)
+    required('world',       'string')
+    required('code',        'string')
+    required('language',    'string')
+    required('title',       'string', true)
+    required('description', 'string')
     if (['javascript', 'karol'].indexOf(newDoc.language) === -1) {
       forbidden("The field 'language' must be either 'javascript' or 'karol'.")
     }
@@ -124,6 +125,20 @@ couchapp.loadAttachments(ddoc, path.join(__dirname, '../skin/css'), 'skin/css')
 
 // IDE
 // ---
+
+route('new', '_show/create_project')
+
+ddoc.shows.create_project = function() {
+  var mustache = require('mustache')
+  
+  var self = this
+  provides('html', function() {
+    return mustache.to_html(self.templates.layout, {
+      title: 'New Project',
+      body: self.templates.create_project
+    })
+  })
+}
 
 route(
   ':author/:title/edit',

@@ -16,7 +16,8 @@ body.ide {
 #wrapper {
   background: #fff;
   position: relative;
-  width: 800px; min-height: 400px;
+  min-width: 500px; width: 85%; max-width: 800px;
+  min-height: 400px;
   margin: auto;
   padding: 20px;
           box-shadow: 0 0 20px #ddd;
@@ -58,8 +59,9 @@ a:hover { text-decoration: none; }
 }
 
 
-// IDE
-// ---
+/*
+ * IDE
+ */
 
 #application,
 #application > .skin-split{

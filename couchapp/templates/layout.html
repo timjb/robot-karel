@@ -5,10 +5,9 @@
   <meta charset="utf-8" />
   <title>{{title}} &middot; Karel.js</title>
   {{#baseUrl}}<base href="{{baseUrl}}" />{{/baseUrl}}
-  <link rel="shortcut icon" href="f/favicon.png" />
+  <link rel="shortcut icon" href="f/favicon.png" /><!-- http://hubot.github.com/ -->
   <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Ubuntu" />
   <link rel="stylesheet" href="f/style.css" />
-  <link rel="stylesheet" href="f/ide.css" />
   <link rel="stylesheet" href="f/skin/css/base.css" />
   <link rel="stylesheet" href="f/skin/css/container.css" />
   <link rel="stylesheet" href="f/skin/css/split.css" />
@@ -55,6 +54,8 @@
   <script src="f/models/robot.js"></script>
   <script src="f/models/world.js"></script>
   <script src="f/models/project.js"></script>
+  <script src="f/collections/project_list.js"></script>
+  <script>window.projects = new Karel.Collections.ProjectList()</script>
   <script src="f/compiler/nodes.js"></script>
   <script src="f/compiler/karol.js"></script>
   <script src="f/views/editor.js"></script>

@@ -130,8 +130,10 @@ var CouchDBSessionView = Backbone.View.extend({
 })
 
 
+window.session = new CouchDBSession().fetch()
+
 $(document).ready(function() {
   $('#wrapper').prepend(new CouchDBSessionView({
-    model: new CouchDBSession()
+    model: window.session
   }).render().el)
 })
