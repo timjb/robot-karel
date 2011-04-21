@@ -18,12 +18,6 @@
   <script src="f/vendor/underscore.js"></script>
   <script src="f/vendor/backbone.js"></script>
   <script src="f/vendor/backbone-couchdb.js"></script>
-  <script>
-    Backbone.couchConnector.databaseName  = 'karel'
-    Backbone.couchConnector.ddocName      = 'app'
-    Backbone.couchConnector.viewName      = 'byCollection'
-    Backbone.couchConnector.enableChanges = false
-  </script>
   <!--
     The problem with this is that old versions of the the scripts depend on an
     old version of jQuery
@@ -32,7 +26,6 @@
   -->
   <script src="f/vendor/sha1.js"></script>
   <script src="f/vendor/jquery.couch.js"></script>
-  <script src="f/authentication.js"></script>
   <script src="f/skin/lib/base.js"></script>
   <script src="f/skin/lib/views/container.js"></script>
   <script src="f/skin/lib/views/split.js"></script>
@@ -54,8 +47,8 @@
   <script src="f/models/robot.js"></script>
   <script src="f/models/world.js"></script>
   <script src="f/models/project.js"></script>
+  <script src="f/models/couchdb_session.js"></script>
   <script src="f/collections/project_list.js"></script>
-  <script>window.projects = new Karel.Collections.ProjectList()</script>
   <script src="f/compiler/nodes.js"></script>
   <script src="f/compiler/karol.js"></script>
   <script src="f/views/editor.js"></script>
@@ -66,12 +59,29 @@
   <script src="f/views/world_3d.js"></script>
   <script src="f/views/world_toolbar.js"></script>
   <script src="f/views/application.js"></script>
+  <script src="f/views/couchdb_session.js"></script>
   <script src="f/vendor/ThreeCanvas.js"></script>
   <script src="f/vendor/ThreeExtras.js"></script><!-- Cube and Plane -->
   <script src="f/vendor/ace.js"></script>
   <script src="f/vendor/mode-javascript.js"></script>
   <script src="f/mode/karol_highlight_rules.js"></script>
   <script src="f/mode/karol.js"></script>
+  <script>
+    // Use janmonschke/backbone-couchdb
+    Backbone.couchConnector.databaseName  = 'karel'
+    Backbone.couchConnector.ddocName      = 'app'
+    Backbone.couchConnector.viewName      = 'byCollection'
+    Backbone.couchConnector.enableChanges = false
+    
+    window.session  = new Karel.Models.CouchDBSession().fetch()
+    window.projects = new Karel.Collections.ProjectList()
+    
+    $(document).ready(function() {
+      $('#wrapper').prepend(new Karel.Views.CouchDBSession({
+        model: window.session
+      }).render().el)
+    })
+  </script>
 </head>
 
 <body class="{{className}}">

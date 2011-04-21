@@ -14,7 +14,13 @@
       fields: [
         { attribute: 'title', attrs: { autofocus: 'autofocus' } },
         { attribute: 'description', type: 'textarea',
-          attrs: { placeholder: "Optional", rows: 5 } }
+          attrs: { placeholder: "Optional", rows: 5 } },
+        { attribute: 'language', type: 'select', value: [
+          { text: "JavaScript", value: 'javascript',
+            selected: neww.get('language') === 'javascript' },
+          { text: "Robot Karol", value: 'karol',
+            selected: neww.get('language') === 'karol' }
+        ] }
       ],
       submit: true
     })
