@@ -5,7 +5,6 @@
 
 * Directory for projects
 * Commands:
-  * "schnell" and "langsam"
   * "require" other scripts
   * istLeer, istVoll, etc
 * Show a little, cute robot
