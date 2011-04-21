@@ -69,8 +69,12 @@ task 'sync', 'Push and watch local files for changes', ->
 KAROL_EXAMPLES_DIR = "#{__dirname}/test/compiler/examples"
 STANDARD_WORLD = "#{KAROL_EXAMPLES_DIR}/01Programm.kdw"
 
+task 'upload:examples', ->
+  invoke 'upload:karol-examples'
+  invoke 'upload:javascript-examples'
+
 task 'upload:karol-examples', "Upload Robot Karol's examples to your local CouchDB", ->
-  db = openDB()
+  db = openDBWithExamples()
   extKdp = /\.kdp$/
   fs.readdirSync(KAROL_EXAMPLES_DIR)
     .filter((filename) -> filename.match(extKdp))
@@ -90,7 +94,7 @@ task 'upload:karol-examples', "Upload Robot Karol's examples to your local Couch
 JS_EXAMPLES_DIR = "#{__dirname}/examples"
 
 task 'upload:javascript-examples', "Upload the new examples written in JavaScript", ->
-  db = openDB()
+  db = openDBWithExamples()
   extJs = /\.js$/
   fs.readdirSync(JS_EXAMPLES_DIR)
     .filter((filename) -> filename.match(extJs))
@@ -106,9 +110,12 @@ task 'upload:javascript-examples', "Upload the new examples written in JavaScrip
         language: 'javascript'
         collection: 'projects'
 
-openDB = ->
+openDBWithExamples = ->
   cradle = require 'cradle'
-  connection = new (cradle.Connection)
+  connection = new cradle.Connection
+    auth:
+      username: 'examples'
+      password: 'beispielhaft'
   connection.database DB_NAME
 
 

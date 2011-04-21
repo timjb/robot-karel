@@ -25,6 +25,57 @@ function route(from, to, query) {
 route('karel/*', '../../*')
 
 
+// Validations
+// -----------
+
+ddoc.validate_doc_update = function(newDoc, oldDoc, userCtx) {
+  // A short DSL
+  function unauthorized(reason) { throw { unauthorized: reason } }
+  function forbidden(reason)    { throw { forbidden:    reason } }
+  function unchanged(field) {
+    if (oldDoc && oldDoc[field] !== newDoc[field]) {
+      forbidden("Field '"+field+"' can't be changed.")
+    }
+  }
+  function required(field, type, nonempty) {
+    if (typeof newDoc[field] === 'undefined') {
+      forbidden("Field '"+field+"' is required.")
+    }
+    if (nonempty && !newDoc[field]) {
+      forbidden("Field '"+field+"' mustn't be empty.")
+    }
+    if (type && typeof newDoc[field] !== type) {
+      forbidden("Field '"+field+"' must have the JS type "+type)
+    }
+  }
+  
+  
+  if (newDoc.body) { // a HTML page
+    if (userCtx.roles.indexOf('_admin') == -1) {
+      unauthorized("Only admins can save HTML pages.")
+    }
+  }
+  
+  if ((oldDoc || newDoc).author) {
+    if(!newDoc._deleted) unchanged('author')
+    if ((oldDoc || newDoc).author !== userCtx.name) {
+      unauthorized("Only the 'author' of a document can save/delete it.")
+    }
+  }
+  
+  if (newDoc.collection === 'projects') {
+    required('author',   'string', true)
+    required('world',    'string')
+    required('code',     'string')
+    required('title',    'string', true)
+    required('language', 'string')
+    if (['javascript', 'karol'].indexOf(newDoc.language) === -1) {
+      forbidden("The field 'language' must be either 'javascript' or 'karol'.")
+    }
+  }
+}
+
+
 // Views
 // -----
 
