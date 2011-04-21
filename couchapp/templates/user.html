@@ -1,12 +1,12 @@
 <h2>{{userName}}</h2>
 
-<h3>Projects</h3>
+<h3>{{numberOfProjects}} Projects</h3>
 
 <ul class="projects">
   {{#projects}}
   <li data-id="{{_id}}">
     <a href="{{author}}/{{title}}">{{title}}</a>
-    ({{language}})
+    <span class="language">({{language}})</span>
     <a class="remove" href="#">Remove</a>
   </li>
   {{/projects}}

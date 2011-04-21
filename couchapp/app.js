@@ -273,6 +273,7 @@ ddoc.lists.user = function() {
       title: userName,
       body: mustache.to_html(self.templates.user, {
         userName: userName,
+        numberOfProjects: rows.length,
         projects: rows
       })
     })

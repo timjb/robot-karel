@@ -77,7 +77,7 @@
     window.projects = new Karel.Collections.ProjectList()
     
     $(document).ready(function() {
-      $('#wrapper').prepend(new Karel.Views.CouchDBSession({
+      $('#header').prepend(new Karel.Views.CouchDBSession({
         model: window.session
       }).render().el)
     })
@@ -87,7 +87,9 @@
 <body class="{{className}}">
   {{^noWrapper}}
   <div id="wrapper">
-    <h1>Karel.js</h1>
+    <div id="header">
+      <h1><a href="p/home">Karel.js</a></h1>
+    </div>
     {{{body}}}
   </div>
   {{/noWrapper}}
