@@ -114,8 +114,8 @@ body.ide {
 .ide h1 { font-size: 16px; }
 
 .world-2d {
-  border-spacing: 0;
-  border-collapse: collapse;
+  position: relative; left: 20px; top: 20px;
+  border-spacing: 0; border-collapse: collapse;
 }
 .world-2d td {
   border: 1px solid #000;
@@ -137,3 +137,34 @@ body.ide {
 }
 .error-bar a { color: inherit; text-decoration: underline; }
 .error-bar a:hover { text-decoration: none; }
+
+
+.structogram {
+  background: #fff;
+  width: 400px; max-height: 80%; padding: 26px;
+  overflow: scroll;
+  font-size: 13px; line-height: 26px;
+}
+.structogram h4 { font-size: 15px; font-weight: normal; }
+.structogram ul { list-style: none; margin: 0 0 0 39px; }
+.structogram > ul {
+  margin: 0;
+   border-right: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
+}
+.structogram li {
+  padding: 0 0 0 6px;
+   border-top: 1px solid #ccc;
+  border-left: 1px solid #ccc;
+}
+.structogram table {
+  margin-left: -6px;
+  width: 100%;
+  border-spacing: 0;
+}
+.structogram td { border-top: 1px solid #ccc; }
+.structogram td + td,
+.structogram th + th { border-left: 1px solid #ccc; }
+.structogram th { font-weight: normal; }
+.structogram td > ul { margin: 0; }
+.structogram td > ul > li { border-left: none; border-top: none; }
