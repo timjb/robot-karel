@@ -17,7 +17,7 @@
   <script src="f/vendor/jquery.js"></script>
   <script src="f/vendor/underscore.js"></script>
   <script src="f/vendor/backbone.js"></script>
-  <script src="f/vendor/backbone-couchdb.js"></script>
+  <script src="f/vendor/backbone.couchdb.js"></script>
   <!--
     The problem with this is that old versions of the the scripts depend on an
     old version of jQuery
@@ -48,7 +48,6 @@
   <script src="f/models/world.js"></script>
   <script src="f/models/project.js"></script>
   <script src="f/models/couchdb_session.js"></script>
-  <script src="f/collections/project_list.js"></script>
   <script src="f/compiler/nodes.js"></script>
   <script src="f/compiler/karol.js"></script>
   <script src="f/views/editor.js"></script>
@@ -70,14 +69,13 @@
   <script src="f/mode/karol.js"></script>
   <script src="f/simple_robot.js"></script>
   <script>
-    // Use janmonschke/backbone-couchdb
-    Backbone.couchConnector.databaseName  = 'karel'
-    Backbone.couchConnector.ddocName      = 'app'
-    Backbone.couchConnector.viewName      = 'byCollection'
-    Backbone.couchConnector.enableChanges = false
+    // Use pyronicide/backbone.couchdb.js
+    Backbone.couch.options = {
+      database: 'karel',
+      design:   'app'
+    }
     
     window.session  = new Karel.Models.CouchDBSession().fetch()
-    window.projects = new Karel.Collections.ProjectList()
     
     $(document).ready(function() {
       $('#header').prepend(new Karel.Views.CouchDBSession({

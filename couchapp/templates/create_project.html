@@ -4,7 +4,7 @@
   $(window).load(function() {
     var neww = new Karel.Models.Project({
       author: session.get('name')
-    }, { collection: window.projects })
+    })
     session.bind('set:name', function() {
       neww.set({ author: session.get('name') })
     })

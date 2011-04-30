@@ -90,7 +90,7 @@ task 'upload:karol-examples', "Upload Robot Karol's examples to your local Couch
         code: fs.readFileSync kdpPath, 'utf-8'
         language: 'karol'
         description: "This is one of the examples that come bundled with Robot Karol."
-        collection: 'projects'
+        type: 'project'
 
 JS_EXAMPLES_DIR = "#{__dirname}/examples"
 
@@ -110,7 +110,7 @@ task 'upload:javascript-examples', "Upload the new examples written in JavaScrip
         code: fs.readFileSync jsPath, 'utf-8'
         language: 'javascript'
         description: ""
-        collection: 'projects'
+        type: 'project'
 
 openDBWithExamples = ->
   cradle = require 'cradle'

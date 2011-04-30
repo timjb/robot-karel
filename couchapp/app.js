@@ -63,7 +63,7 @@ ddoc.validate_doc_update = function(newDoc, oldDoc, userCtx) {
     }
   }
   
-  if (newDoc.collection === 'projects') {
+  if (newDoc.type === 'project') {
     required('author',      'string', true)
     required('world',       'string')
     required('code',        'string')
@@ -80,16 +80,9 @@ ddoc.validate_doc_update = function(newDoc, oldDoc, userCtx) {
 // Views
 // -----
 
-// This view is required by janmonschke/backbone-couchdb
-ddoc.views.byCollection = {
-  map: function (doc) {
-    if (doc.collection) emit(doc.collection, doc)
-  }
-}
-
 ddoc.views.projectsByAuthorAndTitle = {
   map: function(doc) {
-    if (doc.collection == 'projects') {
+    if (doc.type == 'project') {
       emit([doc.author, doc.title], doc)
     }
   }
