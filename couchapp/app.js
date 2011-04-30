@@ -20,6 +20,11 @@ function route(from, to, query) {
   ddoc.rewrites.push({ from: from, to: to, query: query })
 }
 
+// A short DSL for uploading attachments
+function upload(dirpath, prefix) {
+  couchapp.loadAttachments(ddoc, path.join(__dirname, dirpath), prefix)
+}
+
 // Pretend that this is a CouchDB without vhosts settings and URL rewriting.
 // This is important for accessing documents with janmonschke/backbone-couchdb.
 route('karel/*', '../../*')
@@ -110,10 +115,11 @@ addDirectorySync(__dirname + '/templates', ddoc.templates)
 
 route('f/*', '*')
 
-couchapp.loadAttachments(ddoc, path.join(__dirname, '../public'))
-couchapp.loadAttachments(ddoc, path.join(__dirname, '../lib'))
-couchapp.loadAttachments(ddoc, path.join(__dirname, '../skin/lib'), 'skin/lib')
-couchapp.loadAttachments(ddoc, path.join(__dirname, '../skin/css'), 'skin/css')
+upload('../public')
+upload('../lib')
+upload('../skin/lib', 'skin/lib')
+upload('../skin/css', 'skin/css')
+upload('../test/spec', 'spec')
 
 
 // IDE
@@ -212,6 +218,22 @@ ddoc.lists.exportJSProgram = function() {
     if (!row) return "Not found."
     var doc = row.value
     return doc.code
+  })
+}
+
+
+// Jasmine Specs
+// -------------
+
+route('p/spec', '_show/spec')
+
+ddoc.shows.spec = function() {
+  var mustache = require('mustache')
+  
+  return mustache.to_html(this.templates.layout, {
+    baseUrl: '..',
+    title: "Jasmine Specs",
+    body:  this.templates.spec
   })
 }
 

@@ -1,7 +1,7 @@
 * { margin: 0; padding: 0; }
 
 body {
-  font: 14px Ubuntu, Helvetica, Arial, sans-serif; line-height: 18px;
+  font: 14px Ubuntu, Helvetica, Arial, sans-serif !important; line-height: 18px;
   background: #eee;
   padding: 18px 0;
   box-sizing: border-box;

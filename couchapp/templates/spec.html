@@ -1,0 +1,22 @@
+<h2>Software tests</h2>
+
+<p>These tests help ensure that Robot Karel is working correctly:</p>
+
+
+<script src="f/vendor/jasmine/jasmine.js"></script>
+<script src="f/vendor/jasmine/jasmine-html.js"></script>
+
+<script src="f/spec/first_spec.js"></script>
+
+<script>
+  $('<link rel="stylesheet" href="f/vendor/jasmine/jasmine.css" />')
+    .appendTo($('head'))
+
+  var reporter = new jasmine.TrivialReporter()
+  var env = jasmine.getEnv()
+
+  env.addReporter(reporter)
+  env.execute()
+
+  $('#wrapper').append(reporter.outerDiv)
+</script>
