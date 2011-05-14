@@ -4,30 +4,9 @@
 
 <ul class="projects">
   {{#projects}}
-  <li class="project" data-id="{{_id}}">
+  <li>
     <a href="{{author}}/{{title}}">{{title}}</a>
     <span class="language">({{language}})</span>
-    <!--{#authorized}--><a class="remove" href="#">Remove</a><!--{/authorized}-->
   </li>
   {{/projects}}
 </ul>
-
-<script>
-  $(document).ready(function() {
-    $('.projects .remove').live('click', function(event) {
-      event.preventDefault()
-      var li = $(this).parent()
-      var id = li.attr('data-id')
-      var project = new Karel.Models.Project({ _id: id }).fetch({
-        success: function() {
-          project.destroy({
-            success: function() {
-              li.removeClass('project').slideUp(400, function() { li.remove() })
-              console.log("Project removed", project)
-            }
-          })
-        }
-      })
-    })
-  })
-</script>

@@ -320,12 +320,17 @@ ddoc.lists.project = function(head, req) {
     var row = getRow()
     if (!row) return self.templates['404']
     var doc = row.value
-    doc.authorized = req.userCtx.name === doc.author
     
     return mustache.to_html(self.templates.layout, {
       baseUrl: '..',
       title: doc.author+"/"+doc.title,
-      body:  mustache.to_html(self.templates.project, doc)
+      body: mustache.to_html(self.templates.project, {
+        authorized:  req.userCtx.name === doc.author,
+        author:      doc.author,
+        title:       doc.title,
+        description: doc.description,
+        json:        JSON.stringify(doc)
+      })
     })
   })
 }

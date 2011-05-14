@@ -19,19 +19,29 @@
   <li>
     <a href="{{author}}/{{title}}/program.js">Export JavaScript</a>
   </li>
+  <li>
+  <!--{#authorized}--><a class="remove" href="#">
+    <b>Remove</b>
+  </a><!--{/authorized}-->
+  </li>
 </ul>
+
+<script>
+  $(window).load(function() {
+    var project = new Karel.Models.Project({{{json}}})
+    
+    $('.remove').click(function(event) {
+      // TODO: Confirm
+      event.preventDefault()
+      project.destroy({ success: function() {
+        window.location = project.get('author')
+      } })
+    })
+  })
+</script>
 
 
 {{#description}}
   <h3>Description</h3>
   <p>{{description}}</p>
 {{/description}}
-
-
-<!--
-<h3>Source Code</h3>
-
-<pre>
-{{code}}
-</pre>
--->

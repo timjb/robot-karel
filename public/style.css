@@ -73,14 +73,8 @@ h3:after { content: ":"; }
 
 .projects { list-style: none; margin: 0; }
 .projects li { padding: 8px; }
-.projects .project {
-          transition: background-color .3s linear;
-     -moz-transition: background-color .3s linear;
-  -webkit-transition: background-color .3s linear;
-}
-.projects .project:nth-of-type(odd)  { background: #fff; }
-.projects .project:nth-of-type(even) { background: #f3f3f3; }
-.remove { float: right; }
+.projects li:nth-child(odd)  { background: #fff; }
+.projects li:nth-child(even) { background: #f3f3f3; }
 .language { color: #888; }
 
 
