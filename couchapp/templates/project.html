@@ -26,6 +26,10 @@
   </li>
 </ul>
 
+<div id="description">
+  <h3>Description</h3>
+</div>
+
 <script>
   $(window).load(function() {
     var project = new Karel.Models.Project({{{json}}})
@@ -37,11 +41,11 @@
         window.location = project.get('author')
       } })
     })
+    
+    new Skin.InPlaceEditor({
+      model: project,
+      attribute: 'description',
+      type: 'textarea'
+    }).appendTo($('#description'))
   })
 </script>
-
-
-{{#description}}
-  <h3>Description</h3>
-  <p>{{description}}</p>
-{{/description}}
