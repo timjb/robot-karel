@@ -3,17 +3,14 @@ path = require 'path'
 {exec, spawn} = require 'child_process'
 
 
+# Build
+# =====
+
 task 'build:parser', ->
   jison = exec 'jison src/compiler/karol.yy src/compiler/karol.l'
   connectStd jison
   jison.on 'exit', ->
     fs.rename 'karol.js', 'lib/compiler/parser.js'
-
-task 'server', ->
-  connect = require 'connect'
-  server = connect.createServer(connect.static(__dirname+'/public'))
-  server.listen 8000
-  console.log "Server listening on localhost:8000"
 
 ###
 task 'compress', 'Bundle and compress all JavaScript files', ->
@@ -49,6 +46,9 @@ task 'compress', 'Bundle and compress all JavaScript files', ->
 ###
 
 
+# Push/Sync CouchApp
+# ==================
+
 DB_NAME = 'karel'
 
 # The URL is secret since it contains the admin password
@@ -57,14 +57,19 @@ DB_NAME = 'karel'
 # Note to myself: Start CouchDB with `sudo /etc/init.d/couchdb start`
 COUCHAPP_URL = "http://t:t@localhost:5984/#{DB_NAME}"
 
+createCouchApp = (callback) ->
+  couchapp = require 'couchapp'
+  couchapp.createApp require('./couchapp/app.js'), COUCHAPP_URL, callback
+
 task 'push', 'Push the couchapp to the server', ->
-  couchapp = spawn 'couchapp', ['push', 'couchapp/app.js', COUCHAPP_URL]
-  connectStd couchapp
+  createCouchApp (app) -> app.push()
 
 task 'sync', 'Push and watch local files for changes', ->
-  couchapp = spawn 'couchapp', ['sync', 'couchapp/app.js', COUCHAPP_URL]
-  connectStd couchapp
+  createCouchApp (app) -> app.sync()
 
+
+# Examples
+# ========
 
 KAROL_EXAMPLES_DIR = "#{__dirname}/test/compiler/examples"
 STANDARD_WORLD = "#{KAROL_EXAMPLES_DIR}/01Programm.kdw"
@@ -120,6 +125,9 @@ openDBWithExamples = ->
       password: 'beispielhaft'
   connection.database DB_NAME
 
+
+# Helpers
+# -------
 
 connectStd = (process) ->
   log = (data) -> console.log data.toString()
