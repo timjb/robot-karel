@@ -12,16 +12,17 @@
     "colors":     ">=0.5.0"
   },
   "devDependencies": {
-    "couchapp":  ">=0.7.1",
-    "cradle":    ">=0.5.5",
-    "uglify-js": ">=1.0.1",
-    "zombie":    ">=0.9.4",
-    "canvas":    ">=0.4.3",
-    "jison":     ">=0.2.1"
+    "couchapp":     ">=0.7.1",
+    "cradle":       ">=0.5.5",
+    "uglify-js":    ">=1.0.1",
+    "zombie":       ">=0.9.4",
+    "canvas":       ">=0.4.3",
+    "jison":        ">=0.2.1",
+    "jasmine-node": ">=1.0.6"
   },
   "scripts": {
     "start": "node server.js",
-    "test": "node test/run_tests.js"
+    "test": "cake test"
   },
   "main": "./server.js"
 }

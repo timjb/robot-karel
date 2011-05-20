@@ -46,6 +46,15 @@ task 'compress', 'Bundle and compress all JavaScript files', ->
 ###
 
 
+# Test
+# ====
+
+task 'test', ->
+  # doesn't work somehow
+  jasmine = exec 'jasmine-node test/spec'
+  connectStd jasmine
+
+
 # Push/Sync CouchApp
 # ==================
 
