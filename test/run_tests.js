@@ -1,4 +1,4 @@
-['position_and_direction', 'compiler/test_all']
+['compiler/test_all']
   .forEach(function(name) {
     var module = require('./'+name)
     

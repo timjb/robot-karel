@@ -4,6 +4,10 @@ beforeEach(function() {
       return this.actual instanceof klass
     },
 
+    toEquals: function(expected) { // note the 's' at the end
+      return this.actual.equals(expected)
+    },
+
     toHaveType: function(type) {
       return typeof this.actual === type
     },
