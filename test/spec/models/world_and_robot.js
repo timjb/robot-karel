@@ -14,14 +14,29 @@ describe("World and Robot", function() {
     robot = world.get('robot')
   })
 
-  it("should make a clone of a field", function() {
-    var field = new Field()
-    field.bricks = 2
-    field.marker = true
-    var clone = field.clone()
-    expect(clone).not.toBe(field)
-    expect(clone.bricks).toBe(field.bricks)
-    expect(clone.marker).toBe(field.marker)
+  describe("Field", function() {
+    it("should make a clone of a field", function() {
+      var field = new Field()
+      field.bricks = 2
+      field.marker = true
+      var clone = field.clone()
+      expect(clone).not.toBe(field)
+      expect(clone.bricks).toBe(field.bricks)
+      expect(clone.marker).toBe(field.marker)
+    })
+
+    it("should be testable for equality", function() {
+      var field1 = new Field()
+      ,   field2 = new Field()
+      
+      field1.bricks = field2.bricks = 2
+      field1.marker = field2.marker = true
+      field1.block  = field2.block  = false
+      expect(field1.equals(field2)).toBeTruthy()
+      
+      field2.block = true
+      expect(field1.equals(field2)).toBeFalsy()
+    })
   })
 
 
@@ -171,6 +186,15 @@ describe("World and Robot", function() {
 
 
   // Various
+
+  it("should be testable for equality", function() {
+    expect(new World().get('robot').equals(robot)).toBeTruthy()
+    expect(new World().get('robot').turnLeft().equals(robot)).toBeFalsy()
+    expect(new World({ width: 3, depth: 3 }).equals(world)).toBeTruthy()
+    expect(new World({ width: 3, depth: 3 }).get('robot')
+      .putBrick()
+      .get('world').equals(world)).toBeFalsy()
+  })
 
   it("should test if there is a wall", function() {
     expect(robot.isWall()).toBeFalsy()
