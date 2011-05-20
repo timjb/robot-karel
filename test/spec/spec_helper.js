@@ -10,6 +10,14 @@ beforeEach(function() {
 
     toBeContainedIn: function(arr) {
       return arr.indexOf(this.actual) !== -1
+    },
+
+    toHavePosition: function(position) {
+      return this.actual.get('position').equals(position)
+    },
+
+    toHaveDirection: function(direction) {
+      return this.actual.get('direction').equals(direction)
     }
   })
 })
