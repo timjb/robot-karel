@@ -84,6 +84,9 @@ describe("Karol Interpreter", function() {
   })
 
   it("should let me define my own conditions", function() {
-    expect(false).toBe(true)
+    eval('bedingung invert wenn yes dann falsch sonst wahr *wenn *bedingung '
+        +'wenn invert dann foo sonst bar *wenn')
+    expect(globals.foo).not.toHaveBeenCalled()
+    expect(globals.bar).toHaveBeenCalled()
   })
 })

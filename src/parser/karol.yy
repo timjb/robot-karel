@@ -32,7 +32,7 @@ statement
   | functionInvocation
   | conditionDefinition
   | program
-  | bool
+  | boolStatement
   ;
 
 import
@@ -40,7 +40,7 @@ import
   ;
 
 number
-  : NUMBER { $$ = parseInt($1, 10); }
+  : NUMBER { $$ = new yy.Number($1); }
   ;
 
 optNumber
@@ -48,9 +48,9 @@ optNumber
   | number
   ;
 
-bool
-  : WAHR   { $$ = new yy.Bool(true); }
-  | FALSCH { $$ = new yy.Bool(false); }
+boolStatement
+  : WAHR   { $$ = new yy.BoolStatement(true); }
+  | FALSCH { $$ = new yy.BoolStatement(false); }
   ;
 
 optSemicolon
@@ -72,7 +72,7 @@ functionDefinition
   ;
 
 conditionDefinition
-  : BEDINGUNG identifier block STAR BEDINGUNG { $$ = new yy.ConditionDefinition($2, $3); }
+  : BEDINGUNG identifier optFormalParameters optSemicolon block STAR BEDINGUNG { $$ = new yy.ConditionDefinition($2, $3, $5); }
   ;
 
 condition
