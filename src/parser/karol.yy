@@ -64,11 +64,11 @@ optKarolPrefix
   ;
 
 functionInvocation
-  : optKarolPrefix identifier optArgumentList { $$ = new yy.FunctionInvocation($2, $3); }
+  : optKarolPrefix identifier optParameters { $$ = new yy.FunctionInvocation($2, $3); }
   ;
 
 functionDefinition
-  : ANWEISUNG identifier optSemicolon block STAR ANWEISUNG { $$ = new yy.FunctionDefinition($2, $4); }
+  : ANWEISUNG identifier optFormalParameters optSemicolon block STAR ANWEISUNG { $$ = new yy.FunctionDefinition($2, $3, $5); }
   ;
 
 conditionDefinition
@@ -84,13 +84,23 @@ program
   : PROGRAMM block STAR PROGRAMM { $$ = $2.dontIndent(); }
   ;
 
-argumentList
-  : LPAREN optNumber RPAREN { $$ = new yy.ArgumentList($2); }
+formalParameters
+  : LPAREN identifier RPAREN { $$ = new yy.FormalParameters($2); }
   ;
 
-optArgumentList
-  : { $$ = new yy.ArgumentList(); }
-  | argumentList
+optFormalParameters
+  : { $$ = new yy.FormalParameters(); }
+  | formalParameters
+  ;
+
+parameters
+  : LPAREN optNumber  RPAREN { $$ = new yy.Parameters($2); }
+  | LPAREN identifier RPAREN { $$ = new yy.Parameters($2); }
+  ;
+
+optParameters
+  : { $$ = new yy.Parameters(); }
+  | parameters
   ;
 
 if
