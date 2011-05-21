@@ -1,9 +1,9 @@
 %%
 
 \s+            /* whitespace: do nothing */
-[0-9]+         { return 'NUMBER'; }
 "{"[^\}]*"}"   /*{ return 'BLOCK_COMMENT'; }*/
-"//"[^\n]*\n   /*{ return 'LINE_COMMENT'; }*/
+"//"[^\n]*     /*{ return 'LINE_COMMENT'; }*/
+[0-9]+         { return 'NUMBER'; }
 
 "*"            { return 'STAR'; }
 ";"            { return 'SEMICOLON'; }
@@ -17,7 +17,7 @@
 "anweisung"\b  { return 'ANWEISUNG'; }
 "bedingung"\b  { return 'BEDINGUNG'; }
 "programm"\b   { return 'PROGRAMM'; }
-"einfuegen"\b  { return 'EINFUEGEN'; }
+"einfügen"\b   { return 'EINFUEGEN'; }
 "karol"\b      { return 'KAROL'; }
 "tue"\b        { return 'TUE'; }
 "dann"\b       { return 'DANN'; }
@@ -28,6 +28,6 @@
 "falsch"\b     { return 'FALSCH'; }
 "nicht"\b      { return 'NICHT'; }
 
-[A-Za-z_-][A-Za-z0-9_-]* { return 'IDENTIFIER'; }
+[A-Za-zäöüß_-][A-Za-zÄÖÜäöüß0-9_-]* { return 'IDENTIFIER'; }
 
 .              { return 'INVALID'; }

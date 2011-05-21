@@ -7,10 +7,10 @@ path = require 'path'
 # =====
 
 task 'build:parser', ->
-  jison = exec 'jison src/compiler/karol.yy src/compiler/karol.l'
+  jison = exec 'jison src/parser/karol.yy src/parser/karol.l'
   connectStd jison
   jison.on 'exit', ->
-    fs.rename 'karol.js', 'lib/compiler/parser.js'
+    fs.rename 'karol.js', 'lib/parser/parser.js'
 
 ###
 task 'compress', 'Bundle and compress all JavaScript files', ->
@@ -80,7 +80,7 @@ task 'sync', 'Push and watch local files for changes', ->
 # Examples
 # ========
 
-KAROL_EXAMPLES_DIR = "#{__dirname}/test/compiler/examples"
+KAROL_EXAMPLES_DIR = "#{__dirname}/test/parser/examples"
 STANDARD_WORLD = "#{KAROL_EXAMPLES_DIR}/01Programm.kdw"
 
 task 'upload:examples', ->

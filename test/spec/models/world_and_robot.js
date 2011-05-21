@@ -273,6 +273,22 @@ describe("World and Robot", function() {
     expect(world.toString()).toBe(kdwString)
   })
 
+  it("should have a chainable API", function() {
+    expect(robot
+      .move()
+      .moveBackwards()
+      .putMarker()
+      .removeMarker()
+      .toggleMarker()
+      .putBrick()
+      .putBrick(2)
+      .removeBrick(3)
+      .putBlock()
+      .removeBlock()
+      .turnLeft()
+      .turnRight()).toBe(robot)
+  })
+
   it("should provide German aliases of all methods", function() {
     var r = robot
 

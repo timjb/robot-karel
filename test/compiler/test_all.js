@@ -1,7 +1,7 @@
-var path = require('path')
-,   fs   = require('fs')
+var path   = require('path')
+,   fs     = require('fs')
 ,   assert = require('assert')
-,   compiler = require('../../lib/compiler/karol')
+,   karol  = require('../../lib/parser/compiler')
 
 var EXAMPLES_DIR = __dirname + '/examples'
 
@@ -10,7 +10,7 @@ var extKdp = /\.kdp$/
 function test (kdpPath, jsPath) {
   var kdpCode    = fs.readFileSync(kdpPath, 'utf-8')
   ,   jsExpected = fs.readFileSync(jsPath, 'utf-8').trim()
-  ,   jsCompiled = compiler.compile(kdpCode)
+  ,   jsCompiled = karol.compile(kdpCode)
   try {
     assert.equal(jsCompiled, jsExpected, kdpPath)
   } catch (exc) {
