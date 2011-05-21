@@ -1,9 +1,15 @@
-!!!!!!!!!!!
-!! Tests !!
-!!!!!!!!!!!
-
-
-* Directory for projects
+* Tests
+  * Views
+    * Application
+    * CouchDBSession
+    * Editor
+    * EditorToolbar
+    * MainToolbar
+    * Structogram (and Renderer)
+    * WorldToolbar
+  * Models
+    * CouchDBSession
+* Add an interpreter for the Karol language
 * Commands:
   * "require" other scripts
   * istLeer, istVoll, etc
