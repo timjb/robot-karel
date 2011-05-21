@@ -22,8 +22,8 @@ function istgehenerlaubt() {
   }
   schnell();
   result = false;
-  if (!istWand()) {
-    if (!istZiegel()) {
+  if (nichtIstWand()) {
+    if (nichtIstZiegel()) {
       if (!istmarkevorne()) {
         result = true;
       }
@@ -55,7 +55,7 @@ function zweiggehen() {
       if (istziel()) {
         warten(2500);
         ton();
-        while (!istZiegel(1)) {
+        while (nichtIstZiegel(1)) {
           linksDrehen();
         }
         schritt();

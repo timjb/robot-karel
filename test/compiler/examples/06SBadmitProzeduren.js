@@ -1,6 +1,6 @@
 function bauebecken() {
   for (var i = 0; i < 12; i++) {
-    while (!istWand()) {
+    while (nichtIstWand()) {
       hinlegen();
       schritt();
     }
@@ -9,7 +9,7 @@ function bauebecken() {
 }
 function abbauenbecken() {
   for (var j = 0; j < 12; j++) {
-    while (!istWand()) {
+    while (nichtIstWand()) {
       aufheben();
       schritt();
     }
@@ -25,7 +25,7 @@ function schwimmen() {
     hinlegen();
   }
   schritt();
-  while (!istZiegel()) {
+  while (nichtIstZiegel()) {
     for (var l = 0; l < 3; l++) {
       hinlegen();
     }
@@ -57,7 +57,7 @@ function hauptteil() {
   }
   rechtsDrehen();
   abbauenbecken();
-  while (!istWand()) {
+  while (nichtIstWand()) {
     schritt();
   }
   linksDrehen();

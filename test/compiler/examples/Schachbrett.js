@@ -1,29 +1,29 @@
 function markierezeile() {
-  while (!istWand()) {
+  while (nichtIstWand()) {
     markeSetzen();
-    if (!istWand()) {
+    if (nichtIstWand()) {
       schritt();
     }
-    if (!istWand()) {
+    if (nichtIstWand()) {
       schritt();
     }
   }
 }
 function nachlinks() {
   linksDrehen();
-  if (!istWand()) {
+  if (nichtIstWand()) {
     schritt();
     linksDrehen();
   }
 }
 function nachrechts() {
   rechtsDrehen();
-  if (!istWand()) {
+  if (nichtIstWand()) {
     schritt();
     rechtsDrehen();
   }
 }
-while (!istWand()) {
+while (nichtIstWand()) {
   markierezeile();
   if (istSueden()) {
     nachlinks();

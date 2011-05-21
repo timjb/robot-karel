@@ -11,7 +11,7 @@ function istziegelrechts() {
   return result;
 }
 function biszurwand() {
-  while (!istZiegel()) {
+  while (nichtIstZiegel()) {
     schritt();
     if (istMarke()) {
       beenden();
@@ -30,6 +30,6 @@ biszurwand();
 linksDrehen();
 anderwandentlang();
 rechtsDrehen();
-while (!istMarke()) {
+while (nichtIstMarke()) {
   schritt();
 }

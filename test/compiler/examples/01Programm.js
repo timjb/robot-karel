@@ -1,3 +1,3 @@
-while (!istWand()) {
+while (nichtIstWand()) {
   schritt();
 }

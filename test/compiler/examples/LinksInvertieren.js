@@ -1,4 +1,4 @@
-while (!istWand()) {
+while (nichtIstWand()) {
   if (istZiegel()) {
     schritt();
   } else {

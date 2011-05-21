@@ -14,7 +14,7 @@ for (var i = 0; i < 7; i++) {
   }
   zweischritt();
   umdrehen();
-  while (!istMarke()) {
+  while (nichtIstMarke()) {
     hinlegen();
     schritt();
   }

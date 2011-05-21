@@ -273,6 +273,27 @@ describe("World and Robot", function() {
     expect(world.toString()).toBe(kdwString)
   })
 
+  it("should provide a negation of all testing functions", function() {
+    expect(robot.notIsMarker()).toBeTruthy()
+    robot.putMarker()
+    expect(robot.notIsMarker()).toBeFalsy()
+
+    robot.putBrick(2)
+    expect(robot.notIsBrick()).toBeFalsy()
+    expect(robot.notIsBrick(3)).toBeTruthy()
+    robot.removeBrick(2)
+    expect(robot.notIsBrick()).toBeTruthy()
+
+    expect(robot.notIsWall()).toBeTruthy()
+    robot.putBlock()
+    expect(robot.notIsWall()).toBeFalsy()
+
+    expect(robot.notIsSouth()).toBeFalsy()
+    expect(robot.notIsWest()).toBeTruthy()
+    expect(robot.notIsNorth()).toBeTruthy()
+    expect(robot.notIsEast()).toBeTruthy()
+  })
+
   it("should have a chainable API", function() {
     expect(robot
       .move()
@@ -317,6 +338,14 @@ describe("World and Robot", function() {
     expect(r.istWand).toBe(r.isWall)
     expect(r.tonErzeugen).toBe(r.beep)
     expect(r.probiere).toBe(r.attempt)
+
+    expect(r.nichtIstWand).toBe(r.notIsWall)
+    expect(r.nichtIstMarke).toBe(r.notIsMarker)
+    expect(r.nichtIstZiegel).toBe(r.notIsBrick)
+    expect(r.nichtIstSueden).toBe(r.notIsSouth)
+    expect(r.nichtIstWesten).toBe(r.notIsWest)
+    expect(r.nichtIstNorden).toBe(r.notIsNorth)
+    expect(r.nichtIstOsten).toBe(r.notIsEast)
   })
 })
 

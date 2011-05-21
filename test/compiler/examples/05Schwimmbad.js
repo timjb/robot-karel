@@ -4,7 +4,7 @@ function umdrehen() {
 }
 for (var i = 0; i < 4; i++) {
   for (var j = 0; j < 12; j++) {
-    while (!istWand()) {
+    while (nichtIstWand()) {
       hinlegen();
       schritt();
     }
@@ -19,7 +19,7 @@ for (var i = 0; i < 4; i++) {
     hinlegen();
   }
   schritt();
-  while (!istZiegel()) {
+  while (nichtIstZiegel()) {
     for (var m = 0; m < 3; m++) {
       hinlegen();
     }
@@ -42,13 +42,13 @@ for (var i = 0; i < 4; i++) {
   }
   rechtsDrehen();
   for (var q = 0; q < 12; q++) {
-    while (!istWand()) {
+    while (nichtIstWand()) {
       aufheben();
       schritt();
     }
     rechtsDrehen();
   }
-  while (!istWand()) {
+  while (nichtIstWand()) {
     schritt();
   }
   umdrehen();

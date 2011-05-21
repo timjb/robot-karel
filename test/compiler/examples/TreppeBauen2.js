@@ -7,7 +7,7 @@ function zweischritt() {
   schritt();
 }
 function eineschichtlegen() {
-  while (!istMarke()) {
+  while (nichtIstMarke()) {
     hinlegen();
     schritt();
   }

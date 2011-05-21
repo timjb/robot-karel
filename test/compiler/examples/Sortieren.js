@@ -49,13 +49,13 @@ function vergleichen() {
     umdrehen();
   }
   schnell();
-  while (!istMarke()) {
-    if (!istZiegel()) {
+  while (nichtIstMarke()) {
+    if (nichtIstZiegel()) {
       markeSetzen();
     }
-    if (!istMarke()) {
+    if (nichtIstMarke()) {
       schrittlinks();
-      if (!istZiegel()) {
+      if (nichtIstZiegel()) {
         markeSetzen();
         schrittrechts();
         markeSetzen();
@@ -79,11 +79,11 @@ function tauschen() {
   umsetzendiagonal();
 }
 for (var i = 0; i < 8; i++) {
-  while (!istWand()) {
+  while (nichtIstWand()) {
     rechtsDrehen();
     vergleichen();
     schrittlinks();
-    if (!istMarke()) {
+    if (nichtIstMarke()) {
       tauschen();
     } else {
       markeLoeschen();
@@ -92,7 +92,7 @@ for (var i = 0; i < 8; i++) {
   }
   schnell();
   umdrehen();
-  while (!istWand()) {
+  while (nichtIstWand()) {
     schritt();
   }
   umdrehen();

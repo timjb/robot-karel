@@ -5,7 +5,7 @@ function umdrehen() {
 }
 function schnellzurueck() {
   schnell();
-  while (!istWand()) {
+  while (nichtIstWand()) {
     schritt();
   }
 }
@@ -52,10 +52,10 @@ function setzen() {
   }
   return result;
 }
-while (!istWand()) {
+while (nichtIstWand()) {
   schritt();
   linksDrehen();
-  while (!istWand()) {
+  while (nichtIstWand()) {
     schritt();
     if (setzen()) {
       markeSetzen();

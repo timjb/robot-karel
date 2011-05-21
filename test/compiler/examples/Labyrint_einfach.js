@@ -34,7 +34,7 @@ function istlinksziegelundfrei() {
   var result;
   result = false;
   if (istlinksziegel()) {
-    if (!istZiegel()) {
+    if (nichtIstZiegel()) {
       result = true;
     }
   }
@@ -44,7 +44,7 @@ function istrechtsziegelundfrei() {
   var result;
   result = false;
   if (istrechtsziegel()) {
-    if (!istZiegel()) {
+    if (nichtIstZiegel()) {
       result = true;
     }
   }
@@ -53,7 +53,7 @@ function istrechtsziegelundfrei() {
 while (!istOsten()) {
   linksDrehen();
 }
-while (!istMarke()) {
+while (nichtIstMarke()) {
   while (istlinksziegelundfrei()) {
     schritt();
   }

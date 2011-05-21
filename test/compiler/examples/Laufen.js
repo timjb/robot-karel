@@ -2,12 +2,12 @@ function umdrehen() {
   linksDrehen();
   linksDrehen();
 }
-while (!istMarke()) {
+while (nichtIstMarke()) {
   if (istZiegel()) {
     schritt();
   } else {
     linksDrehen();
-    if (!istZiegel()) {
+    if (nichtIstZiegel()) {
       umdrehen();
     }
     schritt();

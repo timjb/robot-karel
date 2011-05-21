@@ -11,25 +11,25 @@ function schrittzurueck() {
 }
 function reihestapeln() {
   linksDrehen();
-  while (!istWand()) {
+  while (nichtIstWand()) {
     while (istZiegel()) {
       aufheben();
     }
     schritt();
   }
   schrittzurueck();
-  while (!istLeer()) {
+  while (nichtIstLeer()) {
     hinlegen();
   }
   umdrehen();
-  while (!istWand()) {
+  while (nichtIstWand()) {
     schritt();
   }
   linksDrehen();
 }
-while (!istWand()) {
+while (nichtIstWand()) {
   reihestapeln();
-  if (!istWand()) {
+  if (nichtIstWand()) {
     schritt();
   }
 }

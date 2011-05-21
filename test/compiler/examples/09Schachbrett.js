@@ -1,8 +1,8 @@
 function markierezeile() {
-  while (!istWand()) {
+  while (nichtIstWand()) {
     markeSetzen();
     schritt();
-    if (!istWand()) {
+    if (nichtIstWand()) {
       schritt();
     }
   }

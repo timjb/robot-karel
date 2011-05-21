@@ -6,14 +6,14 @@ function invertieren() {
   }
 }
 function einereihe() {
-  while (!istWand()) {
+  while (nichtIstWand()) {
     invertieren();
     schritt();
   }
 }
 function nachlinks() {
   linksDrehen();
-  if (!istWand()) {
+  if (nichtIstWand()) {
     invertieren();
     schritt();
     linksDrehen();
@@ -21,7 +21,7 @@ function nachlinks() {
 }
 function nachrechts() {
   rechtsDrehen();
-  if (!istWand()) {
+  if (nichtIstWand()) {
     invertieren();
     schritt();
     rechtsDrehen();
@@ -37,7 +37,7 @@ function ursprung() {
   linksDrehen();
 }
 ursprung();
-while (!istWand()) {
+while (nichtIstWand()) {
   einereihe();
   if (istSueden()) {
     nachlinks();
