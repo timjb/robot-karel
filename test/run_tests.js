@@ -1,4 +1,4 @@
-['compiler/test_all']
+['compiler', 'interpreter']
   .forEach(function(name) {
     var module = require('./'+name)
     

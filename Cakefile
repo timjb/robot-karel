@@ -80,7 +80,7 @@ task 'sync', 'Push and watch local files for changes', ->
 # Examples
 # ========
 
-KAROL_EXAMPLES_DIR = "#{__dirname}/test/parser/examples"
+KAROL_EXAMPLES_DIR = "#{__dirname}/examples/karol"
 STANDARD_WORLD = "#{KAROL_EXAMPLES_DIR}/01Programm.kdw"
 
 task 'upload:examples', ->
@@ -106,7 +106,7 @@ task 'upload:karol-examples', "Upload Robot Karol's examples to your local Couch
         description: "This is one of the examples that come bundled with Robot Karol."
         type: 'project'
 
-JS_EXAMPLES_DIR = "#{__dirname}/examples"
+JS_EXAMPLES_DIR = "#{__dirname}/examples/javascript"
 
 task 'upload:javascript-examples', "Upload the new examples written in JavaScript", ->
   db = openDBWithExamples()

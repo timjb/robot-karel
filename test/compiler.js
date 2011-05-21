@@ -1,9 +1,9 @@
 var path   = require('path')
 ,   fs     = require('fs')
 ,   assert = require('assert')
-,   karol  = require('../../lib/parser/compiler')
+,   karol  = require('../lib/parser/compiler')
 
-var EXAMPLES_DIR = __dirname + '/examples'
+var EXAMPLES_DIR = path.join(__dirname, '../examples/karol')
 
 var extKdp = /\.kdp$/
 

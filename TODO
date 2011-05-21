@@ -9,6 +9,8 @@
     * WorldToolbar
   * Models
     * CouchDBSession
+  * CLI
+  * Webinterface
 * Add an interpreter for the Karol language
 * Commands:
   * "require" other scripts
