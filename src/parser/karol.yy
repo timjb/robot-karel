@@ -36,7 +36,7 @@ statement
   ;
 
 import
-  : EINFUEGEN identifier STAR EINFUEGEN { $$ = new yy.Import($2); }
+  : EINFUEGEN identifier STAR EINFUEGEN { $$ = new yy.Import($2).l(@$); }
   ;
 
 number
@@ -49,8 +49,8 @@ optNumber
   ;
 
 boolStatement
-  : WAHR   { $$ = new yy.BoolStatement(true); }
-  | FALSCH { $$ = new yy.BoolStatement(false); }
+  : WAHR   { $$ = new yy.BoolStatement(true).l(@$); }
+  | FALSCH { $$ = new yy.BoolStatement(false).l(@$); }
   ;
 
 optSemicolon
@@ -64,20 +64,20 @@ optKarolPrefix
   ;
 
 functionInvocation
-  : optKarolPrefix identifier optParameters { $$ = new yy.FunctionInvocation($2, $3); }
+  : optKarolPrefix identifier optParameters { $$ = new yy.FunctionInvocation($2, $3).l(@$); }
   ;
 
 functionDefinition
-  : ANWEISUNG identifier optFormalParameters optSemicolon block STAR ANWEISUNG { $$ = new yy.FunctionDefinition($2, $3, $5); }
+  : ANWEISUNG identifier optFormalParameters optSemicolon block STAR ANWEISUNG { $$ = new yy.FunctionDefinition($2, $3, $5).l(@$); }
   ;
 
 conditionDefinition
-  : BEDINGUNG identifier optFormalParameters optSemicolon block STAR BEDINGUNG { $$ = new yy.ConditionDefinition($2, $3, $5); }
+  : BEDINGUNG identifier optFormalParameters optSemicolon block STAR BEDINGUNG { $$ = new yy.ConditionDefinition($2, $3, $5).l(@$); }
   ;
 
 condition
   : functionInvocation { $$ = $1.setInline(); }
-  | NICHT functionInvocation { $$ = new yy.Inversion($2.setInline()); }
+  | NICHT functionInvocation { $$ = new yy.Inversion($2.setInline()).l(@$); }
   ;
 
 program
@@ -104,23 +104,23 @@ optParameters
   ;
 
 if
-  : WENN condition DANN block SONST block STAR WENN { $$ = new yy.If($2, $4, $6); }
-  | WENN condition DANN block STAR WENN { $$ = new yy.If($2, $4, null); }
+  : WENN condition DANN block SONST block STAR WENN { $$ = new yy.If($2, $4, $6).l(@$); }
+  | WENN condition DANN block STAR WENN { $$ = new yy.If($2, $4, null).l(@$); }
   ;
 
 for
-  : WIEDERHOLE number MAL block STAR WIEDERHOLE { $$ = new yy.For($2, $4); }
+  : WIEDERHOLE number MAL block STAR WIEDERHOLE { $$ = new yy.For($2, $4).l(@$); }
   ;
 
 while
-  : WIEDERHOLE SOLANGE condition block STAR WIEDERHOLE { $$ = new yy.While($3, $4); }
-  | SOLANGE condition TUE block STAR SOLANGE { $$ = new yy.While($2, $4); }
+  : WIEDERHOLE SOLANGE condition block STAR WIEDERHOLE { $$ = new yy.While($3, $4).l(@$); }
+  | SOLANGE condition TUE block STAR SOLANGE { $$ = new yy.While($2, $4).l(@$); }
   ;
 
 whileTrue
-  : WIEDERHOLE IMMER block STAR WIEDERHOLE { $$ = new yy.WhileTrue($3); }
+  : WIEDERHOLE IMMER block STAR WIEDERHOLE { $$ = new yy.WhileTrue($3).l(@$); }
   ;
 
 doWhile
-  : WIEDERHOLE forceBlock STAR WIEDERHOLE SOLANGE condition { $$ = new yy.DoWhile($6, $2); }
+  : WIEDERHOLE forceBlock STAR WIEDERHOLE SOLANGE condition { $$ = new yy.DoWhile($6, $2).l(@$); }
   ;
