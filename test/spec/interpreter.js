@@ -33,11 +33,6 @@ describe("Karol Interpreter", function() {
     expect(globals.foo.callCount).toBe(4)
   })
 
-  /*it("should hoist functions to the top", function() {
-    eval('test test anweisung test foo foo *anweisung')
-    expect(globals.foo.callCount).toBe(4)
-  })*/
-
   it("should pass parameters to my functions", function() {
     eval('anweisung test(n) bar(n) *anweisung test(42)')
     expect(globals.bar).toHaveBeenCalledWith(42)
@@ -87,6 +82,13 @@ describe("Karol Interpreter", function() {
     eval('bedingung invert wenn yes dann falsch sonst wahr *wenn *bedingung '
         +'wenn invert dann foo sonst bar *wenn')
     expect(globals.foo).not.toHaveBeenCalled()
+    expect(globals.bar).toHaveBeenCalled()
+  })
+
+  it("should hoist functions to the top", function() {
+    eval('test test anweisung test foo foo *anweisung')
+    expect(globals.foo.callCount).toBe(4)
+    eval('wenn blub dann bar *wenn bedingung blub wahr *bedingung')
     expect(globals.bar).toHaveBeenCalled()
   })
 })
