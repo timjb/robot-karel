@@ -1,0 +1,7 @@
+.karol-comment { color: #888; }
+.karol-command { color: #006; }
+.karol-condition { font-style: italic; }
+.karol-keyword { font-weight: bold; }
+.karol-boolean { color: #055; }
+.karol-number { color: #00f; }
+.karol-identifier {}
