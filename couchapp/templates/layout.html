@@ -15,6 +15,8 @@
   <link rel="stylesheet" href="f/skin/css/overlay.css" />
   <link rel="stylesheet" href="f/skin/css/form.css" />
   <link rel="stylesheet" href="f/skin/css/in_place_editor.css" />
+  <link rel="stylesheet" href="f/codemirror/codemirror.css" />
+  <link rel="stylesheet" href="f/codemirror/javascript.css" />
   <script src="f/vendor/jquery.js"></script>
   <script src="f/vendor/underscore.js"></script>
   <script src="f/vendor/backbone.js"></script>
@@ -36,7 +38,6 @@
   <script src="f/skin/lib/views/form.js"></script>
   <script src="f/skin/lib/views/in_place_editor.js"></script>
   <script src="f/skin/lib/locales/en.js"></script>
-  <script src="f/compiler/parser.js"></script>
   <script src="f/base.js"></script>
   <script src="f/settings.js"></script>
   <script src="f/helpers/beep.js"></script>
@@ -68,10 +69,10 @@
   <script src="f/views/structogram.js"></script>
   <script src="f/vendor/ThreeCanvas.js"></script>
   <script src="f/vendor/ThreeExtras.js"></script><!-- Cube and Plane -->
-  <script src="f/vendor/ace.js"></script>
-  <script src="f/vendor/mode-javascript.js"></script>
-  <script src="f/mode/karol_highlight_rules.js"></script>
-  <script src="f/mode/karol.js"></script>
+  <script src="f/codemirror/codemirror.js"></script>
+  <script src="f/codemirror/javascript.js"></script>
+  <!--<script src="f/mode/karol_highlight_rules.js"></script>
+  <script src="f/mode/karol.js"></script>-->
   <script src="f/simple_robot.js"></script>
   <script>
     // Use pyronicide/backbone.couchdb.js
@@ -80,7 +81,7 @@
       design:   'app'
     }
     
-    window.session  = new Karel.Models.CouchDBSession().fetch()
+    window.session = new Karel.Models.CouchDBSession().fetch()
     
     $(document).ready(function() {
       $('#header').prepend(new Karel.Views.CouchDBSession({

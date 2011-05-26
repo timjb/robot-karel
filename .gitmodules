@@ -1,3 +1,6 @@
 [submodule "skin"]
 	path = skin
 	url = https://github.com/timjb/skin.git
+[submodule "codemirror"]
+	path = codemirror
+	url = https://github.com/marijnh/CodeMirror2.git

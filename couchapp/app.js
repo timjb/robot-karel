@@ -120,6 +120,8 @@ upload('../lib')
 upload('../skin/lib', 'skin/lib')
 upload('../skin/css', 'skin/css')
 upload('../test/spec', 'spec')
+upload('../codemirror/lib', 'codemirror')
+upload('../codemirror/mode/javascript', 'codemirror')
 
 
 // IDE
