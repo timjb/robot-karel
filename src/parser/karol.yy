@@ -4,7 +4,7 @@
 
 
 root
-  : block { return $$ = $1.dontIndent(); }
+  : block { return $$ = $1.setToplevel(); }
   ;
 
 block
@@ -68,11 +68,11 @@ functionInvocation
   ;
 
 functionDefinition
-  : ANWEISUNG identifier optFormalParameters optSemicolon block STAR ANWEISUNG { $$ = new yy.FunctionDefinition($2, $3, $5).l(@$); }
+  : ANWEISUNG identifier optFormalParameters optSemicolon block STAR ANWEISUNG { $$ = new yy.Definition($2, $3, $5, false).l(@$); }
   ;
 
 conditionDefinition
-  : BEDINGUNG identifier optFormalParameters optSemicolon block STAR BEDINGUNG { $$ = new yy.ConditionDefinition($2, $3, $5).l(@$); }
+  : BEDINGUNG identifier optFormalParameters optSemicolon block STAR BEDINGUNG { $$ = new yy.Definition($2, $3, $5, true).l(@$); }
   ;
 
 condition
@@ -81,7 +81,7 @@ condition
   ;
 
 program
-  : PROGRAMM block STAR PROGRAMM { $$ = $2.dontIndent(); }
+  : PROGRAMM block STAR PROGRAMM { $$ = $2.setToplevel(); }
   ;
 
 formalParameters
