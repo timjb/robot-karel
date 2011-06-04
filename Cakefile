@@ -3,6 +3,13 @@ path = require 'path'
 {exec, spawn} = require 'child_process'
 
 
+# Uses the same keys as [michael's substance](https://github.com/michael/substance)
+try
+  config = JSON.parse(fs.readFileSync('./config.json', 'utf-8'))
+catch _
+  process.stderr.write "You must write a `config.json` file for some tasks. Use `config.json.example` for reference."
+
+
 # Build
 # =====
 
@@ -50,6 +57,7 @@ task 'compress', 'Bundle and compress all JavaScript files', ->
 # ====
 
 task 'test', ->
+  require './test/run_tests'
   # doesn't work somehow
   jasmine = exec 'jasmine-node test/spec'
   connectStd jasmine
@@ -58,17 +66,11 @@ task 'test', ->
 # Push/Sync CouchApp
 # ==================
 
-DB_NAME = 'karel'
-
-# The URL is secret since it contains the admin password
-#COUCHAPP_URL = fs.readFileSync('COUCHDB_URL', 'utf-8') + DB_NAME
-
 # Note to myself: Start CouchDB with `sudo /etc/init.d/couchdb start`
-COUCHAPP_URL = "http://t:t@localhost:5984/#{DB_NAME}"
 
 createCouchApp = (callback) ->
   couchapp = require 'couchapp'
-  couchapp.createApp require('./couchapp/app.js'), COUCHAPP_URL, callback
+  couchapp.createApp require('./couchapp/app.js'), config.couchdb_url, callback
 
 task 'push', 'Push the couchapp to the server', ->
   createCouchApp (app) -> app.push()
