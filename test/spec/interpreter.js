@@ -47,6 +47,8 @@ describe("Karol Interpreter", function() {
     expect(globals.bar.callCount).toBe(1)
     eval('wenn yes dann bar *wenn')
     expect(globals.bar.callCount).toBe(2)
+    eval('wenn no dann bar *wenn')
+    expect(globals.bar.callCount).toBe(2)
   })
 
   it("should invert the condition", function() {
