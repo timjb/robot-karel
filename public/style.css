@@ -108,7 +108,7 @@ body.ide {
 .ide h1 { font-size: 16px; }
 
 .editor { position: relative; }
-.CodeMirror { height: auto !important; position: absolute; top: 0; bottom: 0; left: 0; right: 0; }
+.CodeMirror, .CodeMirror-scroll { height: auto !important; position: absolute; top: 0; bottom: 0; left: 0; right: 0; }
 
 .world-2d {
   position: relative; left: 20px; top: 20px;

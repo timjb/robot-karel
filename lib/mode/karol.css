@@ -1,7 +1,7 @@
-.karol-comment { color: #888; }
-.karol-command { color: #006; }
-.karol-condition { font-style: italic; }
-.karol-keyword { font-weight: bold; }
-.karol-boolean { color: #055; }
-.karol-number { color: #00f; }
-.karol-identifier {}
+span.cm-karol-comment { color: #888; }
+span.cm-karol-command { color: #006; }
+span.cm-karol-condition { font-style: italic; }
+span.cm-karol-keyword { font-weight: bold; }
+span.cm-karol-boolean { color: #055; }
+span.cm-karol-number { color: #00f; }
+span.cm-karol-identifier {}
