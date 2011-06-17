@@ -22,9 +22,11 @@ function test (kdpPath, jsPath, kdwPath) {
   var projectC = new Project({ language: 'javascript', code: jsCode,  world: worldC })
   var projectI = new Project({ language: 'karol',      code: kdpCode, world: worldI })
   
+  
   try { projectC.run() } catch (exc) {
     console.log("Exception while running compiled JavaScript"); throw exc
   }
+  global.setTimeout = function(cb) { cb() } // make execution of karol synchronous
   try { projectI.run() } catch (exc) {
     console.log("Exception while eval'ing Karol"); throw exc
   }

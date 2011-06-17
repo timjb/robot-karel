@@ -122,6 +122,7 @@ upload('../skin/css', 'skin/css')
 upload('../test/spec', 'spec')
 upload('../codemirror/lib', 'codemirror')
 upload('../codemirror/mode/javascript', 'codemirror')
+upload('../codemirror/theme', 'codemirror')
 
 
 // IDE

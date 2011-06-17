@@ -7,12 +7,13 @@
     * MainToolbar
     * Structogram (and Renderer)
     * WorldToolbar
+    * JSExecution, KarolExecution
   * Models
     * CouchDBSession
   * CLI
   * Webinterface
-* Add an interpreter for the Karol language
 * Commands:
+  * Fast & slow
   * "require" other scripts
   * istLeer, istVoll, etc
 * Buttons for running step by step or fast

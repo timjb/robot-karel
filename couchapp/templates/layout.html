@@ -16,8 +16,9 @@
   <link rel="stylesheet" href="f/skin/css/form.css" />
   <link rel="stylesheet" href="f/skin/css/in_place_editor.css" />
   <link rel="stylesheet" href="f/codemirror/codemirror.css" />
-  <link rel="stylesheet" href="f/codemirror/javascript.css" />
+  <link rel="stylesheet" href="f/codemirror/default.css" />
   <link rel="stylesheet" href="f/mode/karol.css" />
+  <!-- the ordering of the scripts is importent: scripts lower in the list may depend on scripts that are included above theme -->
   <script src="f/vendor/jquery.js"></script>
   <script src="f/vendor/underscore.js"></script>
   <script src="f/vendor/backbone.js"></script>
@@ -50,6 +51,8 @@
   <script src="f/models/position_and_direction.js"></script>
   <script src="f/models/robot.js"></script>
   <script src="f/models/world.js"></script>
+  <script src="f/models/js_execution.js"></script>
+  <script src="f/models/karol_execution.js"></script>
   <script src="f/models/project.js"></script>
   <script src="f/models/couchdb_session.js"></script>
   <script src="f/parser/nodes.js"></script>
