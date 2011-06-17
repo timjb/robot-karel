@@ -9,6 +9,10 @@ try
 catch _
   process.stderr.write "You must write a `config.json` file for some tasks. Use `config.json.example` for reference."
 
+if config
+  _parts = config.couchdb_url.split('/')
+  db_name = _parts[_parts.length-1]
+
 
 # Build
 # =====
@@ -132,9 +136,9 @@ openDBWithExamples = ->
   cradle = require 'cradle'
   connection = new cradle.Connection
     auth:
-      username: 'examples'
+      username: 'examples' # TODO: set this in config.json
       password: 'beispielhaft'
-  connection.database DB_NAME
+  connection.database db_name
 
 
 # Helpers
