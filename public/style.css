@@ -109,7 +109,7 @@ body.ide {
 
 .editor { position: relative; }
 .CodeMirror, .CodeMirror-scroll { height: auto !important; position: absolute; top: 0; bottom: 0; left: 0; right: 0; }
-.current-line { color: #00f; }
+.CodeMirror pre.current-line { color: #f80; }
 
 .world-2d {
   position: relative; left: 20px; top: 20px;
