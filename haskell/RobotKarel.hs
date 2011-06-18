@@ -1,3 +1,5 @@
+{-# LANGUAGE GeneralizedNewtypeDeriving #-}
+
 module RobotKarel
 ( move
 , turnLeft
@@ -10,14 +12,18 @@ module RobotKarel
 , isBrick
 , putBrick
 , removeBrick
-, World(..)
+, World
+, Karel
+, runKarel
+, evalKarel
+, execKarel
 , emptyWorld
 , showWorld
 ) where
 
 
+import Control.Monad.Error
 import Control.Monad.State
-import Control.Monad.Trans.Error
 import Data.List (intercalate, transpose)
 
 
@@ -76,11 +82,45 @@ nextField :: World -> Field
 nextField = currentField . goForward
 
 
+-- Actions
+-- =======
+
+data KarelError = TooHighError
+                | NoBrickError
+                | OtherError String
+
+instance Error KarelError where
+  strMsg = OtherError
+
+instance Show KarelError where
+  show TooHighError   = "Can't jump more than 1 brick up or down"
+  show NoBrickError   = "Can't remove a brick because there isn't any"
+  show (OtherError s) = s
+
+newtype Karel a = K { runK :: ErrorT KarelError (State World) a }
+                  deriving (Monad, MonadError KarelError, MonadState World)
+
+runKarel :: Karel a -> World -> Either KarelError (a, World)
+runKarel k w = case runState (runErrorT (runK k)) w of
+                 (Left err, _) -> Left err
+                 (Right r, w)  -> Right (r, w)
+
+evalKarel :: Karel a -> World -> Either KarelError a
+evalKarel k = fmap fst . runKarel k
+
+execKarel :: Karel a -> World -> Either KarelError World
+execKarel k = fmap snd . runKarel k
+
 -- Navigation
 
 -- TODO: Test if the difference in height is one or zero, complain otherwise.
-move :: State World ()
-move = modify goForward
+move :: Karel ()
+move = do
+  bricksHere  <- gets $ bricks . currentField
+  bricksThere <- gets $ bricks . nextField
+  let difference = abs $ bricksHere - bricksThere
+  if difference > 2 then throwError TooHighError
+                    else modify goForward
 
 -- for internal use only
 rotateRight :: World -> World
@@ -89,10 +129,10 @@ rotateRight (Row a (Row b1 b2 b3) c) = Row (zipWith3 Row (transpose $ map before
                                            (zipWith3 Row (transpose $ map after c) b3 (transpose $ map after a))
 
 -- when the world rotates right beneath the robot, it seems like the robot turns left
-turnLeft :: State World ()
+turnLeft :: Karel ()
 turnLeft = modify rotateRight
 
-turnRight :: State World ()
+turnRight :: Karel ()
 turnRight = do
   turnLeft
   turnLeft
@@ -101,16 +141,16 @@ turnRight = do
 
 -- Markers
 
-isMarker :: State World Bool
+isMarker :: Karel Bool
 isMarker = gets $ marker . currentField
 
-putMarker :: State World ()
+putMarker :: Karel ()
 putMarker = modify $ modifyCurrentField (\f -> f { marker = True })
 
-removeMarker :: State World ()
+removeMarker :: Karel ()
 removeMarker = modify $ modifyCurrentField (\f -> f { marker = False })
 
-toggleMarker :: State World ()
+toggleMarker :: Karel ()
 toggleMarker = do
   m <- isMarker
   if m then removeMarker
@@ -119,10 +159,10 @@ toggleMarker = do
 
 -- Bricks
 
-countBricks :: State World Int
+countBricks :: Karel Int
 countBricks = gets $ bricks . nextField
 
-isBrick :: State World Bool
+isBrick :: Karel Bool
 isBrick = do
   c <- countBricks
   return (c>0)
@@ -131,9 +171,11 @@ isBrick = do
 addBricks :: Int -> World -> World
 addBricks n = goBack . modifyCurrentField (\f -> f { bricks = bricks f + 1 }) . goForward
 
-putBrick :: State World ()
+putBrick :: Karel ()
 putBrick = modify (addBricks 1)
 
--- maybe test if there is a brick and complain otherwise?
-removeBrick :: State World ()
-removeBrick = modify (addBricks (-1))
+removeBrick :: Karel ()
+removeBrick = do
+  bricks <- countBricks
+  if bricks <= 0 then throwError NoBrickError
+                 else modify (addBricks (-1))
