@@ -17,6 +17,7 @@ module RobotKarel
 
 
 import Control.Monad.State
+import Control.Monad.Trans.Error
 import Data.List (intercalate, transpose)
 
 
@@ -67,9 +68,9 @@ emptyWorld = infiniteRow $ infiniteRow emptyField
 currentField :: World -> Field
 currentField (Row _ (Row _ field _) _) = field
 
-replaceCurrentField :: Field -> World -> World
-replaceCurrentField f (Row back (Row left _ right) front) =
-                      (Row back (Row left f right) front)
+modifyCurrentField :: (Field -> Field) -> World -> World
+modifyCurrentField f (Row back (Row left   c   right) front) =
+                      (Row back (Row left (f c) right) front)
 
 nextField :: World -> Field
 nextField = currentField . goForward
@@ -79,7 +80,7 @@ nextField = currentField . goForward
 
 -- TODO: Test if the difference in height is one or zero, complain otherwise.
 move :: State World ()
-move = state $ \w -> ((), goForward w)
+move = modify goForward
 
 -- for internal use only
 rotateRight :: World -> World
@@ -89,7 +90,7 @@ rotateRight (Row a (Row b1 b2 b3) c) = Row (zipWith3 Row (transpose $ map before
 
 -- when the world rotates right beneath the robot, it seems like the robot turns left
 turnLeft :: State World ()
-turnLeft = state $ \w -> ((), rotateRight w)
+turnLeft = modify rotateRight
 
 turnRight :: State World ()
 turnRight = do
@@ -101,13 +102,13 @@ turnRight = do
 -- Markers
 
 isMarker :: State World Bool
-isMarker = state $ \w -> (marker (currentField w), w)
+isMarker = gets $ marker . currentField
 
 putMarker :: State World ()
-putMarker = state $ \w -> ((), replaceCurrentField (currentField w) { marker = True } w)
+putMarker = modify $ modifyCurrentField (\f -> f { marker = True })
 
 removeMarker :: State World ()
-removeMarker = state $ \w -> ((), replaceCurrentField (currentField w) { marker = False } w)
+removeMarker = modify $ modifyCurrentField (\f -> f { marker = False })
 
 toggleMarker :: State World ()
 toggleMarker = do
@@ -119,7 +120,7 @@ toggleMarker = do
 -- Bricks
 
 countBricks :: State World Int
-countBricks = state $ \w -> (bricks (nextField w), w)
+countBricks = gets $ bricks . nextField
 
 isBrick :: State World Bool
 isBrick = do
@@ -128,13 +129,11 @@ isBrick = do
 
 -- for internal use only
 addBricks :: Int -> World -> World
-addBricks n w = goBack $ replaceCurrentField new (goForward w)
-  where old = nextField w
-        new = old { bricks = bricks old + n }
+addBricks n = goBack . modifyCurrentField (\f -> f { bricks = bricks f + 1 }) . goForward
 
 putBrick :: State World ()
-putBrick = state $ \w -> ((), addBricks 1 w)
+putBrick = modify (addBricks 1)
 
 -- maybe test if there is a brick and complain otherwise?
 removeBrick :: State World ()
-removeBrick = state $ \w -> ((), addBricks (-1) w)
+removeBrick = modify (addBricks (-1))
