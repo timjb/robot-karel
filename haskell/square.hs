@@ -2,7 +2,7 @@ import RobotKarel
 import Control.Monad
 import Control.Monad.State
 
-main = putStr $ case execKarel karelMain $ emptyWorld of 
+main = putStr $ case execKarel karelMain $ emptyFiniteWorld 6 6 of 
                   (Left e)  -> show e
                   (Right w) -> showWorld w
 
@@ -16,4 +16,4 @@ square :: Int -> Karel ()
 square n = 4 `times` (line (n-1) >> turnLeft)
 
 line :: Int -> Karel ()
-line n = n `times` (removeBrick >> move)
+line n = n `times` (putBrick >> move)

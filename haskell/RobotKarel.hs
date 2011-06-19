@@ -13,18 +13,20 @@ module RobotKarel
 , putBrick
 , removeBrick
 , World
+, emptyInfiniteWorld
+, emptyFiniteWorld
+, showWorld
 , Karel
 , runKarel
 , evalKarel
 , execKarel
-, emptyWorld
-, showWorld
 ) where
 
 
 import Control.Monad.Error
 import Control.Monad.State
 import Data.List (intercalate, transpose)
+import Data.Maybe (fromJust)
 
 
 -- Row
@@ -34,11 +36,13 @@ data Row a = Row { before  :: [a]
                  , after   :: [a]
                  } deriving (Show)
 
-goForward :: Row a -> Row a
-goForward (Row a b (c:cs)) = Row (b:a) c cs
+goForward :: Row a -> Maybe (Row a)
+goForward (Row a b (c:cs)) = Just $ Row (b:a) c cs
+goForward _                = Nothing
 
-goBack :: Row a -> Row a
-goBack (Row (a:as) b c) = Row as a (b:c)
+goBack :: Row a -> Maybe (Row a)
+goBack (Row (a:as) b c) = Just $ Row as a (b:c)
+goBack _                = Nothing
 
 infiniteRow :: a -> Row a
 infiniteRow a = Row (repeat a) a (repeat a)
@@ -64,22 +68,29 @@ showField f
 type World = Row (Row Field)
 
 showWorld :: World -> String
-showWorld (Row a b c) = intercalate "\n" $ map showRow $ (reverse $ take n a) ++ [b] ++ take n c
-  where showRow (Row d e f) = intercalate " " . map showField $ (reverse $ take n d) ++ [e] ++ take n f
-        n = 8
+showWorld (Row a b c) = unlines $ map showRow (reverse $ limit c) ++ [showCurrRow b] ++ map showRow (limit a)
+  where showRow     (Row d e f) = intercalate " " . map showField $ (reverse $ limit f) ++ [e] ++ limit d
+        showCurrRow (Row d e f) = intercalate " " $ map showField (reverse $ limit f) ++ ["^"] ++ map showField (limit d)
+        limit = take 10
 
-emptyWorld :: World
-emptyWorld = infiniteRow $ infiniteRow emptyField
+emptyInfiniteWorld :: World
+emptyInfiniteWorld = infiniteRow $ infiniteRow emptyField
+
+emptyFiniteWorld :: Int -- ^ width
+                 -> Int -- ^ depth
+                 -> World
+emptyFiniteWorld w d = Row [] row (replicate (d-1) row)
+  where row = Row [] emptyField (replicate (w-1) emptyField)
 
 currentField :: World -> Field
 currentField (Row _ (Row _ field _) _) = field
 
 modifyCurrentField :: (Field -> Field) -> World -> World
 modifyCurrentField f (Row back (Row left   c   right) front) =
-                      (Row back (Row left (f c) right) front)
+                     (Row back (Row left (f c) right) front)
 
-nextField :: World -> Field
-nextField = currentField . goForward
+nextField :: World -> Maybe Field
+nextField w = fmap currentField (goForward w)
 
 
 -- Actions
@@ -87,6 +98,7 @@ nextField = currentField . goForward
 
 data KarelError = TooHighError
                 | NoBrickError
+                | WallError
                 | OtherError String
 
 instance Error KarelError where
@@ -95,6 +107,7 @@ instance Error KarelError where
 instance Show KarelError where
   show TooHighError   = "Can't jump more than 1 brick up or down"
   show NoBrickError   = "Can't remove a brick because there isn't any"
+  show WallError      = "Can't move/put a brick/etc because Karel's standing in front of a wall"
   show (OtherError s) = s
 
 newtype Karel a = K { runK :: ErrorT KarelError (State World) a }
@@ -113,20 +126,33 @@ execKarel k = fmap snd . runKarel k
 
 -- Navigation
 
--- TODO: Test if the difference in height is one or zero, complain otherwise.
+isWall :: Karel Bool
+isWall = do
+  nextWorld <- gets goForward
+  case nextWorld of
+    Nothing  -> return False
+    (Just _) -> return True
+
 move :: Karel ()
 move = do
-  bricksHere  <- gets $ bricks . currentField
-  bricksThere <- gets $ bricks . nextField
-  let difference = abs $ bricksHere - bricksThere
-  if difference > 2 then throwError TooHighError
-                    else modify goForward
+  nextWorld <- gets goForward
+  case nextWorld of
+    Nothing  -> throwError WallError
+    (Just w) -> do
+      bricksHere  <- gets $ bricks . currentField
+      bricksThere <- countBricks
+      let difference = abs $ bricksHere - bricksThere
+      if difference > 2 then throwError TooHighError
+                        else put w
 
 -- for internal use only
 rotateRight :: World -> World
-rotateRight (Row a (Row b1 b2 b3) c) = Row (zipWith3 Row (transpose $ map before c) b1 (transpose $ map before a))
+rotateRight (Row a (Row b1 b2 b3) c) = Row (zipWith3 Row (myTranspose $ map before c) b1 (myTranspose $ map before a))
                                            (Row (map current c) b2 (map current a))
-                                           (zipWith3 Row (transpose $ map after c) b3 (transpose $ map after a))
+                                           (zipWith3 Row (myTranspose $ map after c) b3 (myTranspose $ map after a))
+  where myTranspose :: [[a]] -> [[a]]
+        myTranspose [] = repeat []
+        myTranspose a  = transpose a
 
 -- when the world rotates right beneath the robot, it seems like the robot turns left
 turnLeft :: Karel ()
@@ -160,7 +186,7 @@ toggleMarker = do
 -- Bricks
 
 countBricks :: Karel Int
-countBricks = gets $ bricks . nextField
+countBricks = gets $ maybe 0 bricks . nextField
 
 isBrick :: Karel Bool
 isBrick = do
@@ -168,14 +194,19 @@ isBrick = do
   return (c>0)
 
 -- for internal use only
-addBricks :: Int -> World -> World
-addBricks n = goBack . modifyCurrentField (\f -> f { bricks = bricks f + 1 }) . goForward
+addBricks :: Int -> Karel ()
+addBricks n = do
+  nextWorld <- gets goForward
+  case nextWorld of
+    Nothing  -> throwError WallError
+    (Just w) -> do
+      bricks <- countBricks
+      when (bricks + n < 0) (throwError NoBrickError)
+      put (fromJust . goBack . modifyCurrentField addBricksToField $ w)
+  where addBricksToField f = f { bricks = bricks f + n }
 
 putBrick :: Karel ()
-putBrick = modify (addBricks 1)
+putBrick = addBricks 1
 
 removeBrick :: Karel ()
-removeBrick = do
-  bricks <- countBricks
-  if bricks <= 0 then throwError NoBrickError
-                 else modify (addBricks (-1))
+removeBrick = addBricks (-1)
