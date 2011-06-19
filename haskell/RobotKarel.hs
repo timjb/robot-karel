@@ -4,18 +4,21 @@ module RobotKarel
 ( move
 , turnLeft
 , turnRight
+, isWall
+, notIsWall
 , isMarker
+, notIsMarker
 , putMarker
 , removeMarker
 , toggleMarker
 , countBricks
 , isBrick
+, notIsBrick
 , putBrick
 , removeBrick
 , World
 , emptyInfiniteWorld
 , emptyFiniteWorld
-, showWorld
 , Karel
 , runKarel
 , evalKarel
@@ -36,13 +39,13 @@ data Row a = Row { before  :: [a]
                  , after   :: [a]
                  } deriving (Show)
 
-goForward :: Row a -> Maybe (Row a)
-goForward (Row a b (c:cs)) = Just $ Row (b:a) c cs
-goForward _                = Nothing
+goForward :: World -> Maybe World
+goForward (W (Row a b (c:cs))) = Just $ W (Row (b:a) c cs)
+goForward _                    = Nothing
 
-goBack :: Row a -> Maybe (Row a)
-goBack (Row (a:as) b c) = Just $ Row as a (b:c)
-goBack _                = Nothing
+goBack :: World -> Maybe World
+goBack (W (Row (a:as) b c)) = Just $ W (Row as a (b:c))
+goBack _                    = Nothing
 
 infiniteRow :: a -> Row a
 infiniteRow a = Row (repeat a) a (repeat a)
@@ -54,40 +57,41 @@ data Field = Field { marker :: Bool
                    , bricks :: Int
                    }
 
+instance Show Field where
+  show f
+    | marker f  = [['a'..] !! bricks f]
+    | otherwise = show $ bricks f
+
 emptyField :: Field
 emptyField = Field False 0
-
-showField :: Field -> String
-showField f
-  | marker f  = [['a'..] !! bricks f]
-  | otherwise = show $ bricks f
 
 
 -- World
 
-type World = Row (Row Field)
+newtype World = W { getW :: Row (Row Field) }
 
-showWorld :: World -> String
-showWorld (Row a b c) = unlines $ map showRow (reverse $ limit c) ++ [showCurrRow b] ++ map showRow (limit a)
-  where showRow     (Row d e f) = intercalate " " . map showField $ (reverse $ limit f) ++ [e] ++ limit d
-        showCurrRow (Row d e f) = intercalate " " $ map showField (reverse $ limit f) ++ ["^"] ++ map showField (limit d)
-        limit = take 10
+instance Show World where
+  show (W (Row a b c)) = unlines $ map showRow (reverse $ limit c) ++ [showCurrRow b] ++ map showRow (limit a)
+    where showRow     (Row d e f) = join . map show $ (reverse $ limit f) ++ [e] ++ limit d
+          showCurrRow (Row d e f) = join $ map show (reverse $ limit f) ++ ["^"] ++ map show (limit d)
+          limit = take 10
+          join = intercalate " "
 
 emptyInfiniteWorld :: World
-emptyInfiniteWorld = infiniteRow $ infiniteRow emptyField
+emptyInfiniteWorld = W $ infiniteRow $ infiniteRow emptyField
 
 emptyFiniteWorld :: Int -- ^ width
                  -> Int -- ^ depth
                  -> World
-emptyFiniteWorld w d = Row [] row (replicate (d-1) row)
+emptyFiniteWorld w d = W $ Row [] row (replicate (d-1) row)
   where row = Row [] emptyField (replicate (w-1) emptyField)
 
 currentField :: World -> Field
-currentField (Row _ (Row _ field _) _) = field
+currentField (W (Row _ (Row _ field _) _)) = field
 
 modifyCurrentField :: (Field -> Field) -> World -> World
-modifyCurrentField f (Row back (Row left   c   right) front) =
-                     (Row back (Row left (f c) right) front)
+modifyCurrentField f (W (Row back (Row left   c   right) front)) =
+                     (W (Row back (Row left (f c) right) front))
 
 nextField :: World -> Maybe Field
 nextField w = fmap currentField (goForward w)
@@ -130,8 +134,11 @@ isWall :: Karel Bool
 isWall = do
   nextWorld <- gets goForward
   case nextWorld of
-    Nothing  -> return False
-    (Just _) -> return True
+    Nothing  -> return True
+    (Just _) -> return False
+
+notIsWall :: Karel Bool
+notIsWall = liftM not isWall
 
 move :: Karel ()
 move = do
@@ -147,9 +154,10 @@ move = do
 
 -- for internal use only
 rotateRight :: World -> World
-rotateRight (Row a (Row b1 b2 b3) c) = Row (zipWith3 Row (myTranspose $ map before c) b1 (myTranspose $ map before a))
-                                           (Row (map current c) b2 (map current a))
-                                           (zipWith3 Row (myTranspose $ map after c) b3 (myTranspose $ map after a))
+rotateRight (W (Row a (Row b1 b2 b3) c)) =
+  W $ Row (zipWith3 Row (myTranspose $ map before c) b1 (myTranspose $ map before a))
+          (Row (map current c) b2 (map current a))
+          (zipWith3 Row (myTranspose $ map after c) b3 (myTranspose $ map after a))
   where myTranspose :: [[a]] -> [[a]]
         myTranspose [] = repeat []
         myTranspose a  = transpose a
@@ -166,9 +174,13 @@ turnRight = do
 
 
 -- Markers
+-- =======
 
 isMarker :: Karel Bool
 isMarker = gets $ marker . currentField
+
+notIsMarker :: Karel Bool
+notIsMarker = liftM not isMarker
 
 putMarker :: Karel ()
 putMarker = modify $ modifyCurrentField (\f -> f { marker = True })
@@ -184,6 +196,7 @@ toggleMarker = do
 
 
 -- Bricks
+-- ======
 
 countBricks :: Karel Int
 countBricks = gets $ maybe 0 bricks . nextField
@@ -192,6 +205,9 @@ isBrick :: Karel Bool
 isBrick = do
   c <- countBricks
   return (c>0)
+
+notIsBrick :: Karel Bool
+notIsBrick = liftM not isBrick
 
 -- for internal use only
 addBricks :: Int -> Karel ()
