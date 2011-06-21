@@ -72,15 +72,13 @@ task 'test', ->
 
 # Note to myself: Start CouchDB with `sudo /etc/init.d/couchdb start`
 
-createCouchApp = (callback) ->
-  couchapp = require 'couchapp'
-  couchapp.createApp require('./couchapp/app.js'), config.couchdb_url, callback
+kanso_push = (auto) ->
+  auto = if auto then 'auto' else ''
+  kanso = exec "cd couchapp; kanso #{auto}push #{config.couchdb_url}"
+  connectStd kanso
 
-task 'push', 'Push the couchapp to the server', ->
-  createCouchApp (app) -> app.push()
-
-task 'sync', 'Push and watch local files for changes', ->
-  createCouchApp (app) -> app.sync()
+task 'push', 'Push the couchapp to the server', -> kanso_push no
+task 'sync', 'Push and watch local files for changes', -> kanso_push yes
 
 
 # Examples
