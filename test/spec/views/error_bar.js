@@ -11,7 +11,7 @@ describe("Error Bar", function() {
     var el = $(errorBar.el)
     expect(el.html()).toEqual('')
     project.run()
-    expect(el.html()).toMatch(/asdf .* not defined/)
+    expect(el.html()).toMatch(/asdf\b.*\bnot defined/)
   })
 
   it("should hide the bar", function() {
