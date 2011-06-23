@@ -1,1 +1,28 @@
-<h1>404 - Not Found</h1>
+<h1>
+  <!--
+    This is the same as public/404bot.png, but inlined as a data-uri.
+    This allows us to serve this html page from whatever url.
+  -->
+  <img alt="404" src="{baseURL}/static/img/404bot.png" />
+</h1>
+<h2>
+  <span lang="en">Not found</span>
+  /
+  <span lang="de">Nicht gefunden</span>
+</h2>
+<a href="/" id="backlink">
+  &lArr;
+  <span lang="en">Back</span>
+  /
+  <span lang="de">Zurück</span>
+</a>
+<p id="credits">
+  Robot
+  <a href="http://creativecommons.org/licences/by-sa/3.0/us/">CC</a>
+  by
+  <a href="http://substack.net/">James Halliday</a>
+</p>
+
+<script>
+  document.getElementById('backlink').onclick = history.back
+</script>

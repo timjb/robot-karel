@@ -1,0 +1,9 @@
+<script>
+  $(window).load(function() {
+    var project = new Karel.Models.Project()
+    project.set(project.parse({json|s}), { silent: true })
+    
+    var application = new Karel.Views.Application({ model: project })
+      .appendTo(document.body)
+  })
+</script>

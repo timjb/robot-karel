@@ -152,7 +152,7 @@ body.ide {
 }
 .structogram li {
   padding: 0 0 0 6px;
-   border-top: 1px solid #ccc;
+  border-top: 1px solid #ccc;
   border-left: 1px solid #ccc;
 }
 .structogram table {
@@ -166,3 +166,12 @@ body.ide {
 .structogram th { font-weight: normal; }
 .structogram td > ul { margin: 0; }
 .structogram td > ul > li { border-left: none; border-top: none; }
+
+/* 404 Page */
+.not_found #wrapper { text-align: center; }
+.not_found h2, #backlink { margin: 10px 0; }
+.not_found h2 { font-size: 20px; font-weight: normal; }
+#backlink { display: block; font-size: 30px; font-weight: bold; }
+#backlink:hover { text-decoration: none; }
+#credits { font-size: 12px; color: #888; }
+#credits a { color: inherit; }

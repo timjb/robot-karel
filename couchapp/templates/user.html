@@ -1,0 +1,16 @@
+<h2>{userName}</h2>
+
+<h3>{projects.length} Projects</h3>
+
+{?projects}
+  <ul class="projects">
+    {#projects}
+      <li>
+        <a href="{baseURL}/{author}/{title}">{title}</a>
+        <span class="language">({language})</span>
+      </li>
+    {/projects}
+  </ul>
+{:else}
+  <p>No projects! :-(</p>
+{/projects}

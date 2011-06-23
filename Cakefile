@@ -1,5 +1,6 @@
 fs = require 'fs'
 path = require 'path'
+url = require 'url'
 {exec, spawn} = require 'child_process'
 
 
@@ -10,8 +11,13 @@ catch _
   process.stderr.write "You must write a `config.json` file for some tasks. Use `config.json.example` for reference."
 
 if config
-  _parts = config.couchdb_url.split('/')
-  db_name = _parts[_parts.length-1]
+  parts   = url.parse config.couchdb_url
+  db_host = parts.hostname
+  db_port = parts.port
+  db_name = parts.pathname.slice 1
+  #if auth = parts.auth
+  #  db_user = auth.split(':')[0]
+  #  db_pass = auth.split(':')[1]
 
 
 # Build
@@ -72,13 +78,13 @@ task 'test', ->
 
 # Note to myself: Start CouchDB with `sudo /etc/init.d/couchdb start`
 
-kanso_push = (auto) ->
-  auto = if auto then 'auto' else ''
-  kanso = exec "cd couchapp; kanso #{auto}push #{config.couchdb_url}"
+kanso = (cmd) ->
+  kanso = exec "cd couchapp; kanso #{cmd} #{config.couchdb_url}"
   connectStd kanso
 
-task 'push', 'Push the couchapp to the server', -> kanso_push no
-task 'sync', 'Push and watch local files for changes', -> kanso_push yes
+task 'push', 'Push the couchapp to the server', -> kanso 'push'
+task 'pushadmin', 'Push the admin app to the server', -> kanso 'pushadmin'
+task 'sync', 'Push and watch local files for changes', -> kanso 'autopush'
 
 
 # Examples
@@ -133,9 +139,11 @@ task 'upload:javascript-examples', "Upload the new examples written in JavaScrip
 openDBWithExamples = ->
   cradle = require 'cradle'
   connection = new cradle.Connection
+    host: db_host
+    port: db_port
     auth:
-      username: 'examples' # TODO: set this in config.json
-      password: 'beispielhaft'
+      username: 'examples'
+      password: config.examples_password
   connection.database db_name
 
 

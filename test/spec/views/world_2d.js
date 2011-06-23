@@ -106,7 +106,7 @@ describe("World2D", function() {
     var position = new Karel.Models.Position(2,3)
     var event = new $.Event('mousedown', { which: 1 })
     view.fields[position.y][position.x].trigger(event)
-    expect(model.get('robot').get('position').equals(position)).toBeTruthy()
+    expect(model.get('robot').get('position')).toEquals(position)
   })
 
   it("should toggle the marker when right-clicking on a field", function() {

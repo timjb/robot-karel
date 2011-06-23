@@ -1,0 +1,30 @@
+<h2>Software tests</h2>
+
+<p>These tests help ensure that Robot Karel is working correctly:</p>
+
+
+<script src="{baseURL}/static/jasmine/jasmine.js"></script>
+<script src="{baseURL}/static/jasmine/jasmine-html.js"></script>
+
+<script src="{baseURL}/static/spec/spec_helper.js"></script>
+<script src="{baseURL}/static/spec/interpreter.js"></script>
+<script src="{baseURL}/static/spec/models/project.js"></script>
+<script src="{baseURL}/static/spec/models/world_and_robot.js"></script>
+<script src="{baseURL}/static/spec/models/position_and_direction.js"></script>
+<script src="{baseURL}/static/spec/views/world_2d.js"></script>
+<script src="{baseURL}/static/spec/views/world_3d.js"></script>
+<script src="{baseURL}/static/spec/views/world_base.js"></script>
+<script src="{baseURL}/static/spec/views/error_bar.js"></script>
+
+<script>
+  $('<link rel="stylesheet" href="{baseURL}/static/jasmine/jasmine.css" />')
+    .appendTo($('head'))
+
+  var reporter = new jasmine.TrivialReporter()
+  var env = jasmine.getEnv()
+
+  env.addReporter(reporter)
+  env.execute()
+
+  $('#wrapper').append(reporter.outerDiv)
+</script>

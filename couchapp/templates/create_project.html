@@ -1,0 +1,30 @@
+<h2>Create a New Project</h2>
+
+<script>
+  $(window).load(function() {
+    var neww = new Karel.Models.Project({
+      author: session.get('name')
+    })
+    session.bind('set:name', function() {
+      neww.set({ author: session.get('name') })
+    })
+    
+    var form = new Skin.Form({
+      model: neww,
+      fields: [
+        { attribute: 'title', attrs: { autofocus: 'autofocus' } },
+        { attribute: 'description', type: 'textarea',
+          attrs: { placeholder: "Optional", rows: 5 } },
+        { attribute: 'language', type: 'select', value: [
+          { text: "JavaScript", value: 'javascript',
+            selected: neww.get('language') === 'javascript' },
+          { text: "Robot Karol", value: 'karol',
+            selected: neww.get('language') === 'karol' }
+        ] }
+      ],
+      submit: true
+    })
+      .bind('submit', function() { neww.save() })
+      .appendTo($('#wrapper'))
+  })
+</script>

@@ -1,0 +1,117 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <title>{title} &middot; Robot Karel</title>
+  <link rel="shortcut icon" href="{baseURL}/static/img/favicon.png" /><!-- http://hubot.github.com/ -->
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Ubuntu" />
+  <link rel="stylesheet" href="{baseURL}/static/css/style.css" />
+  <link rel="stylesheet" href="{baseURL}/static/skin/css/base.css" />
+  <link rel="stylesheet" href="{baseURL}/static/skin/css/container.css" />
+  <link rel="stylesheet" href="{baseURL}/static/skin/css/split.css" />
+  <link rel="stylesheet" href="{baseURL}/static/skin/css/toolbar.css" />
+  <link rel="stylesheet" href="{baseURL}/static/skin/css/overlay.css" />
+  <link rel="stylesheet" href="{baseURL}/static/skin/css/form.css" />
+  <link rel="stylesheet" href="{baseURL}/static/skin/css/in_place_editor.css" />
+  <link rel="stylesheet" href="{baseURL}/static/codemirror/lib/codemirror.css" />
+  <link rel="stylesheet" href="{baseURL}/static/codemirror/theme/default.css" />
+  <link rel="stylesheet" href="{baseURL}/static/lib/mode/karol.css" />
+  <!-- kanso -->
+  <script src="{baseURL}/static/js/jquery-1.6.1.min.js"></script>
+  <script src="{baseURL}/static/js/json2.js"></script>
+  <!-- turn off the client side kanso code
+  <script src="{baseURL}/static/js/history.adapter.jquery.js"></script>
+  <script src="{baseURL}/static/js/history.js"></script>
+  <script src="{baseURL}/static/js/history.html4.js"></script>
+  <script src="{baseURL}/kanso.js"></script>
+  -->
+  <!-- the ordering of the scripts is importent: scripts lower in the list may depend on scripts that are included above theme -->
+  <script src="{baseURL}/static/js/underscore.js"></script>
+  <script src="{baseURL}/static/js/backbone.js"></script>
+  <script src="{baseURL}/static/js/backbone.couchdb.js"></script>
+  <!--
+    The problem with this is that old versions of the the scripts depend on an
+    old version of jQuery
+    <script src="/_utils/script/sha1.js"></script>
+    <script src="/_utils/script/jquery.couch.js"></script>
+  -->
+  <script src="{baseURL}/static/js/sha1.js"></script>
+  <script src="{baseURL}/static/js/jquery.couch.js"></script>
+  <script src="{baseURL}/static/skin/lib/base.js"></script>
+  <script src="{baseURL}/static/skin/lib/views/container.js"></script>
+  <script src="{baseURL}/static/skin/lib/views/split.js"></script>
+  <script src="{baseURL}/static/skin/lib/views/toggle.js"></script>
+  <script src="{baseURL}/static/skin/lib/views/toolbar.js"></script>
+  <script src="{baseURL}/static/skin/lib/views/overlay.js"></script>
+  <script src="{baseURL}/static/skin/lib/views/form.js"></script>
+  <script src="{baseURL}/static/skin/lib/views/in_place_editor.js"></script>
+  <script src="{baseURL}/static/skin/lib/locales/en.js"></script>
+  <script src="{baseURL}/static/lib/base.js"></script>
+  <script src="{baseURL}/static/lib/settings.js"></script>
+  <script src="{baseURL}/static/lib/helpers/beep.js"></script>
+  <script src="{baseURL}/static/lib/helpers/clone.js"></script>
+  <script src="{baseURL}/static/lib/helpers/get_key.js"></script>
+  <script src="{baseURL}/static/lib/helpers/get_line_number.js"></script>
+  <script src="{baseURL}/static/lib/helpers/matrix.js"></script>
+  <script src="{baseURL}/static/lib/helpers/sandbox.js"></script>
+  <script src="{baseURL}/static/lib/models/position_and_direction.js"></script>
+  <script src="{baseURL}/static/lib/models/robot.js"></script>
+  <script src="{baseURL}/static/lib/models/world.js"></script>
+  <script src="{baseURL}/static/lib/models/js_execution.js"></script>
+  <script src="{baseURL}/static/lib/models/karol_execution.js"></script>
+  <script src="{baseURL}/static/lib/models/project.js"></script>
+  <script src="{baseURL}/static/lib/models/couchdb_session.js"></script>
+  <script src="{baseURL}/static/lib/parser/nodes.js"></script>
+  <script src="{baseURL}/static/lib/parser/parser.js"></script>
+  <script src="{baseURL}/static/lib/parser/compiler.js"></script>
+  <script src="{baseURL}/static/lib/parser/interpreter.js"></script>
+  <script src="{baseURL}/static/lib/parser/renderer.js"></script>
+  <script src="{baseURL}/static/lib/views/editor.js"></script>
+  <script src="{baseURL}/static/lib/views/editor_toolbar.js"></script>
+  <script src="{baseURL}/static/lib/views/main_toolbar.js"></script>
+  <script src="{baseURL}/static/lib/views/world_base.js"></script>
+  <script src="{baseURL}/static/lib/views/world_2d.js"></script>
+  <script src="{baseURL}/static/lib/views/world_3d.js"></script>
+  <script src="{baseURL}/static/lib/views/world_toolbar.js"></script>
+  <script src="{baseURL}/static/lib/views/application.js"></script>
+  <script src="{baseURL}/static/lib/views/error_bar.js"></script>
+  <script src="{baseURL}/static/lib/views/couchdb_session.js"></script>
+  <script src="{baseURL}/static/lib/views/structogram.js"></script>
+  <script src="{baseURL}/static/js/ThreeCanvas.js"></script>
+  <script src="{baseURL}/static/js/ThreeExtras.js"></script><!-- Cube and Plane -->
+  <script src="{baseURL}/static/codemirror/lib/codemirror.js"></script>
+  <script src="{baseURL}/static/codemirror/mode/javascript/javascript.js"></script>
+  <script src="{baseURL}/static/lib/mode/karol.js"></script>
+  <script src="{baseURL}/static/etc/simple_robot.js"></script>
+  <script>
+    // Use pyronicide/backbone.couchdb.js
+    Backbone.couch.options = {
+      database: 'robot-karel',
+      design:   'couchapp'
+    }
+    
+    window.session = new Karel.Models.CouchDBSession().fetch()
+    
+    $(document).ready(function() {
+      $('#header').prepend(new Karel.Views.CouchDBSession({
+        model: window.session
+      }).render().el)
+    })
+  </script>
+</head>
+
+<body class="{className}">
+  {?noWrapper}
+    {content|s}
+  {:else}
+    <div id="wrapper">
+      <div id="header">
+        <h1><a href="{baseURL}">Robot Karel</a></h1>
+      </div>
+      {content|s}
+    </div>
+  {/noWrapper}
+</body>
+
+</html>

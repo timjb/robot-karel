@@ -1,7 +1,7 @@
 {
-    "name": "couchapp",
-    "load": "lib/app",
-    "modules": "lib",
-    "templates": "templates",
-    "attachments": "static"
+  "name":        "couchapp",
+  "load":        "lib/app",
+  "modules":     "lib",
+  "templates":   "templates",
+  "attachments": "static"
 }
