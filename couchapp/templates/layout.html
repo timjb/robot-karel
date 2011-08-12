@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
 
 <head>
@@ -19,7 +19,7 @@
   <link rel="stylesheet" href="f/codemirror/default.css" />
   <link rel="stylesheet" href="f/mode/karol.css" />
   <!-- the ordering of the scripts is importent: scripts lower in the list may depend on scripts that are included above theme -->
-  <script src="f/vendor/jquery.js"></script>
+  <script src="f/vendor/jquery-min.js"></script>
   <script src="f/vendor/underscore.js"></script>
   <script src="f/vendor/backbone.js"></script>
   <script src="f/vendor/backbone.couchdb.js"></script>
@@ -84,7 +84,8 @@
       design:   'app'
     }
     
-    window.session = new Karel.Models.CouchDBSession().fetch()
+    window.session = new Karel.Models.CouchDBSession()
+    window.session.fetch()
     
     $(document).ready(function() {
       $('#header').prepend(new Karel.Views.CouchDBSession({
