@@ -158,7 +158,6 @@ ddoc.lists.ide = function() {
     var doc = row.value
     
     return mustache.to_html(self.templates.layout, {
-      baseUrl: '../..',
       title: "Editing " + doc.author+"/"+doc.title,
       className: 'ide',
       noWrapper: true,
@@ -234,7 +233,6 @@ ddoc.shows.spec = function() {
   var mustache = require('mustache')
   
   return mustache.to_html(this.templates.layout, {
-    baseUrl: '..',
     title: "Jasmine Specs",
     body:  this.templates.spec
   })
@@ -244,24 +242,13 @@ ddoc.shows.spec = function() {
 // Static Pages
 // ------------
 
-route('/',       '_show/home/home') // Home page
+route('/',       '_show/static/home') // Home page
 route('p/:page', '_show/static/:page')
 
-ddoc.shows.home = function(doc) {
-  var mustache = require('mustache')
-  
-  return mustache.to_html(this.templates.layout, {
-    title: doc.title,
-    body:  mustache.to_html(this.templates.static, doc)
-  })
-}
-
-// This differs only in that it sets `baseUrl`
 ddoc.shows.static = function(doc) {
   var mustache = require('mustache')
   
   return mustache.to_html(this.templates.layout, {
-    baseUrl: '..',
     title: doc.title,
     body:  mustache.to_html(this.templates.static, doc)
   })
@@ -325,7 +312,6 @@ ddoc.lists.project = function(head, req) {
     var doc = row.value
     
     return mustache.to_html(self.templates.layout, {
-      baseUrl: '..',
       title: doc.author+"/"+doc.title,
       body: mustache.to_html(self.templates.project, {
         authorized:  req.userCtx.name === doc.author,

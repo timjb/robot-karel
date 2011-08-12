@@ -4,79 +4,78 @@
 <head>
   <meta charset="utf-8" />
   <title>{{title}} &middot; Robot Karel</title>
-  {{#baseUrl}}<base href="{{baseUrl}}" />{{/baseUrl}}
-  <link rel="shortcut icon" href="f/favicon.png" /><!-- http://hubot.github.com/ -->
+  <link rel="shortcut icon" href="/f/favicon.png" /><!-- http://hubot.github.com/ -->
   <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Ubuntu" />
-  <link rel="stylesheet" href="f/style.css" />
-  <link rel="stylesheet" href="f/skin/css/base.css" />
-  <link rel="stylesheet" href="f/skin/css/container.css" />
-  <link rel="stylesheet" href="f/skin/css/split.css" />
-  <link rel="stylesheet" href="f/skin/css/toolbar.css" />
-  <link rel="stylesheet" href="f/skin/css/overlay.css" />
-  <link rel="stylesheet" href="f/skin/css/form.css" />
-  <link rel="stylesheet" href="f/skin/css/in_place_editor.css" />
-  <link rel="stylesheet" href="f/codemirror/codemirror.css" />
-  <link rel="stylesheet" href="f/codemirror/default.css" />
-  <link rel="stylesheet" href="f/mode/karol.css" />
+  <link rel="stylesheet" href="/f/style.css" />
+  <link rel="stylesheet" href="/f/skin/css/base.css" />
+  <link rel="stylesheet" href="/f/skin/css/container.css" />
+  <link rel="stylesheet" href="/f/skin/css/split.css" />
+  <link rel="stylesheet" href="/f/skin/css/toolbar.css" />
+  <link rel="stylesheet" href="/f/skin/css/overlay.css" />
+  <link rel="stylesheet" href="/f/skin/css/form.css" />
+  <link rel="stylesheet" href="/f/skin/css/in_place_editor.css" />
+  <link rel="stylesheet" href="/f/codemirror/codemirror.css" />
+  <link rel="stylesheet" href="/f/codemirror/default.css" />
+  <link rel="stylesheet" href="/f/mode/karol.css" />
   <!-- the ordering of the scripts is importent: scripts lower in the list may depend on scripts that are included above theme -->
-  <script src="f/vendor/jquery-min.js"></script>
-  <script src="f/vendor/underscore.js"></script>
-  <script src="f/vendor/backbone.js"></script>
-  <script src="f/vendor/backbone.couchdb.js"></script>
+  <script src="/f/vendor/jquery-min.js"></script>
+  <script src="/f/vendor/underscore.js"></script>
+  <script src="/f/vendor/backbone.js"></script>
+  <script src="/f/vendor/backbone.couchdb.js"></script>
   <!--
     The problem with this is that old versions of the the scripts depend on an
     old version of jQuery
     <script src="/_utils/script/sha1.js"></script>
     <script src="/_utils/script/jquery.couch.js"></script>
   -->
-  <script src="f/vendor/sha1.js"></script>
-  <script src="f/vendor/jquery.couch.js"></script>
-  <script src="f/skin/lib/base.js"></script>
-  <script src="f/skin/lib/views/container.js"></script>
-  <script src="f/skin/lib/views/split.js"></script>
-  <script src="f/skin/lib/views/toggle.js"></script>
-  <script src="f/skin/lib/views/toolbar.js"></script>
-  <script src="f/skin/lib/views/overlay.js"></script>
-  <script src="f/skin/lib/views/form.js"></script>
-  <script src="f/skin/lib/views/in_place_editor.js"></script>
-  <script src="f/skin/lib/locales/en.js"></script>
-  <script src="f/base.js"></script>
-  <script src="f/settings.js"></script>
-  <script src="f/helpers/beep.js"></script>
-  <script src="f/helpers/clone.js"></script>
-  <script src="f/helpers/get_key.js"></script>
-  <script src="f/helpers/get_line_number.js"></script>
-  <script src="f/helpers/matrix.js"></script>
-  <script src="f/helpers/sandbox.js"></script>
-  <script src="f/models/position_and_direction.js"></script>
-  <script src="f/models/robot.js"></script>
-  <script src="f/models/world.js"></script>
-  <script src="f/models/js_execution.js"></script>
-  <script src="f/models/karol_execution.js"></script>
-  <script src="f/models/project.js"></script>
-  <script src="f/models/couchdb_session.js"></script>
-  <script src="f/parser/nodes.js"></script>
-  <script src="f/parser/parser.js"></script>
-  <script src="f/parser/compiler.js"></script>
-  <script src="f/parser/interpreter.js"></script>
-  <script src="f/parser/renderer.js"></script>
-  <script src="f/views/editor.js"></script>
-  <script src="f/views/editor_toolbar.js"></script>
-  <script src="f/views/main_toolbar.js"></script>
-  <script src="f/views/world_base.js"></script>
-  <script src="f/views/world_2d.js"></script>
-  <script src="f/views/world_3d.js"></script>
-  <script src="f/views/world_toolbar.js"></script>
-  <script src="f/views/application.js"></script>
-  <script src="f/views/error_bar.js"></script>
-  <script src="f/views/couchdb_session.js"></script>
-  <script src="f/views/structogram.js"></script>
-  <script src="f/vendor/ThreeCanvas.js"></script>
-  <script src="f/vendor/ThreeExtras.js"></script><!-- Cube and Plane -->
-  <script src="f/codemirror/codemirror.js"></script>
-  <script src="f/codemirror/javascript.js"></script>
-  <script src="f/mode/karol.js"></script>
-  <script src="f/simple_robot.js"></script>
+  <script src="/f/vendor/sha1.js"></script>
+  <script src="/f/vendor/jquery.couch.js"></script>
+  <script src="/f/skin/lib/base.js"></script>
+  <script src="/f/skin/lib/views/container.js"></script>
+  <script src="/f/skin/lib/views/split.js"></script>
+  <script src="/f/skin/lib/views/toggle.js"></script>
+  <script src="/f/skin/lib/views/toolbar.js"></script>
+  <script src="/f/skin/lib/views/overlay.js"></script>
+  <script src="/f/skin/lib/views/form.js"></script>
+  <script src="/f/skin/lib/views/in_place_editor.js"></script>
+  <script src="/f/skin/lib/locales/en.js"></script>
+  <script src="/f/base.js"></script>
+  <script src="/f/settings.js"></script>
+  <script src="/f/helpers/beep.js"></script>
+  <script src="/f/helpers/clone.js"></script>
+  <script src="/f/helpers/get_key.js"></script>
+  <script src="/f/helpers/get_line_number.js"></script>
+  <script src="/f/helpers/matrix.js"></script>
+  <script src="/f/helpers/sandbox.js"></script>
+  <script src="/f/models/position_and_direction.js"></script>
+  <script src="/f/models/robot.js"></script>
+  <script src="/f/models/world.js"></script>
+  <script src="/f/models/js_execution.js"></script>
+  <script src="/f/models/karol_execution.js"></script>
+  <script src="/f/models/project.js"></script>
+  <script src="/f/models/couchdb_session.js"></script>
+  <script src="/f/parser/nodes.js"></script>
+  <script src="/f/parser/parser.js"></script>
+  <script src="/f/parser/compiler.js"></script>
+  <script src="/f/parser/interpreter.js"></script>
+  <script src="/f/parser/renderer.js"></script>
+  <script src="/f/views/editor.js"></script>
+  <script src="/f/views/editor_toolbar.js"></script>
+  <script src="/f/views/main_toolbar.js"></script>
+  <script src="/f/views/world_base.js"></script>
+  <script src="/f/views/world_2d.js"></script>
+  <script src="/f/views/world_3d.js"></script>
+  <script src="/f/views/world_toolbar.js"></script>
+  <script src="/f/views/application.js"></script>
+  <script src="/f/views/error_bar.js"></script>
+  <script src="/f/views/couchdb_session.js"></script>
+  <script src="/f/views/structogram.js"></script>
+  <script src="/f/vendor/ThreeCanvas.js"></script>
+  <script src="/f/vendor/ThreeExtras.js"></script><!-- Cube and Plane -->
+  <script src="/f/codemirror/codemirror.js"></script>
+  <script src="/f/codemirror/javascript.js"></script>
+  <script src="/f/mode/karol.js"></script>
+  <script src="/f/simple_robot.js"></script>
   <script>
     // Use pyronicide/backbone.couchdb.js
     Backbone.couch.options = {
@@ -99,7 +98,7 @@
   {{^noWrapper}}
   <div id="wrapper">
     <div id="header">
-      <h1><a href="p/home">Robot Karel</a></h1>
+      <h1><a href="/p/home">Robot Karel</a></h1>
     </div>
     {{{body}}}
   </div>
