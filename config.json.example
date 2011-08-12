@@ -1,3 +1,3 @@
-{
-  "couchdb_url": "http://localhost:5984/karel"
+{ "couchdb_url": "http://localhost:5984/karel"
+, "examples_password": "beispielhaft"
 }

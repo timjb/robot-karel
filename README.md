@@ -1,3 +1,5 @@
+Documentation: [http://substance/timbaumann/robot-karel](http://substance/timbaumann/robot-karel)
+
 Kudos
 -----
 

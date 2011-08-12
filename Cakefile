@@ -1,4 +1,5 @@
 fs = require 'fs'
+url = require 'url'
 path = require 'path'
 {exec, spawn} = require 'child_process'
 
@@ -10,8 +11,13 @@ catch _
   process.stderr.write "You must write a `config.json` file for some tasks. Use `config.json.example` for reference."
 
 if config
-  _parts = config.couchdb_url.split('/')
-  db_name = _parts[_parts.length-1]
+  parts = url.parse config.couchdb_url
+  db_host = parts.hostname
+  db_port = parts.port
+  db_name = parts.pathname.slice(1)
+  #if auth = parts.auth
+  #  db_user = auth.split(':')[0]
+  #  db_pass = auth.split(':')[1]
 
 
 # Build
@@ -111,6 +117,7 @@ task 'upload:karol-examples', "Upload Robot Karol's examples to your local Couch
         language: 'karol'
         description: "This is one of the examples that come bundled with Robot Karol."
         type: 'project'
+      , (err) -> console.error err if err
 
 JS_EXAMPLES_DIR = "#{__dirname}/examples/javascript"
 
@@ -131,13 +138,16 @@ task 'upload:javascript-examples', "Upload the new examples written in JavaScrip
         language: 'javascript'
         description: ""
         type: 'project'
+      , (err) -> console.error err if err
 
 openDBWithExamples = ->
   cradle = require 'cradle'
   connection = new cradle.Connection
+    host: db_host
+    port: db_port
     auth:
-      username: 'examples' # TODO: set this in config.json
-      password: 'beispielhaft'
+      username: 'examples'
+      password: config.examples_password
   connection.database db_name
 
 
