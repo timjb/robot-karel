@@ -5,7 +5,8 @@
     * MainToolbar
     * Structogram (and Renderer)
   * Models
-    * JSExecution, KarolExecution
+    * JSExecution
+    * KarolExecution
     * CouchDBSession
   * CLI
   * Webinterface
@@ -14,9 +15,9 @@
   * "require" other scripts
   * istLeer, istVoll, etc
 * Buttons for running step by step or fast
+* Optimize Performance (minify JavaScript etc.)
 * Translate error messages
-* README
-* Docs
+* README & Docs (on Substance.io)
 * Examples
   * Time (digital clock using marks)
   * Live stock quotes
