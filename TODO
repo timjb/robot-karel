@@ -2,11 +2,10 @@
   * Views
     * Application
     * CouchDBSession
-    * Editor
     * MainToolbar
     * Structogram (and Renderer)
-    * JSExecution, KarolExecution
   * Models
+    * JSExecution, KarolExecution
     * CouchDBSession
   * CLI
   * Webinterface
