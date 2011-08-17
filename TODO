@@ -5,7 +5,6 @@
     * Editor
     * MainToolbar
     * Structogram (and Renderer)
-    * WorldToolbar
     * JSExecution, KarolExecution
   * Models
     * CouchDBSession
