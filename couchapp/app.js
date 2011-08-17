@@ -195,7 +195,7 @@ route(
   { key: [':author', ':title'] }
 )
 
-ddoc.lists.exportKDPProgram = function() {
+ddoc.lists.exportKDPProgram = function () {
   var self = this
   registerType('kdp', 'text/kdp')
   provides('kdp', function() {
@@ -212,7 +212,7 @@ route(
   { key: [':author', ':title'] }
 )
 
-ddoc.lists.exportJSProgram = function() {
+ddoc.lists.exportJSProgram = function () {
   var self = this
   registerType('js', 'text/javascript')
   provides('js', function() {
@@ -224,28 +224,13 @@ ddoc.lists.exportJSProgram = function() {
 }
 
 
-// Jasmine Specs
-// -------------
-
-route('p/spec', '_show/spec')
-
-ddoc.shows.spec = function() {
-  var mustache = require('mustache')
-  
-  return mustache.to_html(this.templates.layout, {
-    title: "Jasmine Specs",
-    body:  this.templates.spec
-  })
-}
-
-
 // Static Pages
 // ------------
 
-route('/',       '_show/static/home') // Home page
+route('/',       '_show/static/home') // Homepage
 route('p/:page', '_show/static/:page')
 
-ddoc.shows.static = function(doc) {
+ddoc.shows.static = function (doc) {
   var mustache = require('mustache')
   
   return mustache.to_html(this.templates.layout, {
@@ -264,7 +249,7 @@ route(
   { startkey: [':user'] }
 )
 
-ddoc.lists.user = function(head, req) {
+ddoc.lists.user = function (head, req) {
   var mustache = require('mustache')
   
   var self = this
@@ -303,7 +288,7 @@ route(
   { key: [':author', ':title'] }
 )
 
-ddoc.lists.project = function(head, req) {
+ddoc.lists.project = function (head, req) {
   var mustache = require('mustache')
   var self = this
   provides('html', function() {

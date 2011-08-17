@@ -96,7 +96,7 @@ a:hover   { text-decoration: underline; }
  */
 
 #application,
-#application > .skin-split{
+#application > .skin-split {
   height: 100%;
   width: 100%;
 }

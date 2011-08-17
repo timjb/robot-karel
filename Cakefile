@@ -15,9 +15,9 @@ if config
   db_host = parts.hostname
   db_port = parts.port
   db_name = parts.pathname.slice(1)
-  #if auth = parts.auth
-  #  db_user = auth.split(':')[0]
-  #  db_pass = auth.split(':')[1]
+  if auth = parts.auth
+    db_user = auth.split(':')[0]
+    db_pass = auth.split(':')[1]
 
 
 # Build
@@ -88,6 +88,19 @@ task 'push', 'Push the couchapp to the server', ->
 task 'sync', 'Push and watch local files for changes', ->
   createCouchApp (app) -> app.sync()
 
+STATIC_DIR = "#{__dirname}/couchapp/static"
+
+task 'upload:static', ->
+  db = openDBWithAuth db_user, db_pass
+  fs.readdirSync(STATIC_DIR)
+    .forEach (file) ->
+      name = file.replace(/\.html$/, '')
+      body = fs.readFileSync("#{STATIC_DIR}/#{file}", 'utf-8')
+      title = if m = body.match(/<h2>(.*)<\/h2>/) then m[1] else "Untitled Page"
+      db.save name,
+        title: title
+        body:  body
+
 
 # Examples
 # ========
@@ -140,15 +153,21 @@ task 'upload:javascript-examples', "Upload the new examples written in JavaScrip
         type: 'project'
       , (err) -> console.error err if err
 
-openDBWithExamples = ->
+openDBWithAuth = (username, password) ->
+  auth = if username and password
+    username: username
+    password: password
+  else
+    undefined
+  
   cradle = require 'cradle'
   connection = new cradle.Connection
     host: db_host
     port: db_port
-    auth:
-      username: 'examples'
-      password: config.examples_password
+    auth: auth
   connection.database db_name
+
+openDBWithExamples = -> openDBWithAuth 'examples', config.examples_password
 
 
 # Helpers
