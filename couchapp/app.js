@@ -128,27 +128,13 @@ upload('../codemirror/theme', 'codemirror')
 // IDE
 // ---
 
-route('new', '_show/create_project')
-
-ddoc.shows.create_project = function() {
-  var mustache = require('mustache')
-  
-  var self = this
-  provides('html', function() {
-    return mustache.to_html(self.templates.layout, {
-      title: 'New Project',
-      body: self.templates.create_project
-    })
-  })
-}
-
 route(
   ':author/:title/edit',
   '_list/ide/projectsByAuthorAndTitle',
   { key: [':author', ':title'] }
 )
 
-ddoc.lists.ide = function() {
+ddoc.lists.ide = function (_, req) {
   var mustache = require('mustache')
   
   var self = this
@@ -158,6 +144,7 @@ ddoc.lists.ide = function() {
     var doc = row.value
     
     return mustache.to_html(self.templates.layout, {
+      userCtx: JSON.stringify(req.userCtx),
       title: "Editing " + doc.author+"/"+doc.title,
       className: 'ide',
       noWrapper: true,
@@ -178,10 +165,10 @@ route(
   { key: [':author', ':title'] }
 )
 
-ddoc.lists.exportWorld = function() {
+ddoc.lists.exportWorld = function () {
   var self = this
   registerType('kdw', 'text/kdw')
-  provides('kdw', function() {
+  provides('kdw', function () {
     var row = getRow()
     if (!row) return "Not found."
     var doc = row.value
@@ -198,7 +185,7 @@ route(
 ddoc.lists.exportKDPProgram = function () {
   var self = this
   registerType('kdp', 'text/kdp')
-  provides('kdp', function() {
+  provides('kdp', function () {
     var row = getRow()
     if (!row) return "Not found."
     var doc = row.value
@@ -215,7 +202,7 @@ route(
 ddoc.lists.exportJSProgram = function () {
   var self = this
   registerType('js', 'text/javascript')
-  provides('js', function() {
+  provides('js', function () {
     var row = getRow()
     if (!row) return "Not found."
     var doc = row.value
@@ -230,10 +217,11 @@ ddoc.lists.exportJSProgram = function () {
 route('/',       '_show/static/home') // Homepage
 route('p/:page', '_show/static/:page')
 
-ddoc.shows.static = function (doc) {
+ddoc.shows.static = function (doc, req) {
   var mustache = require('mustache')
   
   return mustache.to_html(this.templates.layout, {
+    userCtx: JSON.stringify(req.userCtx),
     title: doc.title,
     body:  mustache.to_html(this.templates.static, doc)
   })
@@ -253,7 +241,7 @@ ddoc.lists.user = function (head, req) {
   var mustache = require('mustache')
   
   var self = this
-  provides('html', function() {
+  provides('html', function () {
     
     var rows = []
     ,   row  = null
@@ -268,6 +256,7 @@ ddoc.lists.user = function (head, req) {
     var userName = rows[0].author
     
     return mustache.to_html(self.templates.layout, {
+      userCtx: JSON.stringify(req.userCtx),
       title: userName,
       body: mustache.to_html(self.templates.user, {
         userName: userName,
@@ -291,12 +280,13 @@ route(
 ddoc.lists.project = function (head, req) {
   var mustache = require('mustache')
   var self = this
-  provides('html', function() {
+  provides('html', function () {
     var row = getRow()
     if (!row) return self.templates['404']
     var doc = row.value
     
     return mustache.to_html(self.templates.layout, {
+      userCtx: JSON.stringify(req.userCtx),
       title: doc.author+"/"+doc.title,
       body: mustache.to_html(self.templates.project, {
         authorized:  req.userCtx.name === doc.author,
@@ -315,7 +305,7 @@ ddoc.lists.project = function (head, req) {
 
 route('*', '_show/404')
 
-ddoc.shows['404'] = function() {
+ddoc.shows['404'] = function () {
   var self = this
   provides('html', function() {
     return self.templates['404']

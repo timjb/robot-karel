@@ -89,17 +89,17 @@
   <script src="/f/simple_robot.js"></script>
   <script>
     // Use pyronicide/backbone.couchdb.js
-    Backbone.couch.options = {
-      database: 'karel',
-      design:   'app'
-    }
+    Backbone.couch.options = { database: 'karel', design: 'app' }
     
-    window.session = new Karel.Models.CouchDBSession()
-    window.session.fetch()
+    var session = new Karel.Models.CouchDBSession()
+    session.set(session.parse({ userCtx: {{{userCtx}}} }))
+    // Usually, rendered pages get cached by CouchDB.
+    // Thus, we need to fetch the session information anyway.
+    session.fetch()
     
     $(document).ready(function() {
       $('#header').prepend(new Karel.Views.CouchDBSession({
-        model: window.session
+        model: session
       }).render().el)
     })
   </script>

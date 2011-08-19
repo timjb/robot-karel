@@ -1,7 +1,6 @@
 * Tests
   * Views
     * Application
-    * CouchDBSession
     * Structogram (and Renderer)
   * Models
     * JSExecution
