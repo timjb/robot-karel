@@ -8,7 +8,7 @@ describe("World Toolbar", function () {
 
   beforeEach(function () {
     world = new Karel.Models.World()
-    robot = world.get('robot')
+    robot = world.getRobot()
     worldToolbar = new Karel.Views.WorldToolbar({ model: world })
     worldToolbar.appendTo(document.body)
   })

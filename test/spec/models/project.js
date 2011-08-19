@@ -28,9 +28,9 @@ describe("Project", function() {
   })
 
   it("should run Karel code", function() {
-    var startDirection = project.get('world').get('robot').get('direction')
+    var startDirection = project.get('world').getRobot().get('direction')
     project.run()
-    var endDirection = project.get('world').get('robot').get('direction')
+    var endDirection = project.get('world').getRobot().get('direction')
     expect(endDirection.equals(startDirection.turnLeft())).toBeTruthy()
   })
 
@@ -47,25 +47,25 @@ describe("Project", function() {
                  +'noSuchMethod();'
       })
       project.bind('error', errorCallback = jasmine.createSpy())
-      startPosition = project.get('world').get('robot').get('position')
+      startPosition = project.get('world').getRobot().get('position')
       project.run()
-      endPosition = project.get('world').get('robot').get('position')
+      endPosition = project.get('world').getRobot().get('position')
     })
 
     it("should have moved the robot three fields", function() {
-      var d = project.get('world').get('robot').get('direction')
+      var d = project.get('world').getRobot().get('direction')
       expect(endPosition.equals(startPosition.plus(d).plus(d).plus(d))).toBeTruthy()
     })
 
     it("should have created a backup of the world before running", function() {
       expect(project._worldBackup).toBeInstanceof(Karel.Models.World)
-      var backupPosition = project._worldBackup.get('robot').get('position')
+      var backupPosition = project._worldBackup.getRobot().get('position')
       expect(backupPosition.equals(startPosition)).toBeTruthy()
     })
 
     it("should be resettable", function() {
       project.reset()
-      var positionAfterReset = project.get('world').get('robot').get('position')
+      var positionAfterReset = project.get('world').getRobot().get('position')
       expect(startPosition.equals(positionAfterReset)).toBeTruthy()
     })
 
@@ -89,7 +89,7 @@ describe("Project", function() {
       project.bind('end',   function ()  { hasEnded = true })
       project.bind('error', function (e) { error = e       })
       
-      var getRobot = function () { return project.get('world').get('robot') }
+      var getRobot = function () { return project.get('world').getRobot() }
       var startPosition = getRobot().get('position')
       var getPosition = function () { return getRobot().get('position') }
       var d = getRobot().get('direction')

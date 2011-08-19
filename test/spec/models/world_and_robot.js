@@ -11,7 +11,7 @@ describe("World and Robot", function() {
 
   beforeEach(function() {
     world = new World({ width: 3, depth: 3 })
-    robot = world.get('robot')
+    robot = world.getRobot()
   })
 
   describe("Field", function() {
@@ -188,10 +188,10 @@ describe("World and Robot", function() {
   // Various
 
   it("should be testable for equality", function() {
-    expect(new World().get('robot').equals(robot)).toBeTruthy()
-    expect(new World().get('robot').turnLeft().equals(robot)).toBeFalsy()
+    expect(new World().getRobot().equals(robot)).toBeTruthy()
+    expect(new World().getRobot().turnLeft().equals(robot)).toBeFalsy()
     expect(new World({ width: 3, depth: 3 }).equals(world)).toBeTruthy()
-    expect(new World({ width: 3, depth: 3 }).get('robot')
+    expect(new World({ width: 3, depth: 3 }).getRobot()
       .putBrick()
       .get('world').equals(world)).toBeFalsy()
   })
@@ -233,7 +233,7 @@ describe("World and Robot", function() {
   it("should import .kdw", function() {
     var kdw = 'KarolVersion2Deutsch 4 4 5 3 2 3 n n n n n m n n n n n o n n n n n o q q n n n o z n n n n m n n n n n o n n n n n o q q n n n o z z n n n m n n n n n o n n n n n o q q n n n o z z z n n m z z n n n o z n n n n o q q n n n o '
     world = World.fromString(kdw)
-    robot = world.get('robot')
+    robot = world.getRobot()
 
     expect(robot).toHavePosition(new Position(3,2))
     expect(robot).toHaveDirection(Direction.EAST)
@@ -256,7 +256,7 @@ describe("World and Robot", function() {
 
   it("should export the world to .kdw", function() {
     world = new World({ width: 2, depth: 2 })
-    robot = world.get('robot')
+    robot = world.getRobot()
 
     robot.putMarker()
     robot.putBrick()

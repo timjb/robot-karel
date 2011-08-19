@@ -39,7 +39,6 @@ describe("Main Toolbar", function () {
     expect(mainToolbar.selectedWorldView()).toBe('2D')
   })
 
-  /*
   it("should open a dialog when the user clicks the 'New' button", function () {
     expect($('.new-world-overlay').length).toBe(0)
     mainToolbar.$('.new-button').click()
@@ -53,7 +52,6 @@ describe("Main Toolbar", function () {
     // Make sure to remove the overlay
     $('.new-world-overlay').remove()
   })
-  */
 
 })
 

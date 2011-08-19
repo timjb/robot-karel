@@ -81,7 +81,7 @@ describe("World3D", function() {
     ,   startRotation    = view.robot.rotation.clone()
     
     expectAllFieldsToBeUpToDate()
-    model.get('robot')
+    model.getRobot()
       .putBrick()
       .move()
       .putBrick()

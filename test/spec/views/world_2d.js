@@ -16,20 +16,20 @@ describe("World2D", function() {
 
   it("should display markers", function() {
     var test = function() {
-      var position = model.get('robot').get('position')
+      var position = model.getRobot().get('position')
       expect(view.fields[position.y][position.x].hasClass('marker'))
         .toEqual(model.getField(position).marker)
     }
     
     test()
-    model.get('robot').putMarker()
+    model.getRobot().putMarker()
     view.render()
     test()
   })
 
   it("should display blocks", function() {
     var test = function() {
-      var robot     = model.get('robot')
+      var robot     = model.getRobot()
       ,   position  = robot.get('position')
       ,   direction = robot.get('direction')
       ,   nextPos   = position.plus(direction)
@@ -39,14 +39,14 @@ describe("World2D", function() {
     }
     
     test()
-    model.get('robot').putBlock()
+    model.getRobot().putBlock()
     view.render()
     test()
   })
 
   it("should display bricks", function() {
     var test = function() {
-      var robot     = model.get('robot')
+      var robot     = model.getRobot()
       ,   position  = robot.get('position')
       ,   direction = robot.get('direction')
       ,   nextPos   = position.plus(direction)
@@ -62,7 +62,7 @@ describe("World2D", function() {
       }
     }
     
-    var robot = model.get('robot')
+    var robot = model.getRobot()
     test()
     robot.putBrick()
     view.render()
@@ -79,7 +79,7 @@ describe("World2D", function() {
 
   it("should display the position and direction of the robot", function() {
     var test = function() {
-      var robot    = model.get('robot')
+      var robot    = model.getRobot()
       ,   position = robot.get('position')
       ,   dir      = robot.get('direction')
       
@@ -89,7 +89,7 @@ describe("World2D", function() {
         .toEqual(directions[directionIndex])
     }
 
-    var robot = model.get('robot')
+    var robot = model.getRobot()
     test()
     robot.set({ position: new Karel.Models.Position(4,2) })
     view.render()
@@ -106,7 +106,7 @@ describe("World2D", function() {
     var position = new Karel.Models.Position(2,3)
     var event = new $.Event('mousedown', { which: 1 })
     view.fields[position.y][position.x].trigger(event)
-    expect(model.get('robot').get('position').equals(position)).toBeTruthy()
+    expect(model.getRobot().get('position').equals(position)).toBeTruthy()
   })
 
   it("should toggle the marker when right-clicking on a field", function() {
