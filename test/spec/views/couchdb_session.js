@@ -28,7 +28,7 @@ describe("CouchDB Session (View)", function () {
     expect(loginSpy).toHaveBeenCalled()
     
     expect($(sessionView.el).html()).not.toMatch(/Welcome/)
-    session.trigger('login')
+    session.set({ loggedIn: true })
     expect($(sessionView.el).html()).toMatch(/Welcome/)
   })
 
@@ -42,7 +42,7 @@ describe("CouchDB Session (View)", function () {
     expect(signupSpy).toHaveBeenCalled()
     
     expect($(sessionView.el).html()).not.toMatch(/Welcome/)
-    session.trigger('signup')
+    session.set({ loggedIn: true })
     expect($(sessionView.el).html()).toMatch(/Welcome/)
   })
 
@@ -54,6 +54,7 @@ describe("CouchDB Session (View)", function () {
     session.login = function (options) {
       if (options && options.success) options.success(null)
       this.trigger('login')
+      this.set({ loggedIn: true })
     }
     sessionView.$('.username').val('admin')
     sessionView.$('.password').val('1234')
@@ -66,9 +67,9 @@ describe("CouchDB Session (View)", function () {
     sessionView.$('.logout').click()
     expect(logoutSpy).toHaveBeenCalled()
     
-    session.trigger('logout')
-    expect(sessionView.$('.logout').length).toBe(1)
-    expect(sessionView.$('.login').length).toBe(0)
+    session.set({ loggedIn: false })
+    expect(sessionView.$('.logout').length).toBe(0)
+    expect(sessionView.$('.login').length).toBe(1)
   })
 
 })

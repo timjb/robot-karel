@@ -80,6 +80,7 @@ describe("CouchDB Session (Model)", function () {
       expect(successSpy).toHaveBeenCalled()
       expect(errorSpy).not.toHaveBeenCalled()
       expect(loginSpy).toHaveBeenCalled()
+      expect(session.get('loggedIn')).toBe(true)
       expect(session.get('password')).toBeUndefined()
     })
   })
@@ -103,6 +104,7 @@ describe("CouchDB Session (Model)", function () {
       expect(successSpy).not.toHaveBeenCalled()
       expect(errorSpy).toHaveBeenCalled()
       expect(loginSpy).not.toHaveBeenCalled()
+      expect(session.get('loggedIn')).toBe(false)
       expect(session.get('password')).toBe('trolololo')
     })
   })
@@ -111,7 +113,7 @@ describe("CouchDB Session (Model)", function () {
     var successSpy, errorSpy, logoutSpy
 
     runs(function () {
-      session.set({ name: 'admin', password: '1234' })
+      session.set({ name: 'admin', password: '1234', loggedIn: true })
       session.login()
     })
 
@@ -132,6 +134,7 @@ describe("CouchDB Session (Model)", function () {
       expect(successSpy).toHaveBeenCalled()
       expect(errorSpy).not.toHaveBeenCalled()
       expect(logoutSpy).toHaveBeenCalled()
+      expect(session.get('loggedIn')).toBe(false)
       expect(session.get('name')).toBeUndefined()
       expect(session.get('password')).toBeUndefined()
     })
@@ -143,7 +146,7 @@ describe("CouchDB Session (Model)", function () {
     // Don't log in
 
     runs(function () {
-      session.set({ name: 'admin', password: '4321' })
+      session.set({ name: 'admin', password: '4321', loggedIn: true })
       successSpy = jasmine.createSpy()
       errorSpy   = jasmine.createSpy()
       logoutSpy  = jasmine.createSpy()
@@ -158,8 +161,9 @@ describe("CouchDB Session (Model)", function () {
       expect(successSpy).not.toHaveBeenCalled()
       expect(errorSpy).toHaveBeenCalled()
       expect(logoutSpy).not.toHaveBeenCalled()
-      expect(session.get('name')).not.toBeUndefined()
-      expect(session.get('password')).not.toBeUndefined()
+      expect(session.get('loggedIn')).toBe(true)
+      expect(session.get('name')).toBe('admin')
+      expect(session.get('password')).toBe('4321')
     })
   })
 
@@ -182,6 +186,7 @@ describe("CouchDB Session (Model)", function () {
       expect(successSpy).toHaveBeenCalled()
       expect(errorSpy).not.toHaveBeenCalled()
       expect(signupSpy).toHaveBeenCalled()
+      expect(session.get('loggedIn')).toBe(true)
       expect(session.get('password')).toBeUndefined()
     })
   })
@@ -205,7 +210,8 @@ describe("CouchDB Session (Model)", function () {
       expect(successSpy).not.toHaveBeenCalled()
       expect(errorSpy).toHaveBeenCalled()
       expect(signupSpy).not.toHaveBeenCalled()
-      expect(session.get('password')).not.toBeUndefined()
+      expect(session.get('loggedIn')).toBe(false)
+      expect(session.get('password')).toBe('asdf')
     })
   })
 
@@ -224,6 +230,7 @@ describe("CouchDB Session (Model)", function () {
     runs(function () {
       expect(successSpy).toHaveBeenCalled()
       expect(errorSpy).not.toHaveBeenCalled()
+      expect(session.get('loggedIn')).toBe(true)
       expect(session.get('name')).toBe('admin')
     })
   })
@@ -243,7 +250,8 @@ describe("CouchDB Session (Model)", function () {
     runs(function () {
       expect(successSpy).not.toHaveBeenCalled()
       expect(errorSpy).toHaveBeenCalled()
-      expect(session.get('name')).toBeUndefined()
+      expect(session.get('loggedIn')).toBe(false)
+      expect(session.get('name')).toBe('')
     })
   })
 
