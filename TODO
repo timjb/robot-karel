@@ -6,7 +6,6 @@
   * Models
     * JSExecution
     * KarolExecution
-    * CouchDBSession
   * CLI
   * Webinterface
 * Commands:
