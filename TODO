@@ -2,7 +2,6 @@
   * Views
     * Application
     * CouchDBSession
-    * MainToolbar
     * Structogram (and Renderer)
   * Models
     * JSExecution
