@@ -10,7 +10,7 @@ describe("World Toolbar", function () {
     world = new Karel.Models.World()
     robot = world.getRobot()
     worldToolbar = new Karel.Views.WorldToolbar({ model: world })
-    worldToolbar.appendTo(document.body)
+    worldToolbar.appendTo(testEl)
   })
 
   afterEach(function () {

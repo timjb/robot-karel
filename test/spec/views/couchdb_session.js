@@ -11,7 +11,7 @@ describe("CouchDB Session (View)", function () {
   beforeEach(function () {
     session = new CouchDBSession({})
     sessionView = new CouchDBSessionView({ model: session })
-    sessionView.appendTo(document.body)
+    sessionView.appendTo(testEl)
   })
 
   afterEach(function () {

@@ -8,7 +8,7 @@ describe("World3D", function() {
   beforeEach(function() {
     model = new Karel.Models.World()
     view  = new Karel.Views.World3D({ model: model })
-    view.appendTo(document.body)
+    view.appendTo(testEl)
   })
 
   afterEach(function() {

@@ -14,7 +14,7 @@ describe("Application (View)", function () {
       code: 'solange nicht istwand tue schritt *solange'
     })
     application = new Application({ model: project })
-    application.appendTo(document.body)
+    application.appendTo(testEl)
   })
 
   afterEach(function () {

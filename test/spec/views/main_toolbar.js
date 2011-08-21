@@ -10,7 +10,7 @@ describe("Main Toolbar", function () {
   beforeEach(function () {
     project = new Project({})
     mainToolbar = new MainToolbar({ model: project })
-    mainToolbar.appendTo(document.body)
+    mainToolbar.appendTo(testEl)
   })
 
   afterEach(function () {

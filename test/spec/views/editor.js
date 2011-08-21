@@ -12,11 +12,13 @@ describe("Editor", function () {
       code: 'putBrick\nmove\nputBrick\nturnLeft'
     })
     editor = new Editor({ model: project })
-    editor.appendTo(document.body)
+    $(testEl).css('display', 'block')
+    editor.appendTo(testEl)
   })
 
   afterEach(function () {
     editor.remove()
+    $(testEl).css('display', 'none')
   })
 
   it("should have the code of the project as it's initial value", function () {
