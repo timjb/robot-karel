@@ -61,6 +61,29 @@ describe("Application (View)", function () {
     expect(application.$('.world-2d').length).toBe(0)
   })
 
+  it("should open a dialog when the user clicks the 'New' button", function () {
+    expect($('.new-world-overlay').length).toBe(0)
+    application.mainToolbar.trigger('show-new-world-dialog')
+    expect($('.new-world-overlay').length).toBe(1)
+    
+    $('.new-world-overlay input[name=width]').val('13').trigger('change')
+    $('.new-world-overlay input[name=depth]').val('17').trigger('change')
+    
+    // It should stop the propagation of keydown events
+    var keydownSpy = jasmine.createSpy()
+    $(application.el).keydown(keydownSpy)
+    $('.new-world-overlay input[name=width]').trigger('keydown')
+    expect(keydownSpy).not.toHaveBeenCalled()
+    
+    $('.new-world-overlay input[type=submit]').click()
+    
+    expect($('.new-world-overlay').length).toBe(0)
+    expect(project.get('world').get('width')).toBe(13)
+    expect(project.get('world').get('depth')).toBe(17)
+    // Make sure to remove the overlay
+    $('.new-world-overlay').remove()
+  })
+
   it("should replace the old views for the world when the world is replaced by a new one", function () {
     var oldWorld2D = application.world2D
     ,   oldWorld3D = application.world3D

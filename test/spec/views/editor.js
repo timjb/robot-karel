@@ -12,6 +12,7 @@ describe("Editor", function () {
       code: 'putBrick\nmove\nputBrick\nturnLeft'
     })
     editor = new Editor({ model: project })
+    
     $(testEl).css('display', 'block')
     editor.appendTo(testEl)
   })

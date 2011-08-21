@@ -39,18 +39,11 @@ describe("Main Toolbar", function () {
     expect(mainToolbar.selectedWorldView()).toBe('2D')
   })
 
-  it("should open a dialog when the user clicks the 'New' button", function () {
-    expect($('.new-world-overlay').length).toBe(0)
+  it("should trigger 'show-new-world-dialog' when the user clicks the 'New' button", function () {
+    var spy = jasmine.createSpy()
+    mainToolbar.bind('show-new-world-dialog', spy)
     mainToolbar.$('.new-button').click()
-    expect($('.new-world-overlay').length).toBe(1)
-    $('.new-world-overlay input[name=width]').val('13').trigger('change')
-    $('.new-world-overlay input[name=depth]').val('17').trigger('change')
-    $('.new-world-overlay input[type=submit]').click()
-    expect($('.new-world-overlay').length).toBe(0)
-    expect(project.get('world').get('width')).toBe(13)
-    expect(project.get('world').get('depth')).toBe(17)
-    // Make sure to remove the overlay
-    $('.new-world-overlay').remove()
+    expect(spy).toHaveBeenCalled()
   })
 
 })
