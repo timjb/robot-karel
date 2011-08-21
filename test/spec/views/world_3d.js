@@ -15,6 +15,13 @@ describe("World3D", function() {
     view.remove()
   })
 
+  it("should accept an object specifying the degrees and cameraZ of the pov", function () {
+    view = new Karel.Views.World3D({ model: model }, { degrees: 77, cameraZ: 0, radius: 777 })
+    expect(view.degrees).toBe(77)
+    expect(view.cameraZ).toBe(0)
+    expect(view.radius).toBe(777)
+  })
+
   it("should rotate when dragging", function() {
     var startDegrees = view.degrees
     ,   startCameraZ = view.cameraZ
