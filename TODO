@@ -1,7 +1,6 @@
 * Tests
   * Views
     * Application
-    * Structogram (and Renderer)
   * Models
     * JSExecution
     * KarolExecution
