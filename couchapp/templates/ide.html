@@ -1,6 +1,6 @@
 <script>
-  $(window).load(function() {
-    var project = new Karel.Models.Project()
+  $(document).ready(function () {
+    var project = window.project = new Karel.Models.Project()
     project.set(project.parse({{{json}}}), { silent: true })
     
     var application = new Karel.Views.Application({ model: project })
