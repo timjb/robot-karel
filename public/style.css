@@ -1,15 +1,11 @@
-/*
- * Reset
- * =====
- */
+/* Reset
+ * == */
 
 * { margin: 0; padding: 0; }
 
 
-/*
- * Layout
- * ======
- */
+/* Layout
+ * === */
 
 body {
   font: 14px Ubuntu, Helvetica, Arial, sans-serif !important; line-height: 18px;
@@ -19,10 +15,7 @@ body {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
 }
-
-body.ide {
-  padding: 0;
-}
+body.ide { padding: 0; }
 
 #wrapper {
   background: #fff;
@@ -41,20 +34,6 @@ body.ide {
   padding: 0 18px;
   line-height: 50px;
   border-bottom: 1px solid #ccc;
-}
-
-.session {
-  text-align: right;
-  float: right;
-  width: 380px;
-}
-.session .username,
-.session .password {
-  width: 120px;
-}
-.session input {
-  margin-left: 4px;
-  padding: 2px;
 }
 
 h1 a, h1 a:visited, h1 a:hover {
@@ -80,6 +59,24 @@ h3:after { content: ":"; }
 .projects li:nth-child(odd)  { background: #fff; }
 .projects li:nth-child(even) { background: #f3f3f3; }
 .language { color: #888; }
+
+
+/* CouchDBSession
+ * ----------- */
+
+.session {
+  text-align: right;
+  float: right;
+  width: 380px;
+}
+.session .username,
+.session .password {
+  width: 120px;
+}
+.session input {
+  margin-left: 4px;
+  padding: 2px;
+}
 
 
 /* Homepage
