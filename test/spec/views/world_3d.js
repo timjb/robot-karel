@@ -1,17 +1,17 @@
-describe("World3D", function() {
+describe("World3D", function () {
 
   // This is very hard to test, since the scene is rendered in a canvas.
   // But we can test some internals.
 
   var model, view
 
-  beforeEach(function() {
+  beforeEach(function () {
     model = new Karel.Models.World()
     view  = new Karel.Views.World3D({ model: model })
     view.appendTo(testEl)
   })
 
-  afterEach(function() {
+  afterEach(function () {
     view.remove()
   })
 
@@ -22,7 +22,7 @@ describe("World3D", function() {
     expect(view.radius).toBe(777)
   })
 
-  it("should rotate when dragging", function() {
+  it("should rotate when dragging", function () {
     var startDegrees = view.degrees
     ,   startCameraZ = view.cameraZ
     
@@ -49,10 +49,10 @@ describe("World3D", function() {
     expect(endCameraZ).toBeGreaterThan(startCameraZ)
   })
 
-  it("should zoom when scrolling", function() {
+  it("should zoom when scrolling", function () {
     var startRadius = view.radius
     
-    var scroll = function() {
+    var scroll = function () {
       $(document).trigger(new $.Event('mousewheel', { wheelDelta: 120 }))
       $(window).trigger(new $.Event('DOMMouseScroll', { detail: -3 }))
     }
@@ -68,11 +68,11 @@ describe("World3D", function() {
   })
 
   // updateField
-  var expectAllFieldsToBeUpToDate = function() {
-    model.eachField(function(x, y, field) {
+  var expectAllFieldsToBeUpToDate = function () {
+    model.eachField(function (x, y, field) {
       var fieldObj = view.fields[x][y]
       expect(fieldObj.bricks.length).toBe(field.bricks)
-      _.each(fieldObj.bricks, function(brickObj) {
+      _.each(fieldObj.bricks, function (brickObj) {
         expect(brickObj).toBeInstanceof(THREE.Mesh)
       })
       expect(!!fieldObj.marker).toBe(field.marker)
@@ -82,7 +82,7 @@ describe("World3D", function() {
     })
   }
 
-  it("should update all fields and the robot", function() {
+  it("should update all fields and the robot", function () {
     var startObjectCount = view.scene.objects.length
     ,   startPosition    = view.robot.position.clone()
     ,   startRotation    = view.robot.rotation.clone()

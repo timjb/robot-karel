@@ -1,4 +1,15 @@
+/*
+ * Reset
+ * =====
+ */
+
 * { margin: 0; padding: 0; }
+
+
+/*
+ * Layout
+ * ======
+ */
 
 body {
   font: 14px Ubuntu, Helvetica, Arial, sans-serif !important; line-height: 18px;
@@ -46,13 +57,6 @@ body.ide {
   padding: 2px;
 }
 
-p, ul {
-  margin-bottom: 18px;
-}
-ul {
-  margin-left: 18px;
-}
-
 h1 a, h1 a:visited, h1 a:hover {
   color: inherit;
   text-decoration: none;
@@ -78,9 +82,25 @@ h3:after { content: ":"; }
 .language { color: #888; }
 
 
-a         { color: #339; text-decoration: none; }
-a:visited { color: #306; }
-a:hover   { text-decoration: underline; }
+/* Homepage
+ * ----- */
+
+#home-example {
+  height: 300px;
+}
+
+#home-example h2 {
+  position: absolute; left: 40px; top: 40px;
+  z-index: 1000;
+}
+
+#home-example .world-3d {
+  position: absolute; top: 0; right: 0; bottom: 0; left: 0;
+}
+
+
+/* GitHub Ribbon
+ * ---------- */
 
 .gh-ribbon {
   display: block; width: 149px; height: 149px;
@@ -91,9 +111,23 @@ a:hover   { text-decoration: underline; }
 }
 
 
-/*
- * IDE
- */
+/* Inline Elements
+ * ------------ */
+
+a         { color: #339; text-decoration: none; }
+a:visited { color: #306; }
+a:hover   { text-decoration: underline; }
+
+
+/* Block Elements
+ * ----------- */
+
+p, ul { margin-bottom: 18px; }
+ul { margin-left: 18px; }
+
+
+/* IDE */
+/* === */
 
 #application,
 #application > .skin-split {
@@ -107,12 +141,20 @@ body.ide {
 
 .ide h1 { font-size: 16px; }
 
+
+/* Editor
+ * === */
+
 .editor { position: relative; }
 .CodeMirror, .CodeMirror-scroll {
   height: auto !important; position: absolute !important;
   top: 0; bottom: 0; left: 0; right: 0;
 }
 .CodeMirror pre.current-line { color: #f80; }
+
+
+/* World2D
+ * ==== */
 
 .world-2d {
   position: relative; left: 20px; top: 20px;
@@ -128,6 +170,10 @@ body.ide {
 .world-2d td.block { background: #666; color: #fff; }
 .world-2d td.brick { background: #f00; color: #fff; }
 
+
+/* ErrorBar
+ * ===== */
+
 .error-bar {
   background-color: #900; color: #fff;
   font-size: 15px; line-height: 28px;
@@ -139,6 +185,9 @@ body.ide {
 .error-bar a { color: inherit; text-decoration: underline; }
 .error-bar a:hover { text-decoration: none; }
 
+
+/* Structogram
+ * ======== */
 
 .structogram {
   background: #fff;

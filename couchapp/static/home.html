@@ -1,3 +1,30 @@
-<h2>Welcome to Robot Karel</h2>
+<div id="home-example">
+  <h2>Welcome to Robot Karel</h2>
+</div>
 
 <p>Check out the <a href="/examples">examples</a> or run the <a href="/p/spec">test suite</a>.</p>
+
+<script>
+  $(document).ready(function () {
+    var world = new Karel.Models.World({ width: 23, depth: 12 })
+    ,   robot = world.getRobot()
+    
+    setInterval(function () {
+      if (robot.isWall()) {
+        robot.turnLeft()
+      } else {
+        robot.move()
+      }
+    }, 1000)
+    
+    var world3D = new Karel.Views.World3D( { model: world }
+                                         , { radius: 550, degrees: 6, cameraZ: 300 } )
+    $(window).resize(function () { world3D.trigger('resize') })
+    world3D.appendTo($('#home-example'))
+    
+    //var coords
+    //$(document.body).mousemove(function (event) {
+    //  coords = { x: event.pageX, y: event.pageY }
+    //})
+  })
+</script>
