@@ -1,6 +1,7 @@
 fs = require 'fs'
 url = require 'url'
 path = require 'path'
+crypto = require 'crypto'
 {exec, spawn} = require 'child_process'
 
 
@@ -105,53 +106,53 @@ task 'upload:static', ->
 # Examples
 # ========
 
-KAROL_EXAMPLES_DIR = "#{__dirname}/examples/karol"
-STANDARD_WORLD = "#{KAROL_EXAMPLES_DIR}/01Programm.kdw"
+DEFAULT_WORLD = "#{__dirname}/examples/default_world.kdw"
 
 task 'upload:examples', ->
-  invoke 'upload:karol-examples'
-  invoke 'upload:javascript-examples'
+  invoke 'upload:old-examples'
+  invoke 'upload:new-examples'
 
-task 'upload:karol-examples', "Upload Robot Karol's examples to your local CouchDB", ->
+uploadExamplesDir = (dir, description) ->
   db = openDBWithExamples()
-  extKdp = /\.kdp$/
-  fs.readdirSync(KAROL_EXAMPLES_DIR)
-    .filter((filename) -> filename.match(extKdp))
-    .sort()
-    .forEach (kdpFilename) ->
-      kdpPath = "#{KAROL_EXAMPLES_DIR}/#{kdpFilename}"
-      kdwPath = kdpPath.replace(extKdp, '.kdw')
-      kdwPath = STANDARD_WORLD unless path.existsSync kdwPath
-      db.save
-        author: "examples"
-        title: path.basename kdpPath, '.kdp'
-        world: fs.readFileSync kdwPath, 'utf-8'
-        code: fs.readFileSync kdpPath, 'utf-8'
-        language: 'karol'
-        description: "This is one of the examples that come bundled with Robot Karol."
-        type: 'project'
+  fs.readdirSync(dir)
+    .forEach (file) ->
+      language = if file.match(/\.js$/)
+        'javascript'
+      else if file.match(/\.kdp$/)
+        'karol'
+      else
+        null
+      
+      return unless language
+      
+      codeFile  = "#{dir}/#{file}"
+      worldFile = codeFile.replace(/\.[a-z]+$/, '.kdw')
+      worldFile = DEFAULT_WORLD unless path.existsSync worldFile
+      
+      db.save sha1(codeFile),
+        type:        'project'
+        author:      "examples"
+        title:       path.basename(codeFile).replace(/\.[a-z]+$/, '')
+        world:       fs.readFileSync worldFile, 'utf-8'
+        code:        fs.readFileSync codeFile, 'utf-8'
+        language:    language
+        description: description
       , (err) -> console.error err if err
 
-JS_EXAMPLES_DIR = "#{__dirname}/examples/javascript"
+task 'upload:old-examples', "Upload the old examples that come bundled with Robot Karol", ->
+  uploadExamplesDir("#{__dirname}/examples/old", "This is one of the examples that come bundled with Robot Karol.")
 
-task 'upload:javascript-examples', "Upload the new examples written in JavaScript", ->
-  db = openDBWithExamples()
-  extJs = /\.js$/
-  fs.readdirSync(JS_EXAMPLES_DIR)
-    .filter((filename) -> filename.match(extJs))
-    .forEach (jsFilename) ->
-      jsPath = "#{JS_EXAMPLES_DIR}/#{jsFilename}"
-      kdwPath = jsPath.replace(extJs, '.kdw')
-      kdwPath = STANDARD_WORLD unless path.existsSync kdwPath
-      db.save
-        author: "examples"
-        title: path.basename jsPath, '.js'
-        world: fs.readFileSync kdwPath, 'utf-8'
-        code: fs.readFileSync jsPath, 'utf-8'
-        language: 'javascript'
-        description: ""
-        type: 'project'
-      , (err) -> console.error err if err
+task 'upload:new-examples', "Upload the new examples", ->
+  uploadExamplesDir("#{__dirname}/examples/new", "")
+
+
+# Helpers
+# -------
+
+sha1 = (str) ->
+  hash = crypto.createHash('sha1')
+  hash.update(str)
+  hash.digest('hex')
 
 openDBWithAuth = (username, password) ->
   auth = if username and password
@@ -169,11 +170,6 @@ openDBWithAuth = (username, password) ->
 
 openDBWithExamples = -> openDBWithAuth 'examples', config.examples_password
 
-
-# Helpers
-# -------
-
-connectStd = (process) ->
-  log = (data) -> console.log data.toString()
-  process.stdout.on 'data', log
-  process.stderr.on 'data', log
+connectStd = (child) ->
+  child.stdout.pipe(process.stdout)
+  child.stderr.pipe(process.stderr)

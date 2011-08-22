@@ -31,14 +31,14 @@
 </div>
 
 <script>
-  $(window).load(function() {
+  $(document).ready(function () {
     var project = new Karel.Models.Project({{{json}}})
     
-    $('.remove').click(function(event) {
+    $('.remove').click(function (event) {
       // TODO: Confirm
       event.preventDefault()
-      project.destroy({ success: function() {
-        window.location = project.get('author')
+      project.destroy({ success: function () {
+        window.location = '/'+project.get('author')
       } })
     })
     
