@@ -1,0 +1,743 @@
+anweisung legen
+  markeSetzen
+*anweisung
+
+anweisung a
+  linksDrehen
+  wiederhole 4 mal
+    legen
+    schritt
+  *wiederhole
+  rechtsDrehen
+  schritt
+  legen
+  schritt
+  rechtsDrehen
+  schritt
+  legen
+  schritt
+  rechtsDrehen
+  schritt
+  legen
+  linksDrehen
+  linksDrehen
+  schritt
+  rechtsDrehen
+  legen
+  schritt
+  legen
+  schritt
+  legen
+  linksDrehen
+  schritt(2)
+*anweisung
+
+anweisung b
+  linksDrehen
+  wiederhole 4 mal
+    legen
+    schritt
+  *wiederhole
+  legen
+  rechtsDrehen
+  schritt
+  legen
+  anweisung rechts
+    schritt
+    rechtsDrehen
+    schritt
+    rechtsDrehen
+    legen
+  *anweisung
+  anweisung links
+    schritt
+    linksDrehen
+    schritt
+    linksDrehen
+    legen
+  *anweisung
+  rechts
+  links
+  rechts
+  links
+  schritt(3)
+*anweisung
+
+anweisung c
+  linksDrehen
+  wiederhole 3 mal
+    schritt
+    legen
+  *wiederhole
+  schritt
+  rechtsDrehen
+  wiederhole 2 mal
+    schritt
+    legen
+  *wiederhole
+  schrittRückwaerts
+  rechtsDrehen
+  schritt(4)
+  linksDrehen
+  legen
+  schritt
+  legen
+  schritt(2)
+*anweisung
+
+anweisung d
+  linksDrehen
+  wiederhole 4 mal
+    legen
+    schritt
+  *wiederhole
+  legen
+  rechtsDrehen
+  schritt
+  legen
+  schritt
+  rechtsDrehen
+  schritt
+  wiederhole 3 mal
+    legen
+    schritt
+  *wiederhole
+  linksDrehen
+  schrittRückwaerts
+  legen
+  schritt(3)
+*anweisung
+
+anweisung e
+  linksDrehen
+  wiederhole 4 mal
+    legen
+    schritt
+  *wiederhole
+  legen
+  rechtsDrehen
+  wiederhole 2 mal
+    schritt
+    legen
+  *wiederhole
+  rechtsDrehen
+  schritt(2)
+  rechtsDrehen
+  legen
+  schritt
+  legen
+  linksDrehen
+  schritt(2)
+  linksDrehen
+  legen
+  schritt
+  legen
+  schritt(2)
+*anweisung
+
+anweisung f
+  linksDrehen
+  wiederhole 4 mal
+    legen
+    schritt
+  *wiederhole
+  legen
+  rechtsDrehen
+  wiederhole 2 mal
+    schritt
+    legen
+  *wiederhole
+  rechtsDrehen
+  schritt(2)
+  rechtsDrehen
+  legen
+  schritt
+  legen
+  linksDrehen
+  schritt(2)
+  linksDrehen
+  schritt(3)
+*anweisung
+
+anweisung g
+  linksDrehen
+  wiederhole 4 mal
+    legen
+    schritt
+  *wiederhole
+  rechtsDrehen
+  wiederhole 2 mal
+    schritt
+    legen
+  *wiederhole
+  rechtsDrehen
+  schritt
+  wiederhole 3 mal
+    schritt
+    legen
+  *wiederhole
+  rechtsDrehen
+  schritt
+  linksDrehen
+  linksDrehen
+  legen
+  schritt(3)
+*anweisung
+
+anweisung h
+  linksDrehen
+  wiederhole 4 mal
+    legen
+    schritt
+  *wiederhole
+  legen
+  rechtsDrehen
+  schritt(2)
+  rechtsDrehen
+  wiederhole 2 mal
+    legen
+    schritt
+  *wiederhole
+  rechtsDrehen
+  schritt
+  legen
+  schrittRückwaerts
+  linksDrehen
+  wiederhole 2 mal
+    legen
+    schritt
+  *wiederhole
+  legen
+  linksDrehen
+  schritt(2)
+*anweisung
+
+anweisung i
+  linksDrehen
+  wiederhole 4 mal
+    legen
+    schritt
+  *wiederhole
+  legen
+  rechtsDrehen
+  rechtsDrehen
+  schritt(4)
+  linksDrehen
+  schritt(2)
+*anweisung
+
+anweisung j
+  wiederhole 2 mal
+    legen
+    schritt
+  *wiederhole
+  linksDrehen
+  wiederhole 4 mal
+    schritt
+    legen
+  *wiederhole
+  rechtsDrehen
+  rechtsDrehen
+  schritt(4)
+  linksDrehen
+  schritt(2)
+*anweisung
+
+anweisung k
+  linksDrehen
+  wiederhole 4 mal
+    legen
+    schritt
+  *wiederhole
+  legen
+  rechtsDrehen
+  schritt(2)
+  rechtsDrehen
+  wiederhole 2 mal
+    legen
+    schritt
+  *wiederhole
+  rechtsDrehen
+  schritt
+  legen
+  schrittRückwaerts
+  linksDrehen
+  wiederhole 2 mal
+    schritt
+    legen
+  *wiederhole
+  linksDrehen
+  schritt(2)
+*anweisung
+
+anweisung l
+  linksDrehen
+  wiederhole 4 mal
+    legen
+    schritt
+  *wiederhole
+  legen
+  rechtsDrehen
+  rechtsDrehen
+  schritt(4)
+  linksDrehen
+  wiederhole 2 mal
+    schritt
+    legen
+  *wiederhole
+  schritt(2)
+*anweisung
+
+anweisung m
+  linksDrehen
+  wiederhole 4 mal
+    legen
+    schritt
+  *wiederhole
+  legen
+  rechtsDrehen
+  schritt
+  legen
+  schritt
+  rechtsDrehen
+  wiederhole 4 mal
+    schritt
+    legen
+  *wiederhole
+  linksDrehen
+  linksDrehen
+  schritt(4)
+  rechtsDrehen
+  schritt
+  legen
+  schritt
+  rechtsDrehen
+  wiederhole 4 mal
+    legen
+    schritt
+  *wiederhole
+  legen
+  linksDrehen
+  schritt(2)
+*anweisung
+
+anweisung n
+  linksDrehen
+  wiederhole 4 mal
+    legen
+    schritt
+  *wiederhole
+  legen
+  rechtsDrehen
+  rechtsDrehen
+  schritt(2)
+  linksDrehen
+  schritt
+  legen
+  schritt
+  linksDrehen
+  schritt
+  legen
+  schritt
+  rechtsDrehen
+  schritt
+  rechtsDrehen
+  wiederhole 4 mal
+    legen
+    schritt
+  *wiederhole
+  legen
+  linksDrehen
+  schritt(2)
+*anweisung
+
+anweisung o
+  linksDrehen
+  wiederhole 3 mal
+    schritt
+    legen
+  *wiederhole
+  schritt
+  rechtsDrehen
+  schritt
+  legen
+  schritt
+  rechtsDrehen
+  wiederhole 3 mal
+    schritt
+    legen
+  *wiederhole
+  schritt
+  linksDrehen
+  schrittRückwaerts
+  legen
+  schritt(3)
+*anweisung
+
+anweisung p
+  linksDrehen
+  wiederhole 4 mal
+    legen
+    schritt
+  *wiederhole
+  legen
+  rechtsDrehen
+  schritt
+  legen
+  schritt
+  rechtsDrehen
+  schritt
+  legen
+  schritt
+  rechtsDrehen
+  schritt
+  legen
+  linksDrehen
+  schritt(2)
+  linksDrehen
+  schritt(3)
+*anweisung
+
+anweisung q
+  linksDrehen
+  wiederhole 4 mal
+    legen
+    schritt
+  *wiederhole
+  rechtsDrehen
+  schritt
+  legen
+  schritt
+  rechtsDrehen
+  wiederhole 3 mal
+    schritt
+    legen
+  *wiederhole
+  schritt
+  linksDrehen
+  schrittRückwaerts
+  legen
+  schritt(3)
+*anweisung
+
+anweisung r
+  linksDrehen
+  wiederhole 4 mal
+    legen
+    schritt
+  *wiederhole
+  legen
+  rechtsDrehen
+  schritt
+  legen
+  schritt
+  rechtsDrehen
+  schritt
+  legen
+  schritt
+  rechtsDrehen
+  schritt
+  legen
+  schrittRückwaerts
+  linksDrehen
+  wiederhole 2 mal
+    schritt
+    legen
+  *wiederhole
+  linksDrehen
+  schritt(2)
+*anweisung
+
+anweisung s
+  wiederhole 2 mal
+    legen
+    schritt
+  *wiederhole
+  linksDrehen
+  schritt
+  legen
+  schritt
+  linksDrehen
+  schritt
+  legen
+  schritt
+  rechtsDrehen
+  schritt
+  legen
+  schritt
+  rechtsDrehen
+  wiederhole 2 mal
+    schritt
+    legen
+  *wiederhole
+  rechtsDrehen
+  schritt(4)
+  linksDrehen
+  schritt(2)
+*anweisung
+
+anweisung t
+  schritt
+  linksDrehen
+  wiederhole 4 mal
+    legen
+    schritt
+  *wiederhole
+  linksDrehen
+  schritt(1)
+  rechtsDrehen
+  rechtsDrehen
+  wiederhole 2 mal
+    legen
+    schritt
+  *wiederhole
+  legen
+  rechtsDrehen
+  schritt(4)
+  linksDrehen
+  schritt(2)
+*anweisung
+
+anweisung u
+  linksDrehen
+  schritt(4)
+  rechtsDrehen
+  rechtsDrehen
+  wiederhole 4 mal
+    legen
+    schritt
+  *wiederhole
+  linksDrehen
+  schritt
+  legen
+  schritt
+  linksDrehen
+  wiederhole 4 mal
+    schritt
+    legen
+  *wiederhole
+  rechtsDrehen
+  rechtsDrehen
+  schritt(4)
+  linksDrehen
+  schritt(2)
+*anweisung
+
+anweisung v
+  schritt
+  linksDrehen
+  wiederhole 2 mal
+    legen
+    schritt
+  *wiederhole
+  linksDrehen
+  schritt
+  rechtsDrehen
+  wiederhole 2 mal
+    legen
+    schritt
+  *wiederhole
+  legen
+  rechtsDrehen
+  schritt(2)
+  rechtsDrehen
+  wiederhole 2 mal
+    legen
+    schritt
+  *wiederhole
+  legen
+  schritt(2)
+  linksDrehen
+  schritt(2)
+*anweisung
+
+anweisung w
+  schritt
+  linksDrehen
+  wiederhole 2 mal
+    legen
+    schritt
+  *wiederhole
+  linksDrehen
+  schritt
+  rechtsDrehen
+  wiederhole 2 mal
+    legen
+    schritt
+  *wiederhole
+  legen
+  rechtsDrehen
+  schritt(2)
+  rechtsDrehen
+  wiederhole 2 mal
+    legen
+    schritt
+  *wiederhole
+  legen
+  linksDrehen
+  linksDrehen
+  schritt(2)
+  rechtsDrehen
+  schritt(2)
+  rechtsDrehen
+  wiederhole 2 mal
+    legen
+    schritt
+  *wiederhole
+  legen
+  rechtsDrehen
+  schritt
+  linksDrehen
+  wiederhole 2 mal
+    schritt
+    legen
+  *wiederhole
+  linksDrehen
+  schritt(3)
+*anweisung
+
+anweisung x
+  linksDrehen
+  wiederhole 2 mal
+    legen
+    schritt
+  *wiederhole
+  wiederhole 2 mal
+    schritt
+    legen
+  *wiederhole
+  rechtsDrehen
+  schritt(2)
+  rechtsDrehen
+  wiederhole 2 mal
+    legen
+    schritt
+  *wiederhole
+  rechtsDrehen
+  schritt
+  legen
+  schrittRückwaerts
+  linksDrehen
+  wiederhole 2 mal
+    schritt
+    legen
+  *wiederhole
+  linksDrehen
+  schritt(2)
+*anweisung
+
+anweisung y
+  schritt
+  linksDrehen
+  wiederhole 3 mal
+    legen
+    schritt
+  *wiederhole
+  linksDrehen
+  schritt
+  rechtsDrehen
+  legen
+  schritt
+  legen
+  rechtsDrehen
+  schritt(2)
+  rechtsDrehen
+  legen
+  schritt
+  legen
+  schritt(3)
+  linksDrehen
+  schritt(2)
+*anweisung
+
+anweisung z
+  linksDrehen
+  schritt(4)
+  rechtsDrehen
+  wiederhole 2 mal
+    legen
+    schritt
+  *wiederhole
+  legen
+  rechtsDrehen
+  schritt
+  legen
+  schritt
+  rechtsDrehen
+  schritt
+  legen
+  schritt
+  linksDrehen
+  schritt
+  legen
+  schritt
+  linksDrehen
+  wiederhole 2 mal
+    legen
+    schritt
+  *wiederhole
+  legen
+  schritt(2)
+*anweisung
+
+anweisung point
+  legen
+  schritt(2)
+*anweisung
+
+anweisung colon
+  linksDrehen
+  schritt(2)
+  rechtsDrehen
+  rechtsDrehen
+  legen
+  schritt(2)
+  legen
+  linksDrehen
+  schritt(2)
+*anweisung
+
+anweisung exclamation
+  linksDrehen
+  schritt
+  wiederhole 3 mal
+    schritt
+    legen
+  *wiederhole
+  rechtsDrehen
+  rechtsDrehen
+  schritt(4)
+  legen
+  linksDrehen
+  schritt(2)
+*anweisung
+
+anweisung space
+  schritt(2)
+*anweisung
+
+anweisung nl
+  rechtsDrehen
+  schritt(6)
+  rechtsDrehen
+  solange nicht istWand tue
+    schritt
+  *solange
+  linksDrehen
+  linksDrehen
+*anweisung
+
+anweisung alphabet
+  a b c d e f g nl
+  h i j k l m n nl
+  o p q r s t u nl
+  v w x y z exclamation
+*anweisung
+
+anweisung helloworld
+  h e l l o nl
+  w o r l d point
+*anweisung
+
+//alphabet
+//helloworld
