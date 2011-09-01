@@ -28,10 +28,36 @@
       coords = { x: event.pageX, y: event.pageY }
     })
     
+    var getRobotCoords = function () {
+      var vector2coords = function (vector, camera, width, height) {
+        var projScreenMatrix = new THREE.Matrix4()
+        projScreenMatrix.multiply(camera.projectionMatrix, camera.matrixWorldInverse)
+        projScreenMatrix.multiplyVector3(vector)
+        return { x: ((vector.x+1)/2)*width
+               , y: ((vector.y+1)/2)*height }
+      }
+      var robotPosition = vector2coords( world3D.robot.position.clone()
+                                       , world3D.camera
+                                       , world3D.width
+                                       , world3D.height
+                                       )
+      
+      var canvas = world3D.$('canvas')
+      ,   canvasOffset = canvas.offset()
+      ,   canvasHeight = canvas.innerHeight()
+      
+      return {
+        x: canvasOffset.left + robotPosition.x,
+        y: canvasOffset.top  + canvasHeight - robotPosition.y
+      }
+    }
+    
     setInterval(function () {
-      var offset = container.offset()
-      var dx = coords.x - (offset.left + (container.outerWidth()/2))
-      ,   dy = coords.y - (offset.top  + (container.outerHeight()/2))
+      var mouseCoords = coords
+      ,   robotCoords = getRobotCoords()
+      
+      var dx = mouseCoords.x - robotCoords.x
+      ,   dy = mouseCoords.y - robotCoords.y
       
       var desiredDirection = (Math.abs(dx) > Math.abs(dy))
                            ? Direction[dx > 0 ? 'EAST'  : 'WEST']
