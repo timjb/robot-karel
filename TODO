@@ -1,12 +1,11 @@
 * Tests
-  * CLI
   * Webinterface
 * Commands:
   * Fast & slow
   * "require" other scripts
   * istLeer, istVoll, etc
 * Buttons for running step by step or fast
-* Optimize Performance (minify JavaScript etc.)
+* Optimize loading performance (minify JavaScript and CSS, etc.)
 * Translate error messages
 * README & Docs (on Substance.io)
 * Examples
