@@ -34,7 +34,7 @@ cli.main(function(args, opts) {
       }
     })
   }
-  var robot = world.get('robot')
+  var robot = world.getRobot()
   
   if (args.length >= 1) {
     try {
@@ -74,8 +74,8 @@ function worldToAscii(world) {
   
   var width = world.get('width')
   ,   depth = world.get('depth')
-  ,   robotPosition = world.get('robot').get('position')
-  ,   robotDirection = world.get('robot').get('direction')
+  ,   robotPosition = world.getRobot().get('position')
+  ,   robotDirection = world.getRobot().get('direction')
   
   s += ('\u250f' + repeat(width, '\u2501') + '\u2513' + '\n')
   for (var y = 0; y < depth; y++) {
