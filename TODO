@@ -5,6 +5,7 @@
   * "require" other scripts
   * istLeer, istVoll, etc
 * Buttons for running step by step or fast
+* Unify axes names (x = width, z = depth, y = height)
 * Optimize loading performance (minify JavaScript and CSS, etc.)
 * Translate error messages
 * README & Docs (on Substance.io)

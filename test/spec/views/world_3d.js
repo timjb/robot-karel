@@ -15,16 +15,16 @@ describe("World3D", function () {
     view.remove()
   })
 
-  it("should accept an object specifying the degrees and cameraZ of the pov", function () {
-    view = new Karel.Views.World3D({ model: model }, { degrees: 77, cameraZ: 0, radius: 777 })
+  it("should accept an object specifying the degrees and cameraY of the pov", function () {
+    view = new Karel.Views.World3D({ model: model }, { degrees: 77, cameraY: 0, radius: 777 })
     expect(view.degrees).toBe(77)
-    expect(view.cameraZ).toBe(0)
+    expect(view.cameraY).toBe(0)
     expect(view.radius).toBe(777)
   })
 
   it("should rotate when dragging", function () {
     var startDegrees = view.degrees
-    ,   startCameraZ = view.cameraZ
+    ,   startCameraZ = view.cameraY
     
     var el     = $(view.el)
     ,   offset = el.offset()
@@ -43,7 +43,7 @@ describe("World3D", function () {
       .trigger(new $.Event('mouseup'))
     
     var endDegrees = view.degrees
-    ,   endCameraZ = view.cameraZ
+    ,   endCameraZ = view.cameraY
     
     expect(endDegrees).not.toBe(startDegrees)
     expect(endCameraZ).toBeGreaterThan(startCameraZ)
@@ -53,8 +53,8 @@ describe("World3D", function () {
     var startRadius = view.radius
     
     var scroll = function () {
-      $(document).trigger(new $.Event('mousewheel', { wheelDelta: 120 }))
-      $(window).trigger(new $.Event('DOMMouseScroll', { detail: -3 }))
+      $(document).trigger(new $.Event('mousewheel', { originalEvent: { wheelDelta: 120 } }))
+      $(window).trigger(new $.Event('DOMMouseScroll', { originalEvent: { detail: -3 } }))
     }
     
     _.times(3, scroll)

@@ -92,14 +92,14 @@ describe("Application (View)", function () {
     expect(oldWorld3D).not.toBeFalsy()
     expect(oldWorldToolbar).not.toBeFalsy()
     oldWorld3D.degrees = 0
-    oldWorld3D.cameraZ = 1
+    oldWorld3D.cameraY = 1
     oldWorld3D.radius  = 2
     project.set({ world: new World() })
     expect(application.world2D).not.toBe(oldWorld2D)
     expect(application.world3D).not.toBe(oldWorld3D)
     expect(application.worldToolbar).not.toBe(oldWorldToolbar)
     expect(application.world3D.degrees).toBe(0)
-    expect(application.world3D.cameraZ).toBe(1)
+    expect(application.world3D.cameraY).toBe(1)
     expect(application.world3D.radius).toBe(2)
     expect($(oldWorld2D.el).parent().length).toBe(0)
     expect($(oldWorld3D.el).parent().length).toBe(0)

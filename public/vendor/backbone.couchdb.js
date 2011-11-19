@@ -12,7 +12,7 @@
     design: 'backbone'
   };
 
-  var couch = {
+  Backbone.couch.utils = {
     _format_row: function(row) {
       _.extend(row, row.value ? { value: row.value } : {}, row.doc);
       // if (!row.id && row._id) row.id = row._id;
@@ -128,6 +128,8 @@
     return ret
   };
 
+  var couch = Backbone.couch.utils;
+
   Backbone.couch.sync = couch.sync;
 
   Backbone.couch.Model = Backbone.Model.extend({
@@ -136,6 +138,7 @@
   });
 
   Backbone.couch.Collection = Backbone.Collection.extend({
+    model: Backbone.couch.Model,
     sync: couch.sync,
     change_feed: false,
     initialize: function() {
