@@ -6,6 +6,52 @@ var Position  = Karel.Models.Position
 ,   Field     = World.Field
 ,   settings  = Karel.settings
 
+describe("Field", function() {
+  it("should have no bricks, blocks or markers when new", function () {
+    var field = new Field()
+    expect(field.bricks).toEqual([])
+    expect(field.marker).toBe(false)
+    expect(field.block).toBe(false)
+  })
+  
+  it("should make a clone of a field", function() {
+    var field = new Field()
+    field.bricks = [0xff0000, 0xff0000]
+    field.marker = true
+    var clone = field.clone()
+    expect(clone).not.toBe(field)
+    expect(clone.bricks).toEqual(field.bricks)
+    expect(clone.marker).toBe(field.marker)
+  })
+
+  it("should be testable for equality", function() {
+    var field1 = new Field()
+    field1.bricks = []
+    field1.marker = true
+    field1.block  = false
+    var field2 = field1.clone()
+    
+    expect(field1.equals(field2)).toBe(true)
+    
+    field2.block = true
+    expect(field1.equals(field2)).toBe(false)
+    field2.block = field1.block
+    
+    field2.bricks.push(0xff0000)
+    expect(field1.equals(field2)).toBe(false)
+  })
+
+  it("should tell me if and how many bricks it has", function () {
+    var field = new Field()
+    expect(field.hasBrick()).toBe(false)
+    expect(field.height()).toBe(0)
+    field.bricks = [0xff0000, 0x00ff00]
+    expect(field.hasBrick()).toBe(true)
+    expect(field.height()).toBe(2)
+  })
+})
+
+
 describe("World and Robot", function() {
   var world, robot
 
@@ -13,32 +59,6 @@ describe("World and Robot", function() {
     world = new World({ width: 3, depth: 3 })
     robot = world.getRobot()
   })
-
-  describe("Field", function() {
-    it("should make a clone of a field", function() {
-      var field = new Field()
-      field.bricks = 2
-      field.marker = true
-      var clone = field.clone()
-      expect(clone).not.toBe(field)
-      expect(clone.bricks).toBe(field.bricks)
-      expect(clone.marker).toBe(field.marker)
-    })
-
-    it("should be testable for equality", function() {
-      var field1 = new Field()
-      ,   field2 = new Field()
-      
-      field1.bricks = field2.bricks = 2
-      field1.marker = field2.marker = true
-      field1.block  = field2.block  = false
-      expect(field1.equals(field2)).toBeTruthy()
-      
-      field2.block = true
-      expect(field1.equals(field2)).toBeFalsy()
-    })
-  })
-
 
   // Dimensions
 
@@ -48,6 +68,10 @@ describe("World and Robot", function() {
 
   it("should look south at first", function() {
     expect(robot).toHaveDirection(new Direction(0,1))
+  })
+
+  it("should lay red bricks per default", function () {
+    expect(robot.get('color')).toBe(0xff0000)
   })
 
   // Movement
@@ -125,23 +149,25 @@ describe("World and Robot", function() {
 
   // Bricks
 
-  it("should put bricks on a field", function() {
+  it("should put bricks in the current color on a field", function() {
     var field = world.getField(new Position(0,1))
-    expect(field.bricks).toEqual(0)
+    expect(field.bricks).toEqual([])
     robot.putBrick()
-    expect(field.bricks).toEqual(1)
+    expect(field.bricks).toEqual([0xff0000])
+    robot.setGreen()
     robot.putBrick()
-    expect(field.bricks).toEqual(2)
+    expect(field.bricks).toEqual([0xff0000, 0x00ff00])
   })
 
   it("should remove bricks", function() {
     var field = world.getField(new Position(0,1))
     robot.putBrick()
+    robot.setBlue()
     robot.putBrick()
     robot.removeBrick()
-    expect(field.bricks).toEqual(1)
+    expect(field.bricks).toEqual([0xff0000])
     robot.removeBrick()
-    expect(field.bricks).toEqual(0)
+    expect(field.bricks).toEqual([])
     expect(function() { robot.removeBrick() }).toThrow()
   })
 
@@ -197,13 +223,13 @@ describe("World and Robot", function() {
   })
 
   it("should test if there is a wall", function() {
-    expect(robot.isWall()).toBeFalsy()
+    expect(robot.isWall()).toBe(false)
     robot.putBlock()
-    expect(robot.isWall()).toBeTruthy()
+    expect(robot.isWall()).toBe(true)
     robot.removeBlock()
     robot.move()
     robot.move()
-    expect(robot.isWall()).toBeTruthy()
+    expect(robot.isWall()).toBe(true)
   })
 
   it("should attempt an operation and if it fails, restore the initial state", function() {
@@ -223,11 +249,10 @@ describe("World and Robot", function() {
     expect(robot).toHaveDirection(new Direction(1,0))
   })
 
-  it("should beep", function() {
+  //it("should beep", function() {
     // Can't really test it
-  })
+  //})
 
-  
   // Import and export
 
   it("should import .kdw", function() {
@@ -238,9 +263,17 @@ describe("World and Robot", function() {
     expect(robot).toHavePosition(new Position(3,2))
     expect(robot).toHaveDirection(Direction.EAST)
 
+    var repeat = function (el, n) {
+      var arr = []
+      while (var i = 0; i < n; i++) {
+        arr[i] = el
+      }
+      return arr
+    }
+
     var f = function(z, m, q) {
       var field = new Field()
-      field.bricks = z || 0
+      field.bricks = repeat(0xff0000, z)
       field.marker = !!m
       field.block  = !!q
       return field
@@ -301,6 +334,14 @@ describe("World and Robot", function() {
       .putMarker()
       .removeMarker()
       .toggleMarker()
+      .setRed()
+      .setGreen()
+      .setBlue()
+      .setWhite()
+      .setOrange()
+      .setPurple()
+      .setBlack()
+      .setYellow()
       .putBrick()
       .putBrick(2)
       .removeBrick(3)
@@ -338,6 +379,15 @@ describe("World and Robot", function() {
     expect(r.istWand).toBe(r.isWall)
     expect(r.tonErzeugen).toBe(r.beep)
     expect(r.probiere).toBe(r.attempt)
+
+    expect(r.setzeRot).toBe(r.setRed)
+    expect(r.setzeGruen).toBe(r.setGreen)
+    expect(r.setzeBlau).toBe(r.setBlue)
+    expect(r.setzeWeiss).toBe(r.setWhite)
+    expect(r.setzeOrange).toBe(r.setOrange)
+    expect(r.setzeLila).toBe(r.setPurple)
+    expect(r.setzeSchwarz).toBe(r.setBlack)
+    expect(r.setzeGelb).toBe(r.setYellow)
 
     expect(r.nichtIstWand).toBe(r.notIsWall)
     expect(r.nichtIstMarke).toBe(r.notIsMarker)

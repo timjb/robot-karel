@@ -45,7 +45,15 @@ describe("World2D", function() {
   })
 
   it("should display bricks", function() {
-    var test = function() {
+    var last = function (arr) { return arr[arr.length - 1] }
+    var padLeft = function (str, n, padChar) {
+      while (str.length < n) {
+        str = padChar + str
+      }
+      return str
+    }
+    var toCSS = function (n) { return '#' + padLeft(n.toString(16), 6, '0') }
+    var test = function () {
       var robot     = model.getRobot()
       ,   position  = robot.get('position')
       ,   direction = robot.get('direction')
@@ -54,10 +62,12 @@ describe("World2D", function() {
       var td    = view.fields[nextPos.y][nextPos.x]
       var field = model.getField(nextPos)
       
-      expect(td.hasClass('brick')).toEqual(!!field.bricks)
-      if (field.bricks) {
-        expect(parseInt(td.text(), 10)).toEqual(field.bricks)
+      expect(td.hasClass('brick')).toEqual(field.bricks.length > 0)
+      if (field.bricks.length > 0) {
+        expect(td.css('background').replace(/\s/g, '')).toBe(new THREE.Color(last(field.bricks)).getContextStyle())
+        expect(parseInt(td.text(), 10)).toEqual(field.bricks.length)
       } else {
+        expect(td.css('background')).toBe('')
         expect(td.text()).toEqual('')
       }
     }
@@ -67,12 +77,14 @@ describe("World2D", function() {
     robot.putBrick()
     view.render()
     test()
-    robot.putBrick()
+    robot.setGreen().putBrick()
     view.render()
     test()
-    while (robot.isBrick()) robot.removeBrick()
-    view.render()
-    test()
+    while (robot.isBrick()) {
+      robot.removeBrick()
+      view.render()
+      test()
+    }
   })
 
   var directions = ['\u25bc','\u25c4','\u25b2','\u25ba'] // S, W, N, E

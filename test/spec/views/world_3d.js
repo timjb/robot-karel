@@ -71,12 +71,16 @@ describe("World3D", function () {
   var expectAllFieldsToBeUpToDate = function () {
     model.eachField(function (x, y, field) {
       var fieldObj = view.fields[x][y]
-      expect(fieldObj.bricks.length).toBe(field.bricks)
-      _.each(fieldObj.bricks, function (brickObj) {
+      expect(fieldObj.bricks.length).toBe(field.height())
+      _.each(fieldObj.bricks, function (brickObj, i) {
         expect(brickObj).toBeInstanceof(THREE.Mesh)
+        expect(brickObj.material.color.getHex()).toBe(field.bricks[i])
       })
       expect(!!fieldObj.marker).toBe(field.marker)
-      if (fieldObj.marker) expect(fieldObj.marker).toBeInstanceof(THREE.Mesh)
+      if (fieldObj.marker) {
+        expect(fieldObj.marker).toBeInstanceof(THREE.Mesh)
+        expect(fieldObj.marker.position.y).toBe(field.bricks.length*view.GH+1)
+      }
       expect(!!fieldObj.block).toBe(field.block)
       if (fieldObj.block) expect(fieldObj.block).toBeInstanceof(THREE.Mesh)
     })
@@ -91,8 +95,10 @@ describe("World3D", function () {
     model.getRobot()
       .putBrick()
       .move()
+      .setBlue()
       .putBrick()
       .removeBrick()
+      .setPurple()
       .putBrick(2)
       .move()
       .putMarker()
