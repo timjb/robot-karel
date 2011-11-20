@@ -43,11 +43,6 @@ number
   : NUMBER { $$ = new yy.Number($1); }
   ;
 
-optNumber
-  : 
-  | number
-  ;
-
 boolStatement
   : WAHR   { $$ = new yy.BoolStatement(true).l(@$); }
   | FALSCH { $$ = new yy.BoolStatement(false).l(@$); }
@@ -84,8 +79,13 @@ program
   : PROGRAMM block STAR PROGRAMM { $$ = $2.setToplevel(); }
   ;
 
+formalParametersList
+  : identifier { $$ = [$1]; }
+  | formalParametersList COMMA identifier { $$ = $1.concat([$3]); }
+  ;
+
 formalParameters
-  : LPAREN identifier RPAREN { $$ = new yy.FormalParameters($2); }
+  : LPAREN formalParametersList RPAREN { $$ = new yy.FormalParameters($2); }
   ;
 
 optFormalParameters
@@ -93,9 +93,19 @@ optFormalParameters
   | formalParameters
   ;
 
+parameter
+  : number
+  | identifier
+  ;
+
+parametersList
+  : parameter { $$ = [$1]; }
+  | parametersList COMMA parameter { $$ = $1.concat([$3]); }
+  ;
+
 parameters
-  : LPAREN optNumber  RPAREN { $$ = new yy.Parameters($2); }
-  | LPAREN identifier RPAREN { $$ = new yy.Parameters($2); }
+  : LPAREN RPAREN { $$ = new yy.Parameters([]); }
+  | LPAREN parametersList RPAREN { $$ = new yy.Parameters($2); }
   ;
 
 optParameters

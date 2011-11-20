@@ -35,6 +35,12 @@ describe("Karol Interpreter", function() {
     expect(globals.foo).toHaveBeenCalledWith(3)
   })
 
+  it("should pass multiple parameters to primitive functions", function () {
+    eval('foo(1, 2, 3)')
+    expect(stops).toBe(1)
+    expect(globals.foo).toHaveBeenCalledWith(1, 2, 3)
+  })
+
   it("should let me define functions", function() {
     eval('anweisung test foo foo *anweisung test test')
     expect(stops).toBe(6)
@@ -45,6 +51,12 @@ describe("Karol Interpreter", function() {
     eval('anweisung test(n) bar(n) *anweisung test(42)')
     expect(stops).toBe(2)
     expect(globals.bar).toHaveBeenCalledWith(42)
+  })
+
+  it("should let me define functions with multiple parameters", function() {
+    eval('anweisung test(n, m, o) bar(n, m, o) *anweisung test(42, 43, 44)')
+    expect(stops).toBe(2)
+    expect(globals.bar).toHaveBeenCalledWith(42, 43, 44)
   })
 
   it("should eval branches conditionally (if statement)", function() {

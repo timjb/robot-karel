@@ -7,6 +7,7 @@
 
 "*"            { return 'STAR'; }
 ";"            { return 'SEMICOLON'; }
+","            { return 'COMMA'; }
 "."            { return 'DOT'; }
 "("            { return 'LPAREN'; }
 ")"            { return 'RPAREN'; }
