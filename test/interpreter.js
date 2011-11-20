@@ -7,7 +7,8 @@ var World       = require('../lib/models/world').World
 ,   compiler    = require('../lib/parser/compiler')
 ,   interpreter = require('../lib/parser/interpreter')
 
-var EXAMPLES_DIR = path.join(__dirname, '../examples/karol')
+var EXAMPLES_DIR   = path.join(__dirname, '../examples/old')
+,   TRANSLATED_DIR = path.join(__dirname, '../examples/old_in_js')
 
 var extKdp = /\.kdp$/
 
@@ -41,7 +42,7 @@ fs.readdirSync(EXAMPLES_DIR)
   .sort()
   .forEach(function (kdpFilename) {
     var kdpPath = EXAMPLES_DIR + '/' + kdpFilename
-    ,   jsPath  = kdpPath.replace(extKdp, '.js')
+    ,   jsPath  = TRANSLATED_DIR + '/' + kdpFilename.replace(extKdp, '.js')
     ,   kdwPath = kdpPath.replace(extKdp, '.kdw')
     if (path.existsSync(jsPath) && path.existsSync(kdwPath)) {
       exports['test_' + kdpFilename.replace(extKdp, '')] = function () {
