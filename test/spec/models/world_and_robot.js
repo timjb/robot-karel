@@ -265,7 +265,7 @@ describe("World and Robot", function() {
 
     var repeat = function (el, n) {
       var arr = []
-      while (var i = 0; i < n; i++) {
+      for (var i = 0; i < n; i++) {
         arr[i] = el
       }
       return arr
