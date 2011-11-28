@@ -75,7 +75,7 @@ describe("Application (View)", function () {
     $('.new-world-overlay input[name=width]').trigger('keydown')
     expect(keydownSpy).not.toHaveBeenCalled()
     
-    $('.new-world-overlay input[type=submit]').click()
+    $('.new-world-overlay .primary').click()
     
     expect($('.new-world-overlay').length).toBe(0)
     expect(project.get('world').get('width')).toBe(13)
