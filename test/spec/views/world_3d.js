@@ -87,7 +87,7 @@ describe("World3D", function () {
   }
 
   it("should update all fields and the robot", function () {
-    var startObjectCount = view.scene.objects.length
+    var startObjectCount = view.scene.__objects.length
     ,   startPosition    = view.robot.position.clone()
     ,   startRotation    = view.robot.rotation.clone()
     
@@ -106,7 +106,7 @@ describe("World3D", function () {
       .putBlock()
     expectAllFieldsToBeUpToDate()
     
-    var endObjectCount = view.scene.objects.length
+    var endObjectCount = view.scene.__objects.length
     ,   endPosition    = view.robot.position.clone()
     ,   endRotation    = view.robot.rotation.clone()
     
